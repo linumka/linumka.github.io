@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Портфолио — linumka | Graphic Design, Motion & 3D, Video</title>
+<meta name="description" content="Кейсы Алёны Васильевой: айдентика событий, 3D motion для LED-экранов, social media-контент и видео.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="spark4" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="pill" href="mailto:v.alena1711@gmail.com">Написать</a>
+    <div class="nav-center">
+      <a class="pill light" href="portfolio.html">Портфолио</a>
+      <a class="pill" href="index.html">Обо мне</a>
+    </div>
+    <div class="nav-right">
+      <span class="weather pill-ghost" id="weather" title="потому что где-то всегда холоднее">Якутск&nbsp;−34°C</span>
+    </div>
+  </div>
+  <div class="nav-status">
+    <span class="spark spark--warm"><svg><use href="#spark4"/></svg></span>
+    <span>Открыта к проектной и удалённой работе</span>
+  </div>
+</nav>
+
+<header class="hero">
+  <canvas class="stars-canvas" data-stars></canvas>
+  <div class="container hero-folio">
+    <p class="hero-name reveal">Алёна Васильева</p>
+    <h1 class="wordmark" data-split>linumka</h1>
+    <p class="hero-sub reveal">Мультимедиа-художница: 3D, motion design
+      и графический дизайн для ивентов и медиа</p>
+  </div>
+</header>
+
+<div class="garland-strip">
+  <img class="garland-photo" src="assets/horizon5.jpg" alt="" aria-hidden="true">
+  <canvas class="garland-canvas" data-garland data-sparse></canvas>
+</div>
+
+<section class="container">
+  <div class="filter-all-wrap reveal">
+    <button class="pill light" data-filter="all">Все работы</button>
+  </div>
+  <div class="filters reveal">
+    <div class="filter-group">
+      <button class="pill" data-filter="graphic">Graphic Design</button>
+      <div class="sub"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span>Event Branding</div>
+      <div class="sub"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span>Social Media</div>
+      <div class="sub"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span>2D Illustration</div>
+    </div>
+    <div class="filter-group">
+      <button class="pill" data-filter="motion">Motion &amp; 3D</button>
+      <div class="sub"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span>3D Motion</div>
+      <div class="sub"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span>3D Static Visual</div>
+    </div>
+    <div class="filter-group">
+      <button class="pill" data-filter="video">Video</button>
+      <div class="sub"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span>2D Motion</div>
+      <div class="sub"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span>Video Editing</div>
+    </div>
+  </div>
+</section>
+
+<section class="container cases" id="cases" data-dynamic>
+  <!-- кейсы рендерятся из cases-data.js -->
+  <noscript><p class="muted">Для просмотра кейсов включите JavaScript.</p></noscript>
+</section>
+
+<footer>
+  <img class="garland-photo" src="assets/horizon4.jpg" alt="" aria-hidden="true">
+  <canvas class="garland-canvas" data-garland data-sparse></canvas>
+  <div class="footer-inner">
+    <div><p>Алёна Васильева</p></div>
+    <div><p>2026</p></div>
+    <div>
+      <p class="col-title">Больше обо мне:</p>
+      <div class="footer-links">
+        <a class="pill" href="https://www.behance.net/fb2b15b5" target="_blank" rel="noopener">Behance</a>
+        <a class="pill" href="https://t.me/linumka" target="_blank" rel="noopener">Telegram</a>
+      </div>
+    </div>
+    <div>
+      <p class="col-title">Связь:</p>
+      <div class="footer-links">
+        <a class="pill" href="mailto:v.alena1711@gmail.com">Почта</a>
+        <a class="pill" href="index.html#contact">Обо мне</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="cases-data.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
