@@ -77,15 +77,11 @@
     if (!wrap || !window.CASES) return;
 
     var html = window.CASES.map(function (c) {
-      var mediaInner;
+      var mediaInner =
+        '<img src="' + esc(c.image) + '" alt="' + esc(c.title) + '" loading="lazy" ' +
+        'onerror="this.parentElement.classList.add(\'ph\');this.remove()">';
       if (c.video) {
-        mediaInner =
-          '<video muted loop playsinline preload="metadata" data-lazy-video ' +
-            'poster="' + esc(c.image) + '" src="' + esc(c.video) + '"></video>';
-      } else {
-        mediaInner =
-          '<img src="' + esc(c.image) + '" alt="' + esc(c.title) + '" loading="lazy" ' +
-          'onerror="this.parentElement.classList.add(\'ph\');this.remove()">';
+        mediaInner += '<span class="play-badge"><span class="spark"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg></span>смотреть анимацию</span>';
       }
       var media = '<div class="case-media">' + mediaInner + '</div>';
 
@@ -104,8 +100,11 @@
           (actions ? '<div class="case-actions">' + actions + '</div>' : '') +
         '</div>';
 
+      var videoAttr = c.video ? ' data-video="' + esc(c.video) + '"' : '';
+      var videoClass = c.video ? ' case--video' : '';
+
       if (!c.featured) {
-        return '<article class="case reveal" data-cats="' + esc(c.cats) + '">' + media + body + '</article>';
+        return '<article class="case reveal' + videoClass + '" data-cats="' + esc(c.cats) + '"' + videoAttr + '>' + media + body + '</article>';
       }
 
       var d = c.details || {};
@@ -135,7 +134,7 @@
           gallery(d.gallery2) +
         '</div></div>';
 
-      return '<article class="case case--featured reveal" data-cats="' + esc(c.cats) + '">' +
+      return '<article class="case case--featured reveal' + videoClass + '" data-cats="' + esc(c.cats) + '"' + videoAttr + '>' +
                '<div class="case-top">' + media + body + '</div>' + details +
              '</article>';
     }).join('');
@@ -145,18 +144,81 @@
 
   renderCases();
 
-  /* lazy autoplay for case videos: play only while on screen */
-  var lazyVideos = document.querySelectorAll('[data-lazy-video]');
-  if (lazyVideos.length && 'IntersectionObserver' in window) {
-    var vio = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        var v = e.target;
-        if (e.isIntersecting) { v.play().catch(function () {}); }
-        else { v.pause(); }
+  /* ---------------------------------------------------
+   * 2.6 Видео-лайтбокс: клик по превью или названию кейса
+   * --------------------------------------------------- */
+  (function initLightbox() {
+    var current = null;
+
+    function sparkSvg() {
+      return '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg>';
+    }
+
+    function open(src) {
+      close();
+      var lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML =
+        '<div class="lightbox-frame">' +
+          '<span class="frame-spark frame-spark--tl">' + sparkSvg() + '</span>' +
+          '<span class="frame-spark frame-spark--br">' + sparkSvg() + '</span>' +
+          '<div class="lightbox-ui">' +
+            '<button class="pill" data-mute>Выключить звук</button>' +
+            '<button class="pill" data-close>Закрыть ✕</button>' +
+          '</div>' +
+          '<video src="' + src + '" autoplay loop playsinline></video>' +
+          '<p class="lightbox-hint">Esc или клик мимо видео — закрыть</p>' +
+        '</div>';
+      document.body.appendChild(lb);
+      document.body.style.overflow = 'hidden';
+      current = lb;
+
+      var video = lb.querySelector('video');
+      video.volume = 0.85;
+      video.play().catch(function () {
+        /* если браузер запретил звук на автоплей — стартуем без звука */
+        video.muted = true;
+        lb.querySelector('[data-mute]').textContent = 'Включить звук';
+        video.play().catch(function () {});
       });
-    }, { rootMargin: '80px' });
-    lazyVideos.forEach(function (v) { vio.observe(v); });
-  }
+
+      lb.querySelector('[data-mute]').addEventListener('click', function (e) {
+        e.stopPropagation();
+        video.muted = !video.muted;
+        this.textContent = video.muted ? 'Включить звук' : 'Выключить звук';
+      });
+      lb.querySelector('[data-close]').addEventListener('click', function (e) {
+        e.stopPropagation(); close();
+      });
+      /* клик по любому месту вне видео закрывает */
+      lb.addEventListener('click', function (e) {
+        if (!e.target.closest('video') && !e.target.closest('.lightbox-ui')) close();
+      });
+      requestAnimationFrame(function () { lb.classList.add('on'); });
+    }
+
+    function close() {
+      if (!current) return;
+      var lb = current; current = null;
+      var v = lb.querySelector('video');
+      if (v) v.pause();
+      lb.classList.remove('on');
+      document.body.style.overflow = '';
+      setTimeout(function () { lb.remove(); }, 300);
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') close();
+    });
+
+    document.querySelectorAll('.case--video').forEach(function (card) {
+      var src = card.getAttribute('data-video');
+      ['.case-media', '.case-title'].forEach(function (sel) {
+        var el = card.querySelector(sel);
+        if (el) el.addEventListener('click', function () { open(src); });
+      });
+    });
+  })();
 
   /* ---------------------------------------------------
    * 3. Entrances
