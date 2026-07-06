@@ -45,10 +45,16 @@ h2 {
   font-weight: 500;
   color: var(--white1);
 }
+h3.block-label {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--white2);
+  margin-top: 72px;
+}
 
 .muted { color: var(--white2); }
 
-/* ---------- pills & buttons: плоские, компактные, без скруглений ---------- */
+/* ---------- pills & buttons: плоские, компактные ---------- */
 .pill {
   display: inline-flex;
   align-items: center;
@@ -73,14 +79,6 @@ h2 {
 }
 .pill.light:hover { background: #fff; }
 
-.pill-ghost {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--white1);
-  font-size: 16px;
-}
-
 /* ---------- sparkle icon ---------- */
 .spark {
   width: 18px; height: 18px;
@@ -92,37 +90,28 @@ h2 {
 .spark--warm { color: var(--white1); }
 .spark--dark { color: var(--brown2); }
 
-/* ---------- nav ---------- */
+/* ---------- компактная плавающая навигация ---------- */
+.top-fade {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 96px;
+  z-index: 40;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(31,19,23,.92) 0%, rgba(31,19,23,.55) 45%, rgba(31,19,23,0) 100%);
+}
 .nav {
-  position: sticky;
-  top: 0;
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 50;
-  background: rgba(31, 19, 23, .82);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-.nav-inner {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 20px 24px;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 12px;
-}
-.nav-inner > .pill { justify-self: start; }
-.nav-center { display: flex; gap: 20px; justify-content: center; }
-.nav-right { display: flex; justify-content: flex-end; }
-.weather { font-size: 15px; color: var(--white2); cursor: help; }
-.nav-status {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 0 24px 10px;
-  font-size: 15px;
-  color: var(--white1);
+  gap: 6px;
+  padding: 6px;
+  background: rgba(31, 19, 23, .45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 236, 231, .1);
 }
 
 /* ---------- hero (about) ---------- */
@@ -130,7 +119,7 @@ h2 {
   position: relative;
   overflow: hidden;
 }
-.hero .stars-canvas {
+.stars-canvas {
   position: absolute;
   inset: 0;
   width: 100%; height: 100%;
@@ -140,7 +129,7 @@ h2 {
   position: relative;
   align-items: center;
   row-gap: 32px;
-  padding-top: 48px;
+  padding-top: 110px;
   padding-bottom: 72px;
 }
 .hero-photo {
@@ -178,12 +167,20 @@ h2 {
   color: var(--white1);
 }
 .hero-city { margin-top: 12px; color: var(--white2); }
+.hero-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+  font-size: 15px;
+  color: var(--white1);
+}
 
 /* ---------- hero (portfolio) ---------- */
 .hero-folio {
   text-align: center;
-  padding-top: 56px;
-  padding-bottom: 40px;
+  padding-top: 120px;
+  padding-bottom: 64px;
   position: relative;
 }
 .hero-folio .hero-name { font-size: clamp(30px, 4.5vw, 55px); }
@@ -192,31 +189,13 @@ h2 {
   margin: 32px auto 0;
   max-width: 360px;
 }
+.hero-folio .hero-status { justify-content: center; }
 
 /* ---------- blue banner ---------- */
 .banner {
   position: relative;
   background: var(--blue1);
   overflow: hidden;
-}
-.banner .garland-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-}
-.garland-photo {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: bottom;
-  pointer-events: none;
-}
-.garland-strip .garland-photo {
-  mix-blend-mode: screen;
-  opacity: .8;
-  filter: brightness(.55) contrast(1.35) saturate(1.2);
 }
 .banner-grid {
   position: relative;
@@ -225,16 +204,6 @@ h2 {
 }
 .banner-text { grid-column: 2 / 4; }
 .banner-text p + p { margin-top: 20px; }
-
-/* ---------- garland divider (portfolio) ---------- */
-.garland-strip {
-  position: relative;
-  height: 190px;
-  overflow: hidden;
-}
-.garland-strip .garland-canvas {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-}
 
 /* ---------- sections ---------- */
 section { position: relative; }
@@ -269,7 +238,7 @@ section { position: relative; }
 
 /* education compact */
 .edu {
-  margin-top: 64px;
+  margin-top: 32px;
   row-gap: 32px;
 }
 .edu-item { min-width: 0; }
@@ -278,7 +247,7 @@ section { position: relative; }
 .edu-item .edu-when { color: var(--white2); font-size: 15px; }
 .edu-item .edu-what { color: var(--white2); margin-top: 4px; }
 
-/* ---------- info cards: старт от пилонов ---------- */
+/* ---------- info cards ---------- */
 .cards-flow {
   row-gap: 48px;
   padding-top: 88px;
@@ -333,7 +302,7 @@ section { position: relative; }
   align-items: flex-start;
   gap: clamp(28px, 6vw, 67px);
   flex-wrap: wrap;
-  padding-top: 48px;
+  padding-top: 24px;
   padding-bottom: 24px;
 }
 .filter-group { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
@@ -369,7 +338,7 @@ section { position: relative; }
   aspect-ratio: 467 / 280;
   background: #2a1a20;
 }
-.case-media img {
+.case-media img, .case-media video {
   width: 100%; height: 100%;
   object-fit: cover;
   transition: transform .6s cubic-bezier(.2,.7,.2,1);
@@ -392,6 +361,7 @@ section { position: relative; }
 }
 .case-desc { margin-top: 18px; color: var(--white2); max-width: 620px; }
 .case-desc a { text-decoration: underline; text-underline-offset: 3px; }
+.case-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
 
 /* featured expandable */
 .case--featured { grid-template-columns: 1fr; }
@@ -401,7 +371,6 @@ section { position: relative; }
   gap: 36px;
   align-items: start;
 }
-.case-toggle { margin-top: 22px; }
 .case-details {
   display: grid;
   grid-template-rows: 0fr;
@@ -437,7 +406,7 @@ section { position: relative; }
   scrollbar-color: var(--brown2) transparent;
 }
 .gallery-strip img {
-  height: 180px;
+  height: 200px;
   width: auto;
   flex: 0 0 auto;
 }
@@ -448,11 +417,6 @@ footer {
   margin-top: 48px;
   background: var(--blue1);
   overflow: hidden;
-}
-footer .garland-canvas {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
 }
 .footer-inner {
   position: relative;
@@ -467,8 +431,27 @@ footer .garland-canvas {
 }
 .footer-inner .col-title { margin-bottom: 14px; }
 .footer-links { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+.footer-weather { margin-top: 8px; color: rgba(255,236,231,.65); font-size: 15px; cursor: help; }
 
-/* ---------- reveal helpers (CSS-driven: надёжно даже в фоновых вкладках) ---------- */
+/* ---------- курсор-звёздочка ---------- */
+.cursor-star {
+  position: fixed;
+  left: 0; top: 0;
+  z-index: 90;
+  width: 20px; height: 20px;
+  pointer-events: none;
+  color: var(--white1);
+  filter: drop-shadow(0 0 6px rgba(255, 236, 231, .7));
+  opacity: 0;
+  transition: opacity .3s;
+  display: none;
+}
+.cursor-star svg { width: 100%; height: 100%; display: block; }
+@media (hover: hover) and (pointer: fine) {
+  .cursor-star { display: block; }
+}
+
+/* ---------- reveal helpers ---------- */
 .reveal {
   opacity: 0;
   transform: translateY(34px);
@@ -507,17 +490,10 @@ footer .garland-canvas {
 }
 
 @media (max-width: 760px) {
-  .nav { position: static; }
-  .nav-inner {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    row-gap: 10px;
-    padding: 14px 16px;
-  }
-  .nav-inner > .pill { justify-self: center; }
-  .nav-right { justify-content: center; }
-  .nav-status { justify-content: center; text-align: center; }
-  .hero-about-grid { padding-top: 24px; }
+  .nav { top: 10px; max-width: calc(100vw - 20px); overflow-x: auto; }
+  .nav .pill { font-size: 15px; }
+  .hero-about-grid { padding-top: 90px; }
+  .hero-folio { padding-top: 100px; }
   .hero-photo { grid-column: 1 / 5; max-width: 320px; }
   .wordmark { white-space: normal; word-break: keep-all; }
   .banner-grid { padding-top: 72px; padding-bottom: 72px; }
@@ -525,10 +501,11 @@ footer .garland-canvas {
   .info-card { padding: 24px 20px 28px; }
   .footer-inner { grid-template-columns: 1fr 1fr; padding-bottom: 72px; }
   .filters { gap: 24px; }
-  .gallery-strip img { height: 130px; }
+  .gallery-strip img { height: 140px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .reveal { opacity: 1 !important; transform: none !important; }
+  .cursor-star { display: none !important; }
 }

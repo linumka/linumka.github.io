@@ -20,21 +20,11 @@
   </defs>
 </svg>
 
+<div class="top-fade"></div>
 <nav class="nav">
-  <div class="nav-inner">
-    <a class="pill" href="mailto:v.alena1711@gmail.com">Написать</a>
-    <div class="nav-center">
-      <a class="pill" href="portfolio.html">Портфолио</a>
-      <a class="pill light" href="index.html">Обо мне</a>
-    </div>
-    <div class="nav-right">
-      <span class="weather pill-ghost" id="weather" title="потому что где-то всегда холоднее">Якутск&nbsp;−34°C</span>
-    </div>
-  </div>
-  <div class="nav-status">
-    <span class="spark spark--warm"><svg><use href="#spark4"/></svg></span>
-    <span>Открыта к проектной и удалённой работе</span>
-  </div>
+  <a class="pill" href="portfolio.html">Портфолио</a>
+  <a class="pill light" href="index.html">Обо мне</a>
+  <a class="pill" href="mailto:v.alena1711@gmail.com">Написать</a>
 </nav>
 
 <header class="hero">
@@ -49,13 +39,16 @@
       <p class="hero-sub reveal">Графический дизайнер — брендинг
         и event-айдентика для мероприятий и digital-медиа</p>
       <p class="hero-city reveal">Санкт-Петербург</p>
+      <p class="hero-status reveal">
+        <span class="spark spark--warm"><svg><use href="#spark4"/></svg></span>
+        <span>Открыта к проектной и удалённой работе</span>
+      </p>
     </div>
   </div>
 </header>
 
 <section class="banner">
-  <img class="garland-photo" src="assets/horizon3.jpg" alt="" aria-hidden="true">
-  <canvas class="garland-canvas" data-garland data-sparse></canvas>
+  <canvas class="stars-canvas" data-stars></canvas>
   <div class="container grid4 banner-grid">
     <div class="banner-text">
       <p class="reveal">Разрабатываю фирменный стиль для мероприятий и брендов —
@@ -126,6 +119,7 @@
     </article>
   </div>
 
+  <h3 class="block-label reveal">Образование и дополнительно</h3>
   <div class="grid4 edu reveal">
     <div class="edu-item">
       <p class="edu-when">2022 — 2026</p>
@@ -140,8 +134,8 @@
     </div>
     <div class="edu-item">
       <p class="edu-when">Сентябрь 2025 — Январь 2026</p>
-      <p>Школа световых технологий ИТМО</p>
-      <p class="edu-what">Преподаватель световых технологий (волонтёр)</p>
+      <p>Школа светового дизайна ИТМО</p>
+      <p class="edu-what">Преподаватель светового дизайна (волонтёр)</p>
     </div>
     <div class="edu-item">
       <p class="edu-when">2023 — 2026</p>
@@ -201,22 +195,25 @@
 </div>
 
 <footer>
-  <img class="garland-photo" src="assets/horizon4.jpg" alt="" aria-hidden="true">
-  <canvas class="garland-canvas" data-garland data-sparse></canvas>
+  <canvas class="stars-canvas" data-stars></canvas>
   <div class="footer-inner">
     <div><p>Алёна Васильева</p></div>
-    <div><p>2026</p></div>
+    <div>
+      <p>2026</p>
+      <p class="footer-weather" id="weather" title="потому что где-то всегда холоднее">Якутск −34°C</p>
+    </div>
     <div>
       <p class="col-title">Больше обо мне:</p>
       <div class="footer-links">
         <a class="pill" href="https://www.behance.net/fb2b15b5" target="_blank" rel="noopener">Behance</a>
-        <a class="pill" href="https://t.me/linumka" target="_blank" rel="noopener">Telegram</a>
+        <a class="pill" href="https://t.me/linumushka" target="_blank" rel="noopener">Telegram-канал</a>
       </div>
     </div>
     <div>
       <p class="col-title">Связь:</p>
       <div class="footer-links">
         <a class="pill" href="mailto:v.alena1711@gmail.com">Почта</a>
+        <a class="pill" href="https://t.me/linumka" target="_blank" rel="noopener">Telegram</a>
       </div>
     </div>
   </div>

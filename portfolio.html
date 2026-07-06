@@ -20,21 +20,11 @@
   </defs>
 </svg>
 
+<div class="top-fade"></div>
 <nav class="nav">
-  <div class="nav-inner">
-    <a class="pill" href="mailto:v.alena1711@gmail.com">Написать</a>
-    <div class="nav-center">
-      <a class="pill light" href="portfolio.html">Портфолио</a>
-      <a class="pill" href="index.html">Обо мне</a>
-    </div>
-    <div class="nav-right">
-      <span class="weather pill-ghost" id="weather" title="потому что где-то всегда холоднее">Якутск&nbsp;−34°C</span>
-    </div>
-  </div>
-  <div class="nav-status">
-    <span class="spark spark--warm"><svg><use href="#spark4"/></svg></span>
-    <span>Открыта к проектной и удалённой работе</span>
-  </div>
+  <a class="pill light" href="portfolio.html">Портфолио</a>
+  <a class="pill" href="index.html">Обо мне</a>
+  <a class="pill" href="mailto:v.alena1711@gmail.com">Написать</a>
 </nav>
 
 <header class="hero">
@@ -44,13 +34,12 @@
     <h1 class="wordmark" data-split>linumka</h1>
     <p class="hero-sub reveal">Мультимедиа-художница: 3D, motion design
       и графический дизайн для ивентов и медиа</p>
+    <p class="hero-status reveal">
+      <span class="spark spark--warm"><svg><use href="#spark4"/></svg></span>
+      <span>Открыта к проектной и удалённой работе</span>
+    </p>
   </div>
 </header>
-
-<div class="garland-strip">
-  <img class="garland-photo" src="assets/horizon5.jpg" alt="" aria-hidden="true">
-  <canvas class="garland-canvas" data-garland data-sparse></canvas>
-</div>
 
 <section class="container">
   <div class="filter-all-wrap reveal">
@@ -82,23 +71,25 @@
 </section>
 
 <footer>
-  <img class="garland-photo" src="assets/horizon4.jpg" alt="" aria-hidden="true">
-  <canvas class="garland-canvas" data-garland data-sparse></canvas>
+  <canvas class="stars-canvas" data-stars></canvas>
   <div class="footer-inner">
     <div><p>Алёна Васильева</p></div>
-    <div><p>2026</p></div>
+    <div>
+      <p>2026</p>
+      <p class="footer-weather" id="weather" title="потому что где-то всегда холоднее">Якутск −34°C</p>
+    </div>
     <div>
       <p class="col-title">Больше обо мне:</p>
       <div class="footer-links">
         <a class="pill" href="https://www.behance.net/fb2b15b5" target="_blank" rel="noopener">Behance</a>
-        <a class="pill" href="https://t.me/linumka" target="_blank" rel="noopener">Telegram</a>
+        <a class="pill" href="https://t.me/linumushka" target="_blank" rel="noopener">Telegram-канал</a>
       </div>
     </div>
     <div>
       <p class="col-title">Связь:</p>
       <div class="footer-links">
         <a class="pill" href="mailto:v.alena1711@gmail.com">Почта</a>
-        <a class="pill" href="index.html#contact">Обо мне</a>
+        <a class="pill" href="https://t.me/linumka" target="_blank" rel="noopener">Telegram</a>
       </div>
     </div>
   </div>
