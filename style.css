@@ -56,6 +56,7 @@ h3.block-label {
 
 /* ---------- pills & buttons: плоские, компактные ---------- */
 .pill {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -72,12 +73,24 @@ h3.block-label {
   transition: background .25s, color .25s;
   white-space: nowrap;
 }
+/* невидимая зона клика ≥44px при компактном виде */
+.pill::after {
+  content: "";
+  position: absolute;
+  top: -10px; bottom: -10px;
+  left: -6px; right: -6px;
+}
 .pill:hover { background: #6a4c56; }
 .pill.active, .pill.light {
   background: var(--white1);
   color: var(--brown1);
 }
-.pill.light:hover { background: #fff; }
+.pill.light:hover { background: #fff4ef; }
+.pill--accent {
+  background: var(--blue2);
+  color: var(--brown1);
+}
+.pill--accent:hover { background: #c9dbff; }
 
 /* ---------- sparkle icon ---------- */
 .spark {
@@ -293,7 +306,7 @@ section { position: relative; }
   gap: 12px;
   margin-top: 20px;
 }
-.contact-actions .pill { background: var(--brown2); color: #fff; }
+.contact-actions .pill { background: var(--brown2); color: var(--white1); }
 .contact-actions .pill:hover { background: var(--brown1); }
 
 /* ---------- filters (portfolio) ---------- */
@@ -569,6 +582,10 @@ footer {
 @media (max-width: 760px) {
   .nav { top: 10px; max-width: calc(100vw - 20px); overflow-x: auto; }
   .nav .pill { font-size: 15px; }
+  /* пальцем должно быть легко попасть: реальные паддинги побольше */
+  .pill { padding: 8px 14px; }
+  .contact-actions { gap: 14px; }
+  .footer-links { gap: 14px; }
   .hero-about-grid { padding-top: 90px; }
   .hero-folio { padding-top: 100px; }
   .hero-photo { grid-column: 1 / 5; max-width: 320px; }

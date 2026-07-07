@@ -74,11 +74,24 @@
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
+  /* хронология: свежие проекты выше; «н.в.» (идущие сейчас) – в самом верху */
+  function caseSortKey(c) {
+    var y = String(c.year || '');
+    var years = y.match(/\d{4}/g);
+    var key = years ? Math.max.apply(null, years.map(Number)) : 0;
+    if (/н\.?\s?в|now|наст/i.test(y)) key += 100;
+    return key;
+  }
+
   function renderCases() {
     var wrap = document.querySelector('#cases[data-dynamic]');
     if (!wrap || !window.CASES) return;
 
-    var html = window.CASES.map(function (c) {
+    var sorted = window.CASES.slice().sort(function (a, b) {
+      return caseSortKey(b) - caseSortKey(a);
+    });
+
+    var html = sorted.map(function (c) {
       var mediaInner =
         '<img src="' + esc(c.image) + '" alt="' + esc(c.title) + '" loading="lazy" ' +
         'onerror="this.parentElement.classList.add(\'ph\');this.remove()">';
