@@ -1,6 +1,8 @@
-/* ============ linumka portfolio — main.js ============ */
+/* ============ linumka portfolio – main.js ============ */
 (function () {
   'use strict';
+
+  document.documentElement.classList.remove('no-js');
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -111,7 +113,7 @@
       var gallery = function (list) {
         if (!list || !list.length) return '';
         return '<div class="gallery-strip">' + list.map(function (src) {
-          return '<img src="' + esc(src) + '" alt="' + esc(c.title) + ' — материалы" loading="lazy" onerror="this.remove()">';
+          return '<img src="' + esc(src) + '" alt="' + esc(c.title) + ' – материалы" loading="lazy" onerror="this.remove()">';
         }).join('') + '</div>';
       };
       var solution = (d.solution || []).map(function (item) {
@@ -167,7 +169,7 @@
             '<button class="pill" data-close>Закрыть ✕</button>' +
           '</div>' +
           '<video src="' + src + '" autoplay loop playsinline></video>' +
-          '<p class="lightbox-hint">Esc или клик мимо видео — закрыть</p>' +
+          '<p class="lightbox-hint">Esc или клик мимо видео – закрыть</p>' +
         '</div>';
       document.body.appendChild(lb);
       document.body.style.overflow = 'hidden';
@@ -176,7 +178,7 @@
       var video = lb.querySelector('video');
       video.volume = 0.85;
       video.play().catch(function () {
-        /* если браузер запретил звук на автоплей — стартуем без звука */
+        /* если браузер запретил звук на автоплей – стартуем без звука */
         video.muted = true;
         lb.querySelector('[data-mute]').textContent = 'Включить звук';
         video.play().catch(function () {});
@@ -337,7 +339,7 @@
   }
 
   /* ---------------------------------------------------
-   * 7. Yakutsk weather — the joke is real
+   * 7. Yakutsk weather – the joke is real
    * --------------------------------------------------- */
   var weatherEl = document.getElementById('weather');
   if (weatherEl && navigator.onLine) {
