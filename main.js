@@ -356,12 +356,20 @@
    * --------------------------------------------------- */
   var weatherEl = document.getElementById('weather');
   if (weatherEl && navigator.onLine) {
-    fetch('https://api.open-meteo.com/v1/forecast?latitude=62.03&longitude=129.73&current=temperature_2m')
+    // два города одним запросом: Санкт-Петербург и Якутск
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=59.94,62.03&longitude=30.31,129.73&current=temperature_2m')
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        var temp = Math.round(d.current.temperature_2m);
-        weatherEl.textContent = 'Якутск ' + (temp > 0 ? '+' : temp < 0 ? '−' : '') + Math.abs(temp) + '°C';
+        var list = Array.isArray(d) ? d : [d];
+        function fmt(t) {
+          t = Math.round(t);
+          return (t > 0 ? '+' : t < 0 ? '−' : '') + Math.abs(t) + '°C';
+        }
+        if (list.length >= 2) {
+          weatherEl.textContent = 'СПб ' + fmt(list[0].current.temperature_2m) +
+            ' · Якутск ' + fmt(list[1].current.temperature_2m);
+        }
       })
-      .catch(function () { /* keep the -34 legend */ });
+      .catch(function () { /* остаётся легендарное «Якутск −34°C» */ });
   }
 })();

@@ -86,11 +86,24 @@ h3.block-label {
   color: var(--brown1);
 }
 .pill.light:hover { background: #fff4ef; }
-.pill--accent {
-  background: var(--blue2);
-  color: var(--brown1);
+/* «Написать»: как остальные кнопки, но со звёздочкой-приманкой */
+.pill--write .spark { width: 14px; height: 14px; }
+.pill--write .spark svg { animation: writeTwinkle 2.6s ease-in-out infinite; }
+@keyframes writeTwinkle {
+  0%, 100% { transform: scale(1); opacity: .85; }
+  50%      { transform: scale(1.35) rotate(20deg); opacity: 1; }
 }
-.pill--accent:hover { background: #c9dbff; }
+/* подпись-статус под навигацией, у кнопки «Написать» */
+.nav-note {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  font-size: 12.5px;
+  color: var(--white2);
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 0 1px 8px rgba(31,19,23,.9);
+}
 
 /* ---------- sparkle icon ---------- */
 .spark {
@@ -445,7 +458,12 @@ footer {
 }
 .footer-inner .col-title { margin-bottom: 14px; }
 .footer-links { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
-.footer-weather { margin-top: 8px; color: rgba(255,236,231,.65); font-size: 15px; cursor: help; }
+.footer-weather {
+  margin-top: 8px;
+  color: rgba(255,236,231,.65);
+  font-size: 15px;
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="%23FFECE7" stroke="%231F1317" stroke-width="1" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg>') 11 11, auto;
+}
 
 /* ---------- видео-лайтбокс ---------- */
 .case--video .case-media,
@@ -580,8 +598,9 @@ footer {
 }
 
 @media (max-width: 760px) {
-  .nav { top: 10px; max-width: calc(100vw - 20px); overflow-x: auto; }
+  .nav { top: 10px; max-width: calc(100vw - 20px); }
   .nav .pill { font-size: 15px; }
+  .nav-note { right: 50%; transform: translateX(50%); font-size: 11.5px; }
   /* пальцем должно быть легко попасть: реальные паддинги побольше */
   .pill { padding: 8px 14px; }
   .contact-actions { gap: 14px; }
