@@ -191,7 +191,6 @@
             '<button class="pill" data-close>Закрыть ✕</button>' +
           '</div>' +
           '<video autoplay playsinline' + (multi ? '' : ' loop') + '></video>' +
-          '<p class="lightbox-hint">Esc или клик мимо видео – закрыть</p>' +
         '</div>';
       document.body.appendChild(lb);
       document.body.style.overflow = 'hidden';

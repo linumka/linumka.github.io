@@ -529,16 +529,8 @@ footer {
   gap: 10px;
 }
 .lightbox-ui .pill { background: rgba(31,19,23,.8); }
-.lightbox-hint {
-  position: absolute;
-  bottom: -34px; left: 0;
-  font-size: 14px;
-  color: var(--white1);
-  opacity: .7;
-}
 @media (max-width: 760px) {
   .lightbox-ui { top: auto; bottom: -42px; right: 0; }
-  .lightbox-hint { display: none; }
 }
 
 /* ---------- курсор-звёздочка ---------- */
