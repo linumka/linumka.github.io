@@ -94,6 +94,7 @@ window.CASES = [
     "cats": "motion graphic",
     "tags": ["3D Motion", "Social Media"],
     "image": "assets/fashion-show.jpg",
+    "video": ["assets/fashion-1.mp4", "assets/fashion-2.mp4", "assets/fashion-3.mp4"],
     "desc": "Серия вертикальных 3D промо-роликов для событий конкурса моды, визуальная айдентика показа и SMM-контент; анимированная графика для экранов подиума.",
     "featured": false
   },
@@ -103,6 +104,7 @@ window.CASES = [
     "cats": "motion video",
     "tags": ["3D Motion", "2D Motion"],
     "image": "assets/shl.jpg",
+    "video": ["assets/shl-1.mp4", "assets/shl-2.mp4"],
     "desc": "Моушен-интро и графические перебивки для серии подкастов Студенческой хоккейной лиги Санкт-Петербурга. Финальный рендер 1920×1080.",
     "featured": false
   },
@@ -112,6 +114,7 @@ window.CASES = [
     "cats": "motion graphic",
     "tags": ["3D Motion", "Social Media", "Event Branding"],
     "image": "assets/megahouse.jpg",
+    "video": "assets/megahouse.mp4",
     "desc": "Вертикальный 3D промо-ролик и анимированная графика для MEGAHOUSE – стриминг-проекта онлайн-вечеринок комьюнити СЕАНС; оформление кампании в соцсетях.",
     "featured": false
   },

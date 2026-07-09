@@ -92,11 +92,13 @@
     });
 
     var html = sorted.map(function (c) {
+      var vids = c.video ? (Array.isArray(c.video) ? c.video : [c.video]) : [];
       var mediaInner =
         '<img src="' + esc(c.image) + '" alt="' + esc(c.title) + '" loading="lazy" ' +
         'onerror="this.parentElement.classList.add(\'ph\');this.remove()">';
-      if (c.video) {
-        mediaInner += '<span class="play-badge"><span class="spark"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg></span>смотреть анимацию</span>';
+      if (vids.length) {
+        var label = vids.length > 1 ? 'смотреть анимации (' + vids.length + ')' : 'смотреть анимацию';
+        mediaInner += '<span class="play-badge"><span class="spark"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg></span>' + label + '</span>';
       }
       var media = '<div class="case-media">' + mediaInner + '</div>';
 
@@ -115,8 +117,10 @@
           (actions ? '<div class="case-actions">' + actions + '</div>' : '') +
         '</div>';
 
-      var videoAttr = c.video ? ' data-video="' + esc(c.video) + '"' : '';
-      var videoClass = c.video ? ' case--video' : '';
+      /* video может быть строкой или массивом */
+      var videoList = c.video ? (Array.isArray(c.video) ? c.video : [c.video]) : [];
+      var videoAttr = videoList.length ? ' data-video="' + esc(videoList.join('|')) + '"' : '';
+      var videoClass = videoList.length ? ' case--video' : '';
 
       if (!c.featured) {
         return '<article class="case reveal' + videoClass + '" data-cats="' + esc(c.cats) + '"' + videoAttr + '>' + media + body + '</article>';
@@ -169,8 +173,12 @@
       return '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg>';
     }
 
-    function open(src) {
+    function open(srcList) {
       close();
+      var playlist = String(srcList).split('|');
+      var idx = 0;
+      var multi = playlist.length > 1;
+
       var lb = document.createElement('div');
       lb.className = 'lightbox';
       lb.innerHTML =
@@ -178,10 +186,11 @@
           '<span class="frame-spark frame-spark--tl">' + sparkSvg() + '</span>' +
           '<span class="frame-spark frame-spark--br">' + sparkSvg() + '</span>' +
           '<div class="lightbox-ui">' +
+            (multi ? '<button class="pill" data-next>Дальше · <span data-counter>1 / ' + playlist.length + '</span></button>' : '') +
             '<button class="pill" data-mute>Выключить звук</button>' +
             '<button class="pill" data-close>Закрыть ✕</button>' +
           '</div>' +
-          '<video src="' + src + '" autoplay loop playsinline></video>' +
+          '<video autoplay playsinline' + (multi ? '' : ' loop') + '></video>' +
           '<p class="lightbox-hint">Esc или клик мимо видео – закрыть</p>' +
         '</div>';
       document.body.appendChild(lb);
@@ -189,13 +198,29 @@
       current = lb;
 
       var video = lb.querySelector('video');
+      var counter = lb.querySelector('[data-counter]');
       video.volume = 0.85;
-      video.play().catch(function () {
-        /* если браузер запретил звук на автоплей – стартуем без звука */
-        video.muted = true;
-        lb.querySelector('[data-mute]').textContent = 'Включить звук';
-        video.play().catch(function () {});
-      });
+
+      function playIdx(i) {
+        idx = (i + playlist.length) % playlist.length;
+        video.src = playlist[idx];
+        if (counter) counter.textContent = (idx + 1) + ' / ' + playlist.length;
+        video.play().catch(function () {
+          /* если браузер запретил звук на автоплей – стартуем без звука */
+          video.muted = true;
+          lb.querySelector('[data-mute]').textContent = 'Включить звук';
+          video.play().catch(function () {});
+        });
+      }
+      playIdx(0);
+
+      if (multi) {
+        /* по окончании ролика – следующий, по кругу */
+        video.addEventListener('ended', function () { playIdx(idx + 1); });
+        lb.querySelector('[data-next]').addEventListener('click', function (e) {
+          e.stopPropagation(); playIdx(idx + 1);
+        });
+      }
 
       lb.querySelector('[data-mute]').addEventListener('click', function (e) {
         e.stopPropagation();
