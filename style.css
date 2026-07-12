@@ -533,6 +533,27 @@ footer {
   .lightbox-ui { top: auto; bottom: -42px; right: 0; }
 }
 
+/* ---------- тост «адрес скопирован» ---------- */
+.copy-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translate(-50%, 12px);
+  z-index: 110;
+  background: var(--blue2);
+  color: var(--brown1);
+  padding: 6px 14px;
+  font-size: 15px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease, transform .3s ease;
+  white-space: nowrap;
+  max-width: calc(100vw - 32px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.copy-toast.on { opacity: 1; transform: translate(-50%, 0); }
+
 /* ---------- курсор-звёздочка ---------- */
 .cursor-star {
   position: fixed;

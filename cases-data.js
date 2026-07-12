@@ -7,7 +7,7 @@
    - title    : название
    - year     : год (строка, показывается серым)
    - cats     : категории для фильтра, через пробел:
-                graphic | motion | video
+                graphic (статика) | motion (motion & video)
    - tags     : список тегов на карточке
    - image    : путь к превью (положи файл в папку assets/)
    - desc     : короткое описание
@@ -52,7 +52,7 @@ window.CASES = [
   {
     "title": "СЕАНС – визуальный бренд",
     "year": "2023 – н.в.",
-    "cats": "graphic motion video",
+    "cats": "graphic motion",
     "tags": ["Brand Identity", "Event Branding", "Social Media", "3D Static Visual", "2D Motion"],
     "image": "assets/se-cover.jpg",
     "desc": "СЕАНС – молодое музыкальное творческое объединение из Санкт-Петербурга: сеты, треки, обучение, вечеринки и стриминговый проект MEGAHOUSE. Я главный дизайнер бренда с 2023 года: за два года он прошёл путь от логотипа и одного цвета до цельной системы, которая распространяется на релизы, вечеринки, мерч и коллаборации.",
@@ -101,7 +101,7 @@ window.CASES = [
   {
     "title": "Под трибуной СХЛ",
     "year": "2025",
-    "cats": "motion video",
+    "cats": "motion",
     "tags": ["3D Motion", "2D Motion"],
     "image": "assets/shl.jpg",
     "video": ["assets/shl-1.mp4", "assets/shl-2.mp4"],
@@ -141,7 +141,7 @@ window.CASES = [
   {
     "title": "DE MATES emoji pack",
     "year": "2025",
-    "cats": "motion graphic",
+    "cats": "graphic",
     "tags": ["3D Static Visual", "Social Media"],
     "image": "assets/de-mates.jpg",
     "desc": "Набор 3D-эмодзи и стикеров для комьюнити DE MATES: единая серия персонажей-смайлов для Telegram и промо-материалов вечеринок.",

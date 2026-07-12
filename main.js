@@ -303,6 +303,10 @@
     var cases = document.querySelectorAll('.case');
 
     function applyFilter(cat) {
+      /* фильтр живёт в адресе: перезагрузка и «назад» его не сбрасывают */
+      try {
+        history.replaceState(null, '', cat === 'all' ? location.pathname : '#' + cat);
+      } catch (err) {}
       filterBtns.forEach(function (b) {
         b.classList.toggle('light', b.getAttribute('data-filter') === cat);
         b.classList.toggle('active', b.getAttribute('data-filter') === cat);
@@ -326,6 +330,12 @@
     filterBtns.forEach(function (b) {
       b.addEventListener('click', function () { applyFilter(b.getAttribute('data-filter')); });
     });
+
+    /* восстановить фильтр из адреса при загрузке */
+    var initial = location.hash.slice(1);
+    if (initial && document.querySelector('[data-filter="' + initial + '"]')) {
+      applyFilter(initial);
+    }
   }
 
   /* ---------------------------------------------------
@@ -374,6 +384,39 @@
       requestAnimationFrame(follow);
     })();
   }
+
+  /* ---------------------------------------------------
+   * 6.5 Почтовые ссылки: копируем адрес в буфер
+   *     (mailto может никуда не вести, если нет почтового
+   *      клиента – а адрес в буфере выручает всегда)
+   * --------------------------------------------------- */
+  (function initEmailCopy() {
+    var toast = null, hideTimer = null;
+
+    function showToast(text) {
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.className = 'copy-toast';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = text;
+      toast.classList.add('on');
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(function () { toast.classList.remove('on'); }, 2200);
+    }
+
+    document.querySelectorAll('a[href^="mailto:"]').forEach(function (a) {
+      a.addEventListener('click', function () {
+        var email = a.getAttribute('href').replace('mailto:', '').split('?')[0];
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(email).then(function () {
+            showToast('✦ ' + email + ' – скопировано');
+          }).catch(function () {});
+        }
+        /* mailto продолжает работать как обычно */
+      });
+    });
+  })();
 
   /* ---------------------------------------------------
    * 7. Yakutsk weather – the joke is real
