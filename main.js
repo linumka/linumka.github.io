@@ -164,83 +164,180 @@
   renderCases();
 
   /* ---------------------------------------------------
-   * 2.6 Видео-лайтбокс: клик по превью или названию кейса
+   * 2.6 Видео-лайтбокс
+   *     Десктоп: рамка + квадратные кнопки (пауза/звук на видео,
+   *              стрелки prev/next по бокам, ✕ в углу экрана)
+   *     Мобайл:  вертикальная лента как в Reels – свайп = следующее
    * --------------------------------------------------- */
   (function initLightbox() {
     var current = null;
+    var soundOn = true; /* запоминаем выбор звука между роликами */
 
-    function sparkSvg() {
-      return '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg>';
+    var I = {
+      play:  '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M7.5 4.5v15l13-7.5z"/></svg>',
+      pause: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M6 4h4.4v16H6zM13.6 4H18v16h-4.4z"/></svg>',
+      volOn: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 9v6h4l5 4.5v-15L8 9H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16 8.7a4.7 4.7 0 0 1 0 6.6M18.6 6.2a8.2 8.2 0 0 1 0 11.6"/></svg>',
+      volOff:'<svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 9v6h4l5 4.5v-15L8 9H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="m15.8 9.6 5 5M20.8 9.6l-5 5"/></svg>',
+      prev:  '<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M14.5 5.5 8 12l6.5 6.5"/></svg>',
+      next:  '<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="m9.5 5.5 6.5 6.5-6.5 6.5"/></svg>',
+      close: '<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="m5.5 5.5 13 13M18.5 5.5l-13 13"/></svg>',
+      spark: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg>'
+    };
+
+    function btn(cls, icon, label) {
+      return '<button class="lb-btn ' + cls + '" aria-label="' + label + '">' + icon + '</button>';
+    }
+
+    function tryPlay(video, muteBtn) {
+      video.muted = !soundOn;
+      video.play().catch(function () {
+        /* браузер запретил звук – играем без него */
+        soundOn = false;
+        video.muted = true;
+        if (muteBtn) muteBtn.innerHTML = I.volOff;
+        video.play().catch(function () {});
+      });
     }
 
     function open(srcList) {
       close();
       var playlist = String(srcList).split('|');
-      var idx = 0;
-      var multi = playlist.length > 1;
+      var isMobile = window.matchMedia('(max-width: 760px), (pointer: coarse)').matches;
+      if (isMobile) openReels(playlist);
+      else openDesktop(playlist);
+    }
 
+    /* ---------- десктоп: рамка + стрелки ---------- */
+    function openDesktop(playlist) {
+      var idx = 0, multi = playlist.length > 1;
       var lb = document.createElement('div');
       lb.className = 'lightbox';
       lb.innerHTML =
         '<div class="lightbox-frame">' +
-          '<span class="frame-spark frame-spark--tl">' + sparkSvg() + '</span>' +
-          '<span class="frame-spark frame-spark--br">' + sparkSvg() + '</span>' +
-          '<div class="lightbox-ui">' +
-            (multi ? '<button class="pill" data-next>Дальше · <span data-counter>1 / ' + playlist.length + '</span></button>' : '') +
-            '<button class="pill" data-mute>Выключить звук</button>' +
-            '<button class="pill" data-close>Закрыть ✕</button>' +
-          '</div>' +
+          '<span class="frame-spark frame-spark--tl">' + I.spark + '</span>' +
+          '<span class="frame-spark frame-spark--br">' + I.spark + '</span>' +
           '<video autoplay playsinline' + (multi ? '' : ' loop') + '></video>' +
-        '</div>';
-      document.body.appendChild(lb);
-      document.body.style.overflow = 'hidden';
-      current = lb;
+          (multi ? '<div class="lb-badge" data-counter>1 / ' + playlist.length + '</div>' : '') +
+          '<div class="lb-controls">' +
+            btn('lb-pause', I.pause, 'Пауза') +
+            btn('lb-mute', soundOn ? I.volOn : I.volOff, 'Звук') +
+          '</div>' +
+        '</div>' +
+        btn('lb-close', I.close, 'Закрыть') +
+        (multi ? btn('lb-prev', I.prev, 'Предыдущее') + btn('lb-next', I.next, 'Следующее') : '');
+      mount(lb);
 
       var video = lb.querySelector('video');
       var counter = lb.querySelector('[data-counter]');
+      var pauseBtn = lb.querySelector('.lb-pause');
+      var muteBtn = lb.querySelector('.lb-mute');
       video.volume = 0.85;
 
       function playIdx(i) {
         idx = (i + playlist.length) % playlist.length;
         video.src = playlist[idx];
         if (counter) counter.textContent = (idx + 1) + ' / ' + playlist.length;
-        video.play().catch(function () {
-          /* если браузер запретил звук на автоплей – стартуем без звука */
-          video.muted = true;
-          lb.querySelector('[data-mute]').textContent = 'Включить звук';
-          video.play().catch(function () {});
-        });
+        pauseBtn.innerHTML = I.pause;
+        tryPlay(video, muteBtn);
       }
       playIdx(0);
 
       if (multi) {
-        /* по окончании ролика – следующий, по кругу */
         video.addEventListener('ended', function () { playIdx(idx + 1); });
-        lb.querySelector('[data-next]').addEventListener('click', function (e) {
-          e.stopPropagation(); playIdx(idx + 1);
-        });
+        lb.querySelector('.lb-next').addEventListener('click', function (e) { e.stopPropagation(); playIdx(idx + 1); });
+        lb.querySelector('.lb-prev').addEventListener('click', function (e) { e.stopPropagation(); playIdx(idx - 1); });
+        lb._keys = function (e) {
+          if (e.key === 'ArrowRight') playIdx(idx + 1);
+          if (e.key === 'ArrowLeft') playIdx(idx - 1);
+        };
+        document.addEventListener('keydown', lb._keys);
       }
 
-      lb.querySelector('[data-mute]').addEventListener('click', function (e) {
-        e.stopPropagation();
-        video.muted = !video.muted;
-        this.textContent = video.muted ? 'Включить звук' : 'Выключить звук';
+      wireCommon(lb, function () { return video; }, pauseBtn, muteBtn);
+    }
+
+    /* ---------- мобайл: вертикальная лента (reels) ---------- */
+    function openReels(playlist) {
+      var lb = document.createElement('div');
+      lb.className = 'lightbox lightbox--reels';
+      lb.innerHTML =
+        '<div class="reels-scroll">' +
+          playlist.map(function (src, i) {
+            return '<div class="reel"><video src="' + src + '" loop playsinline preload="metadata" data-i="' + i + '"></video></div>';
+          }).join('') +
+        '</div>' +
+        (playlist.length > 1 ? '<div class="lb-badge lb-badge--fixed" data-counter>1 / ' + playlist.length + '</div>' : '') +
+        '<div class="lb-controls lb-controls--fixed">' +
+          btn('lb-pause', I.pause, 'Пауза') +
+          btn('lb-mute', soundOn ? I.volOn : I.volOff, 'Звук') +
+        '</div>' +
+        btn('lb-close', I.close, 'Закрыть');
+      mount(lb);
+
+      var videos = [].slice.call(lb.querySelectorAll('video'));
+      var counter = lb.querySelector('[data-counter]');
+      var pauseBtn = lb.querySelector('.lb-pause');
+      var muteBtn = lb.querySelector('.lb-mute');
+      var activeVideo = videos[0];
+      videos.forEach(function (v) { v.volume = 0.85; });
+
+      /* играет только видимый ролик */
+      var vio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          var v = e.target;
+          if (e.isIntersecting && e.intersectionRatio > 0.6) {
+            activeVideo = v;
+            if (counter) counter.textContent = (+v.dataset.i + 1) + ' / ' + videos.length;
+            pauseBtn.innerHTML = I.pause;
+            tryPlay(v, muteBtn);
+          } else {
+            v.pause();
+            v.currentTime = 0;
+          }
+        });
+      }, { root: lb.querySelector('.reels-scroll'), threshold: 0.6 });
+      videos.forEach(function (v) { vio.observe(v); });
+
+      wireCommon(lb, function () { return activeVideo; }, pauseBtn, muteBtn);
+    }
+
+    /* ---------- общее: пауза, звук, закрытие ---------- */
+    function wireCommon(lb, getVideo, pauseBtn, muteBtn) {
+      function togglePause(e) {
+        if (e) e.stopPropagation();
+        var v = getVideo();
+        if (v.paused) { v.play().catch(function () {}); pauseBtn.innerHTML = I.pause; }
+        else { v.pause(); pauseBtn.innerHTML = I.play; }
+      }
+      pauseBtn.addEventListener('click', togglePause);
+      /* тап по самому видео = пауза, как в Instagram */
+      lb.addEventListener('click', function (e) {
+        if (e.target.closest('video')) { togglePause(); return; }
+        if (!e.target.closest('.lb-btn') && !e.target.closest('.lb-badge')) close();
       });
-      lb.querySelector('[data-close]').addEventListener('click', function (e) {
+      muteBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        soundOn = !soundOn;
+        getVideo().muted = !soundOn;
+        muteBtn.innerHTML = soundOn ? I.volOn : I.volOff;
+      });
+      lb.querySelector('.lb-close').addEventListener('click', function (e) {
         e.stopPropagation(); close();
       });
-      /* клик по любому месту вне видео закрывает */
-      lb.addEventListener('click', function (e) {
-        if (!e.target.closest('video') && !e.target.closest('.lightbox-ui')) close();
-      });
+    }
+
+    function mount(lb) {
+      document.body.appendChild(lb);
+      document.body.style.overflow = 'hidden';
+      current = lb;
       requestAnimationFrame(function () { lb.classList.add('on'); });
     }
 
     function close() {
       if (!current) return;
       var lb = current; current = null;
-      var v = lb.querySelector('video');
-      if (v) v.pause();
+      lb.querySelectorAll('video').forEach(function (v) { v.pause(); });
+      if (lb._keys) document.removeEventListener('keydown', lb._keys);
       lb.classList.remove('on');
       document.body.style.overflow = '';
       setTimeout(function () { lb.remove(); }, 300);
