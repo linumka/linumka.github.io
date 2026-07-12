@@ -178,8 +178,8 @@
       pause: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M6 4h4.4v16H6zM13.6 4H18v16h-4.4z"/></svg>',
       volOn: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 9v6h4l5 4.5v-15L8 9H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16 8.7a4.7 4.7 0 0 1 0 6.6M18.6 6.2a8.2 8.2 0 0 1 0 11.6"/></svg>',
       volOff:'<svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 9v6h4l5 4.5v-15L8 9H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="m15.8 9.6 5 5M20.8 9.6l-5 5"/></svg>',
-      prev:  '<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M14.5 5.5 8 12l6.5 6.5"/></svg>',
-      next:  '<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="m9.5 5.5 6.5 6.5-6.5 6.5"/></svg>',
+      up:    '<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="m5.5 14.5 6.5-6.5 6.5 6.5"/></svg>',
+      down:  '<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="m5.5 9.5 6.5 6.5 6.5-6.5"/></svg>',
       close: '<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="m5.5 5.5 13 13M18.5 5.5l-13 13"/></svg>',
       spark: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg>'
     };
@@ -224,7 +224,7 @@
           '</div>' +
         '</div>' +
         btn('lb-close', I.close, 'Закрыть') +
-        (multi ? btn('lb-prev', I.prev, 'Предыдущее') + btn('lb-next', I.next, 'Следующее') : '');
+        (multi ? '<div class="lb-nav">' + btn('lb-prev', I.up, 'Предыдущее') + btn('lb-next', I.down, 'Следующее') + '</div>' : '');
       mount(lb);
 
       var video = lb.querySelector('video');
@@ -242,16 +242,38 @@
       }
       playIdx(0);
 
+      /* вниз после последнего ролика = выход обратно в портфолио */
+      function goDown() {
+        if (idx >= playlist.length - 1) close();
+        else playIdx(idx + 1);
+      }
+      function goUp() {
+        if (idx > 0) playIdx(idx - 1);
+      }
+
       if (multi) {
         video.addEventListener('ended', function () { playIdx(idx + 1); });
-        lb.querySelector('.lb-next').addEventListener('click', function (e) { e.stopPropagation(); playIdx(idx + 1); });
-        lb.querySelector('.lb-prev').addEventListener('click', function (e) { e.stopPropagation(); playIdx(idx - 1); });
-        lb._keys = function (e) {
-          if (e.key === 'ArrowRight') playIdx(idx + 1);
-          if (e.key === 'ArrowLeft') playIdx(idx - 1);
-        };
-        document.addEventListener('keydown', lb._keys);
+        lb.querySelector('.lb-next').addEventListener('click', function (e) { e.stopPropagation(); goDown(); });
+        lb.querySelector('.lb-prev').addEventListener('click', function (e) { e.stopPropagation(); goUp(); });
       }
+
+      lb._keys = function (e) {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') goDown();
+        if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') goUp();
+      };
+      document.addEventListener('keydown', lb._keys);
+
+      /* колесо мыши листает ролики */
+      var wheelAcc = 0, wheelLock = false;
+      lb.addEventListener('wheel', function (e) {
+        e.preventDefault();
+        if (wheelLock) return;
+        wheelAcc += e.deltaY;
+        if (wheelAcc > 60) { wheelLock = true; wheelAcc = 0; goDown(); }
+        else if (wheelAcc < -60) { wheelLock = true; wheelAcc = 0; goUp(); }
+        else return;
+        setTimeout(function () { wheelLock = false; }, 500);
+      }, { passive: false });
 
       wireCommon(lb, function () { return video; }, pauseBtn, muteBtn);
     }
@@ -297,6 +319,18 @@
         });
       }, { root: lb.querySelector('.reels-scroll'), threshold: 0.6 });
       videos.forEach(function (v) { vio.observe(v); });
+
+      /* свайп вверх после последнего ролика = выход в портфолио */
+      var scroller = lb.querySelector('.reels-scroll');
+      var touchY = 0;
+      scroller.addEventListener('touchstart', function (e) {
+        touchY = e.touches[0].clientY;
+      }, { passive: true });
+      scroller.addEventListener('touchmove', function (e) {
+        var dy = touchY - e.touches[0].clientY; /* >0 – тянут вверх, к следующему */
+        var atEnd = scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 2;
+        if (dy > 70 && atEnd) close();
+      }, { passive: true });
 
       wireCommon(lb, function () { return activeVideo; }, pauseBtn, muteBtn);
     }

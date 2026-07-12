@@ -563,14 +563,17 @@ footer {
   top: 16px; right: 16px;
   z-index: 8;
 }
-.lb-prev, .lb-next {
+/* стрелки одной колонкой справа, как в Instagram */
+.lb-nav {
   position: fixed;
+  right: 20px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 8;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-.lb-prev { left: 20px; }
-.lb-next { right: 20px; }
 
 /* мобайл: вертикальная лента как reels */
 .lightbox--reels { padding: 0; display: block; background: rgba(31,19,23,.92); }
@@ -700,7 +703,7 @@ footer {
   .banner-grid { padding-top: 72px; padding-bottom: 72px; }
   .edu-item:nth-child(odd), .edu-item:nth-child(even) { grid-column: 1 / 5; }
   .info-card { padding: 24px 20px 28px; }
-  .footer-inner { grid-template-columns: 1fr 1fr; padding-bottom: 72px; }
+  .footer-inner { grid-template-columns: 1fr; padding-bottom: 72px; }
   .filters { gap: 24px; }
   .gallery-strip img { height: 140px; }
 }
