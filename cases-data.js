@@ -1,21 +1,3 @@
-/* ============================================================
-   ДАННЫЕ КЕЙСОВ ПОРТФОЛИО
-   Этот файл можно редактировать вручную или через admin.html
-   (открой admin.html в браузере – там удобный редактор).
-
-   Поля кейса:
-   - title    : название
-   - year     : год (строка, показывается серым)
-   - cats     : категории для фильтра, через пробел:
-                graphic (статика) | motion (motion & video)
-   - tags     : список тегов на карточке
-   - image    : путь к превью (положи файл в папку assets/)
-   - desc     : короткое описание
-   - featured : true = большой кейс с кнопкой «Подробнее»
-   - details  : только для featured-кейсов (роль, задача, решение,
-                галереи – см. примеры ниже)
-   ============================================================ */
-
 window.CASES = [
   {
     "title": "BIOCON",
@@ -92,7 +74,7 @@ window.CASES = [
     "title": "ITMO FASHION SHOW",
     "year": "2025",
     "cats": "motion graphic",
-    "tags": ["3D Motion", "Social Media"],
+    "tags": ["3D Motion"],
     "image": "assets/fashion-show.jpg",
     "video": ["assets/fashion-1.mp4", "assets/fashion-2.mp4", "assets/fashion-3.mp4"],
     "desc": "Серия вертикальных 3D промо-роликов для событий конкурса моды, визуальная айдентика показа и SMM-контент; анимированная графика для экранов подиума.",
@@ -122,7 +104,7 @@ window.CASES = [
     "title": "MATES: RACING CLUB",
     "year": "2025",
     "cats": "motion graphic",
-    "tags": ["3D Motion", "Social Media"],
+    "tags": ["3D Motion"],
     "image": "assets/mates-racing.jpg",
     "video": "assets/mates-racing.mp4",
     "desc": "3D-анонс осенней вечеринки – хип-хоп, рэп и поп. Вертикальный промо-ролик и графическое сопровождение анонсов в соцсетях.",
@@ -132,7 +114,7 @@ window.CASES = [
     "title": "MATES: LOVE PARTY",
     "year": "2026",
     "cats": "motion graphic",
-    "tags": ["3D Motion", "Social Media"],
+    "tags": ["3D Motion"],
     "image": "assets/love-party.jpg",
     "video": "assets/love-party.mp4",
     "desc": "Вертикальный 3D промо-ролик для вечеринки ко Дню всех влюблённых и сопровождение анонсов в соцсетях.",
