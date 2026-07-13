@@ -201,6 +201,7 @@
 
     function open(srcList) {
       close();
+      if (window.ym) ym(110702120, 'reachGoal', 'video_open');
       var playlist = String(srcList).split('|');
       var isMobile = window.matchMedia('(max-width: 760px), (pointer: coarse)').matches;
       if (isMobile) openReels(playlist);
@@ -548,6 +549,20 @@
       });
     });
   })();
+
+  /* ---------------------------------------------------
+   * 6.7 Цели Яндекс.Метрики: клики по ключевым кнопкам
+   * --------------------------------------------------- */
+  document.addEventListener('click', function (e) {
+    if (!window.ym) return;
+    var a = e.target.closest && e.target.closest('a');
+    if (!a) return;
+    var href = a.getAttribute('href') || '';
+    if (href.indexOf('mailto:') === 0) ym(110702120, 'reachGoal', 'email_click');
+    else if (a.hasAttribute('download')) ym(110702120, 'reachGoal', 'cv_download');
+    else if (href.indexOf('behance') !== -1) ym(110702120, 'reachGoal', 'behance_click');
+    else if (href.indexOf('t.me') !== -1) ym(110702120, 'reachGoal', 'telegram_click');
+  });
 
   /* ---------------------------------------------------
    * 7. Yakutsk weather – the joke is real
