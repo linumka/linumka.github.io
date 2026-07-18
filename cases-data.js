@@ -1,13 +1,23 @@
+/* Данные кейсов портфолио. Редактируется через admin.html или вручную. */
 window.CASES = [
   {
     "title": "BIOCON",
     "year": "2023 – 2024",
     "cats": "graphic motion",
-    "tags": ["Event Branding", "Social Media", "2D Illustration", "3D Motion", "3D Static Visual"],
+    "tags": [
+      "Event Branding",
+      "Social Media",
+      "2D Illustration",
+      "3D Motion",
+      "3D Static Visual"
+    ],
     "image": "assets/biocon.jpg",
-    "desc": "BIOCON – ежегодная международная конференция по биотехнологиям, которую Университет ИТМО проводит при поддержке ПАО «Татнефть» (350+ участников из 24 стран). Задача – уйти от сухого академического образа к современному бренду, который привлекает студентов, молодых учёных, стартапы и научные медиа и отражает культурный код Татарстана.",
+    "desc": "BIOCON – международная конференция по биотехнологиям Университета ИТМО и ПАО «Татнефть»: 350+ участников из 24 стран. Организаторы хотели уйти от сухого академического образа. Я построила бренд конференции с нуля и вела его два сезона: логотип, соцсети, иллюстрации, экраны на площадке, полиграфия и мерч.",
     "featured": true,
-    "link": { "url": "https://www.behance.net/gallery/216718569/Event-brand-identity-BIOCON-2024", "label": "Полный кейс на Behance" },
+    "link": {
+      "url": "https://www.behance.net/gallery/216718569/Event-brand-identity-BIOCON-2024",
+      "label": "Полный кейс на Behance"
+    },
     "details": {
       "roleIntro": "",
       "role": [
@@ -19,7 +29,15 @@ window.CASES = [
         "вёрстка презентаций и пресс-кита;",
         "работа в связке с SMM, PR и фронтенд-разработкой."
       ],
-      "gallery1": ["assets/b-157.jpg", "assets/b-178.jpg", "assets/b-211.jpg", "assets/b-ad.jpg", "assets/b-180.jpg", "assets/b-210.jpg", "assets/b-201.jpg"],
+      "gallery1": [
+        "assets/b-157.jpg",
+        "assets/b-178.jpg",
+        "assets/b-211.jpg",
+        "assets/b-ad.jpg",
+        "assets/b-180.jpg",
+        "assets/b-210.jpg",
+        "assets/b-201.jpg"
+      ],
       "task": "Объединить академическое научное сообщество и молодую аудиторию – студентов, школьников, стартапы, молодых исследователей – и подчеркнуть региональную идентичность Татарстана, где проходит конференция.",
       "solutionIntro": "Дизайн построен на трёх пересекающихся смысловых опорах:",
       "solution": [
@@ -28,18 +46,35 @@ window.CASES = [
         "Идентичность Татарстана | Зелёный и красный – национальные цвета – в палитре; узоры и силуэты, вдохновлённые татарским орнаментом, переосмыслены современным графическим языком."
       ],
       "closing": "Отдельной задачей была адаптация стиля под десятки носителей – от экранов и лайтбоксов до Telegram-каналов и печатного мерча. Помогало плотное взаимодействие с организаторами: быстрые концепты, тесты и отбор решений, которые одинаково хорошо работают в вебе и в печати.",
-      "gallery2": ["assets/b-2003.jpg", "assets/b-2004.jpg", "assets/b-2005.jpg", "assets/b-2006.jpg", "assets/b-2007.jpg", "assets/b-2008.jpg", "assets/b-group.jpg"]
+      "gallery2": [
+        "assets/b-2003.jpg",
+        "assets/b-2004.jpg",
+        "assets/b-2005.jpg",
+        "assets/b-2006.jpg",
+        "assets/b-2007.jpg",
+        "assets/b-2008.jpg",
+        "assets/b-group.jpg"
+      ]
     }
   },
   {
     "title": "СЕАНС – визуальный бренд",
     "year": "2023 – н.в.",
     "cats": "graphic motion",
-    "tags": ["Brand Identity", "Event Branding", "Social Media", "3D Static Visual", "2D Motion"],
+    "tags": [
+      "Brand Identity",
+      "Event Branding",
+      "Social Media",
+      "3D Static Visual",
+      "2D Motion"
+    ],
     "image": "assets/se-cover.jpg",
     "desc": "СЕАНС – молодое музыкальное творческое объединение из Санкт-Петербурга: сеты, треки, обучение, вечеринки и стриминговый проект MEGAHOUSE. Я главный дизайнер бренда с 2023 года: за два года он прошёл путь от логотипа и одного цвета до цельной системы, которая распространяется на релизы, вечеринки, мерч и коллаборации.",
     "featured": true,
-    "link": { "url": "https://www.behance.net/gallery/252269959/Brand-identity-Music-community", "label": "Полный кейс на Behance" },
+    "link": {
+      "url": "https://www.behance.net/gallery/252269959/Brand-identity-Music-community",
+      "label": "Полный кейс на Behance"
+    },
     "details": {
       "roleIntro": "Отвечаю за визуальный язык объединения. В 2025 году собрала команду: сама нашла и провела собеседование с дизайнером-помощником, и дальше мы работаем вместе. Медиа придумываем командой – с фотографами и видеографами продумываем концепции съёмок, для видео делаю обложки и 2D/3D-анимацию.",
       "role": [
@@ -49,7 +84,13 @@ window.CASES = [
         "обложки релизов;",
         "мерч и стикеры."
       ],
-      "gallery1": ["assets/se-mashup.jpg", "assets/se-cover.jpg", "assets/se-cover-fall.jpg", "assets/se-cover-ifs.jpg", "assets/se-mix.jpg"],
+      "gallery1": [
+        "assets/se-mashup.jpg",
+        "assets/se-cover.jpg",
+        "assets/se-cover-fall.jpg",
+        "assets/se-cover-ifs.jpg",
+        "assets/se-mix.jpg"
+      ],
       "task": "У каждого события и релиза СЕАНСа своя тема и своё оформление. Задача была не свести их к одному шаблону, а построить систему, в которой у каждого ивента есть собственная айдентика, но за ней всегда читается СЕАНС.",
       "solutionIntro": "У бренда не было отдельного этапа разработки айдентики с брендбуком и черновиками – СЕАНС складывался по ходу, интуитивно, и сразу применялся на конкретных суб-проектах. Система выкристаллизовалась через сами ивенты и релизы:",
       "solution": [
@@ -58,75 +99,123 @@ window.CASES = [
         "Мерч и стикеры | логотип живёт и в предметах – от наклеек до 3D-печатных брелоков."
       ],
       "closing": "За два года СЕАНС превратился в узнаваемый бренд с собственным вайбом: сообщество выросло примерно втрое, с ~300 до 900+ подписчиков, а на вечеринках – от 200 до 3500+ гостей. Бренд работал на удержание и узнаваемость на этом росте.",
-      "gallery2": ["assets/se-inst-poster.jpg", "assets/se-inst-timetable.jpg", "assets/se-inst-live.jpg", "assets/se-coffee.jpg", "assets/se-flat-poster.jpg", "assets/se-flat-timetable.jpg", "assets/se-stickers.jpg", "assets/se-merch.jpg", "assets/se-cd.jpg"]
+      "gallery2": [
+        "assets/se-inst-poster.jpg",
+        "assets/se-inst-timetable.jpg",
+        "assets/se-inst-live.jpg",
+        "assets/se-coffee.jpg",
+        "assets/se-flat-poster.jpg",
+        "assets/se-flat-timetable.jpg",
+        "assets/se-stickers.jpg",
+        "assets/se-merch.jpg",
+        "assets/se-cd.jpg"
+      ]
     }
+  },
+  {
+    "title": "«Вкусовщина» – постер фильма",
+    "year": "2026",
+    "cats": "graphic",
+    "tags": [
+      "2D Illustration",
+      "3D Static Visual"
+    ],
+    "image": "assets/movie-poster.jpg",
+    "desc": "Постер к короткометражке студии ITMO.KINO. На съёмках я работала гаффером, и постер вырос из реального кадра: стаканы, свет и мизансцену я увидела на площадке, пока ставила свет. Сцену собрала в Blender, чтобы зафиксировать перспективу и камеру, отрисовка – в Photoshop.",
+    "featured": false,
+    "link": { "url": "https://www.behance.net/gallery/252892109/Movie-poster-illustration", "label": "Кейс с процессом на Behance" }
   },
   {
     "title": "Вселенная ИТМО (featuring Toxi$)",
     "year": "2025",
     "cats": "motion",
-    "tags": ["3D Motion"],
+    "tags": [
+      "3D Motion"
+    ],
     "image": "assets/itmo-universe.jpg",
-    "desc": "Серия из 10 авторских 3D-роликов для экрана главной сцены клуба A2 – посвящение первокурсников Университета ИТМО на 3500+ зрителей, хедлайнер Toxi$. Blender + After Effects, проект сдан в срок.",
+    "desc": "Посвящение первокурсников ИТМО в клубе A2: 3500+ зрителей, хедлайнер Toxi$. Я сделала 10 авторских роликов для LED-экрана главной сцены – сцены собирала в Blender, дорабатывала и монтировала в After Effects.",
     "featured": false
   },
   {
     "title": "ITMO FASHION SHOW",
     "year": "2025",
-    "cats": "motion graphic",
-    "tags": ["3D Motion"],
+    "cats": "graphic motion",
+    "tags": [
+      "3D Motion"
+    ],
     "image": "assets/fashion-show.jpg",
-    "video": ["assets/fashion-1.mp4", "assets/fashion-2.mp4", "assets/fashion-3.mp4"],
-    "desc": "Серия вертикальных 3D промо-роликов для событий конкурса моды, визуальная айдентика показа и SMM-контент; анимированная графика для экранов подиума.",
-    "featured": false
+    "desc": "Конкурс моды в ИТМО. Айдентика показа, SMM-контент и серия вертикальных 3D-роликов для анонсов; во время показа моя анимированная графика шла на экранах подиума.",
+    "featured": false,
+    "video": [
+      "assets/fashion-1.mp4",
+      "assets/fashion-2.mp4",
+      "assets/fashion-3.mp4"
+    ]
   },
   {
     "title": "Под трибуной СХЛ",
     "year": "2025",
     "cats": "motion",
-    "tags": ["3D Motion", "2D Motion"],
+    "tags": [
+      "3D Motion",
+      "2D Motion"
+    ],
     "image": "assets/shl.jpg",
-    "video": ["assets/shl-1.mp4", "assets/shl-2.mp4"],
-    "desc": "Моушен-интро и графические перебивки для серии подкастов Студенческой хоккейной лиги Санкт-Петербурга. Финальный рендер 1920×1080.",
-    "featured": false
+    "desc": "Видеоподкаст Студенческой хоккейной лиги Санкт-Петербурга. Сделала 3D-интро и 2D-перебивки, которые открывают каждый выпуск серии; рендер 1920×1080 под монтаж.",
+    "featured": false,
+    "video": [
+      "assets/shl-1.mp4",
+      "assets/shl-2.mp4"
+    ]
   },
   {
     "title": "MEGAHOUSE × EightBall",
     "year": "2025",
-    "cats": "motion graphic",
-    "tags": ["3D Motion", "Social Media", "Event Branding"],
+    "cats": "graphic motion",
+    "tags": [
+      "3D Motion",
+      "Social Media",
+      "Event Branding"
+    ],
     "image": "assets/megahouse.jpg",
-    "video": "assets/megahouse.mp4",
-    "desc": "Вертикальный 3D промо-ролик и анимированная графика для MEGAHOUSE – стриминг-проекта онлайн-вечеринок комьюнити СЕАНС; оформление кампании в соцсетях.",
-    "featured": false
+    "desc": "MEGAHOUSE – стриминговые онлайн-вечеринки комьюнити СЕАНС. Для выпуска с EightBall сделала вертикальный 3D-ролик, анимированную графику для видео и оформление кампании в соцсетях.",
+    "featured": false,
+    "video": "assets/megahouse.mp4"
   },
   {
     "title": "MATES: RACING CLUB",
     "year": "2025",
-    "cats": "motion graphic",
-    "tags": ["3D Motion"],
+    "cats": "graphic motion",
+    "tags": [
+      "3D Motion"
+    ],
     "image": "assets/mates-racing.jpg",
-    "video": "assets/mates-racing.mp4",
-    "desc": "3D-анонс осенней вечеринки – хип-хоп, рэп и поп. Вертикальный промо-ролик и графическое сопровождение анонсов в соцсетях.",
-    "featured": false
+    "desc": "Осенняя вечеринка MATES: хип-хоп, рэп и поп. Сделала вертикальный 3D-анонс с гоночной эстетикой и графику для промо в соцсетях.",
+    "featured": false,
+    "video": "assets/mates-racing.mp4"
   },
   {
     "title": "MATES: LOVE PARTY",
     "year": "2026",
-    "cats": "motion graphic",
-    "tags": ["3D Motion"],
+    "cats": "graphic motion",
+    "tags": [
+      "3D Motion"
+    ],
     "image": "assets/love-party.jpg",
-    "video": "assets/love-party.mp4",
-    "desc": "Вертикальный 3D промо-ролик для вечеринки ко Дню всех влюблённых и сопровождение анонсов в соцсетях.",
-    "featured": false
+    "desc": "Вечеринка MATES ко Дню всех влюблённых. Вертикальный 3D-ролик для анонса и посты для соцсетей.",
+    "featured": false,
+    "video": "assets/love-party.mp4"
   },
   {
     "title": "DE MATES emoji pack",
     "year": "2025",
     "cats": "graphic",
-    "tags": ["3D Static Visual", "Social Media"],
+    "tags": [
+      "3D Static Visual",
+      "Social Media"
+    ],
     "image": "assets/de-mates.jpg",
-    "desc": "Набор 3D-эмодзи и стикеров для комьюнити DE MATES: единая серия персонажей-смайлов для Telegram и промо-материалов вечеринок.",
+    "desc": "Набор 3D-эмодзи для Telegram комьюнити DE MATES: серия персонажей-смайлов, которая живёт в чатах и в промо вечеринок.",
     "featured": false
   }
 ];
