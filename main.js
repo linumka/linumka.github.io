@@ -74,6 +74,12 @@
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
+  /* в описаниях работают ссылки вида [текст](https://...) */
+  function fmtDesc(s) {
+    return esc(s).replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  }
+
   /* хронология: свежие проекты выше; «н.в.» (идущие сейчас) – в самом верху */
   function caseSortKey(c) {
     var y = String(c.year || '');
@@ -113,7 +119,7 @@
         '<div class="case-body">' +
           '<p class="case-title">' + esc(c.title) + '<span class="year">' + esc(c.year) + '</span></p>' +
           '<div class="case-tags">' + (c.tags || []).map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>' +
-          '<p class="case-desc">' + esc(c.desc) + '</p>' +
+          '<p class="case-desc">' + fmtDesc(c.desc) + '</p>' +
           (actions ? '<div class="case-actions">' + actions + '</div>' : '') +
         '</div>';
 
