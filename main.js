@@ -382,11 +382,10 @@
       document.body.appendChild(lb);
       document.body.style.overflow = 'hidden';
       current = lb;
-      requestAnimationFrame(function () {
-        lb.classList.add('on');
-        var first = lb.querySelector('.lb-close');
-        if (first) first.focus();
-      });
+      /* фокус переводим сразу: rAF не выполняется в фоновых вкладках */
+      var first = lb.querySelector('.lb-close');
+      if (first) first.focus();
+      requestAnimationFrame(function () { lb.classList.add('on'); });
 
       /* фокус не должен уходить за пределы диалога */
       lb._trap = function (e) {
