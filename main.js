@@ -100,7 +100,7 @@
     var html = sorted.map(function (c) {
       var vids = c.video ? (Array.isArray(c.video) ? c.video : [c.video]) : [];
       var mediaInner =
-        '<img src="' + esc(c.image) + '" alt="' + esc(c.title) + '" loading="lazy" ' +
+        '<img src="' + esc(c.image) + '" alt="" loading="lazy" ' +
         'onerror="this.parentElement.classList.add(\'ph\');this.remove()">';
       if (vids.length) {
         var label = vids.length > 1 ? 'смотреть анимации (' + vids.length + ')' : 'смотреть анимацию';
@@ -109,7 +109,7 @@
       var media = '<div class="case-media">' + mediaInner + '</div>';
 
       var actions = '';
-      if (c.featured) actions += '<button class="pill case-toggle" data-toggle>Подробнее о кейсе</button>';
+      if (c.featured) actions += '<button class="pill case-toggle" data-toggle aria-expanded="false">Подробнее о кейсе</button>';
       if (c.link && c.link.url) {
         actions += '<a class="pill" href="' + esc(c.link.url) + '" target="_blank" rel="noopener">' +
                    esc(c.link.label || 'Смотреть кейс') + '</a>';
@@ -117,8 +117,8 @@
 
       var body =
         '<div class="case-body">' +
-          '<p class="case-title">' + esc(c.title) + '<span class="year">' + esc(c.year) + '</span></p>' +
-          '<div class="case-tags">' + (c.tags || []).map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>' +
+          '<h3 class="case-title">' + esc(c.title) + '<span class="year">' + esc(c.year) + '</span></h3>' +
+          '<div class="case-tags">' + (c.tags || []).map(function (t) { return '<span lang="en">' + esc(t) + '</span>'; }).join('') + '</div>' +
           '<p class="case-desc">' + fmtDesc(c.desc) + '</p>' +
           (actions ? '<div class="case-actions">' + actions + '</div>' : '') +
         '</div>';
@@ -127,17 +127,22 @@
       var videoList = c.video ? (Array.isArray(c.video) ? c.video : [c.video]) : [];
       var videoAttr = videoList.length ? ' data-video="' + esc(videoList.join('|')) + '"' : '';
       var videoClass = videoList.length ? ' case--video' : '';
+      /* необязательное поле ratio: "9/16" даёт вертикальную карточку */
+      if (String(c.ratio || '').replace(/\s/g, '') === '9/16') videoClass += ' case--vertical';
+
+      var tagsAttr = ' data-tags="' + esc((c.tags || []).join('|')) + '"';
 
       if (!c.featured) {
-        return '<article class="case reveal' + videoClass + '" data-cats="' + esc(c.cats) + '"' + videoAttr + '>' + media + body + '</article>';
+        return '<article class="case reveal' + videoClass + '" data-cats="' + esc(c.cats) + '"' + tagsAttr + videoAttr + '>' + media + body + '</article>';
       }
 
       var d = c.details || {};
       var gallery = function (list) {
         if (!list || !list.length) return '';
-        return '<div class="gallery-strip">' + list.map(function (src) {
-          return '<img src="' + esc(src) + '" alt="' + esc(c.title) + ' – материалы" loading="lazy" onerror="this.remove()">';
-        }).join('') + '</div>';
+        return '<div class="gallery-strip" tabindex="0" role="group" aria-label="Галерея кейса ' + esc(c.title) + '">' +
+          list.map(function (src) {
+            return '<img src="' + esc(src) + '" alt="" loading="lazy" onerror="this.remove()">';
+          }).join('') + '</div>';
       };
       var solution = (d.solution || []).map(function (item) {
         var parts = String(item).split('|');
@@ -155,11 +160,11 @@
           gallery(d.gallery1) +
           (d.task ? '<h4>Задача</h4><p>' + esc(d.task) + '</p>' : '') +
           (solution ? '<h4>Решение</h4>' + (d.solutionIntro ? '<p>' + esc(d.solutionIntro) + '</p>' : '') + '<ul>' + solution + '</ul>' : '') +
-          (d.closing ? '<p style="margin-top:14px">' + esc(d.closing) + '</p>' : '') +
+          (d.closing ? '<p class="mt-14">' + esc(d.closing) + '</p>' : '') +
           gallery(d.gallery2) +
         '</div></div>';
 
-      return '<article class="case case--featured reveal' + videoClass + '" data-cats="' + esc(c.cats) + '"' + videoAttr + '>' +
+      return '<article class="case case--featured reveal' + videoClass + '" data-cats="' + esc(c.cats) + '"' + tagsAttr + videoAttr + '>' +
                '<div class="case-top">' + media + body + '</div>' + details +
              '</article>';
     }).join('');
@@ -367,11 +372,32 @@
       });
     }
 
+    var lastFocused = null;
+
     function mount(lb) {
+      lastFocused = document.activeElement;
+      lb.setAttribute('role', 'dialog');
+      lb.setAttribute('aria-modal', 'true');
+      lb.setAttribute('aria-label', 'Просмотр анимации');
       document.body.appendChild(lb);
       document.body.style.overflow = 'hidden';
       current = lb;
-      requestAnimationFrame(function () { lb.classList.add('on'); });
+      requestAnimationFrame(function () {
+        lb.classList.add('on');
+        var first = lb.querySelector('.lb-close');
+        if (first) first.focus();
+      });
+
+      /* фокус не должен уходить за пределы диалога */
+      lb._trap = function (e) {
+        if (e.key !== 'Tab' || !current) return;
+        var items = current.querySelectorAll('button, [href], video[controls]');
+        if (!items.length) return;
+        var first = items[0], last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      };
+      document.addEventListener('keydown', lb._trap);
     }
 
     function close() {
@@ -379,9 +405,13 @@
       var lb = current; current = null;
       lb.querySelectorAll('video').forEach(function (v) { v.pause(); });
       if (lb._keys) document.removeEventListener('keydown', lb._keys);
+      if (lb._trap) document.removeEventListener('keydown', lb._trap);
       lb.classList.remove('on');
       document.body.style.overflow = '';
-      setTimeout(function () { lb.remove(); }, 300);
+      setTimeout(function () {
+        lb.remove();
+        if (lastFocused && lastFocused.isConnected) lastFocused.focus();
+      }, 300);
     }
 
     document.addEventListener('keydown', function (e) {
@@ -390,10 +420,26 @@
 
     document.querySelectorAll('.case--video').forEach(function (card) {
       var src = card.getAttribute('data-video');
-      ['.case-media', '.case-title'].forEach(function (sel) {
-        var el = card.querySelector(sel);
-        if (el) el.addEventListener('click', function () { open(src); });
+      var media = card.querySelector('.case-media');
+      var title = card.querySelector('.case-title');
+      if (!media) return;
+
+      /* превью работает как настоящая кнопка: мышь, Enter и Space */
+      media.setAttribute('role', 'button');
+      media.setAttribute('tabindex', '0');
+      media.setAttribute('aria-label',
+        'Смотреть анимацию: ' + (title ? title.textContent.trim() : 'кейс'));
+
+      function fire() { open(src); }
+      media.addEventListener('click', fire);
+      media.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+          e.preventDefault();
+          fire();
+        }
       });
+      /* заголовок – только для мыши, дублировать его в таб-порядке не нужно */
+      if (title) title.addEventListener('click', fire);
     });
   })();
 
@@ -437,42 +483,81 @@
    * 4. Case filtering
    * --------------------------------------------------- */
   var filterBtns = document.querySelectorAll('[data-filter]');
+  var subBtns = document.querySelectorAll('[data-subfilter]');
   if (filterBtns.length) {
     var cases = document.querySelectorAll('.case');
 
-    function applyFilter(cat) {
-      /* фильтр живёт в адресе: перезагрузка и «назад» его не сбрасывают */
+    function show(card, visible) {
+      if (visible) {
+        if (card.style.display === 'none') {
+          card.style.display = '';
+          card.classList.remove('pop');
+          void card.offsetWidth;
+          card.classList.add('pop');
+        }
+      } else {
+        card.style.display = 'none';
+        card.classList.remove('pop');
+      }
+    }
+
+    function setHash(value) {
       try {
-        history.replaceState(null, '', cat === 'all' ? location.pathname : '#' + cat);
+        history.replaceState(null, '', value ? '#' + encodeURIComponent(value) : location.pathname);
       } catch (err) {}
+    }
+
+    /* фильтр по разделу: graphic | motion | all */
+    function applyFilter(cat) {
+      setHash(cat === 'all' ? '' : cat);
       filterBtns.forEach(function (b) {
-        b.classList.toggle('light', b.getAttribute('data-filter') === cat);
-        b.classList.toggle('active', b.getAttribute('data-filter') === cat);
+        var on = b.getAttribute('data-filter') === cat;
+        b.classList.toggle('light', on);
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      subBtns.forEach(function (b) {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
       });
       cases.forEach(function (card) {
-        var match = cat === 'all' || (card.getAttribute('data-cats') || '').split(' ').indexOf(cat) !== -1;
-        if (match) {
-          if (card.style.display === 'none') {
-            card.style.display = '';
-            card.classList.remove('pop');
-            void card.offsetWidth;
-            card.classList.add('pop');
-          }
-        } else {
-          card.style.display = 'none';
-          card.classList.remove('pop');
-        }
+        show(card, cat === 'all' || (card.getAttribute('data-cats') || '').split(' ').indexOf(cat) !== -1);
+      });
+    }
+
+    /* под-фильтр по тегу: точное совпадение со строкой из tags */
+    function applySub(tag) {
+      setHash(tag);
+      filterBtns.forEach(function (b) {
+        var isAll = b.getAttribute('data-filter') === 'all';
+        b.classList.toggle('light', false);
+        b.classList.toggle('active', false);
+        b.setAttribute('aria-pressed', 'false');
+        if (isAll) b.classList.remove('light');
+      });
+      subBtns.forEach(function (b) {
+        var on = b.getAttribute('data-subfilter') === tag;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      cases.forEach(function (card) {
+        var tags = (card.getAttribute('data-tags') || '').split('|');
+        show(card, tags.indexOf(tag) !== -1);
       });
     }
 
     filterBtns.forEach(function (b) {
       b.addEventListener('click', function () { applyFilter(b.getAttribute('data-filter')); });
     });
+    subBtns.forEach(function (b) {
+      b.addEventListener('click', function () { applySub(b.getAttribute('data-subfilter')); });
+    });
 
-    /* восстановить фильтр из адреса при загрузке */
-    var initial = location.hash.slice(1);
-    if (initial && document.querySelector('[data-filter="' + initial + '"]')) {
-      applyFilter(initial);
+    /* восстановить состояние из адреса */
+    var initial = decodeURIComponent(location.hash.slice(1));
+    if (initial) {
+      if (document.querySelector('[data-filter="' + initial + '"]')) applyFilter(initial);
+      else if (document.querySelector('[data-subfilter="' + initial.replace(/"/g, '') + '"]')) applySub(initial);
     }
   }
 
@@ -483,6 +568,7 @@
     var details = btn.closest('.case').querySelector('.case-details');
     btn.addEventListener('click', function () {
       var open = details.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
       btn.textContent = open ? 'Свернуть' : 'Подробнее о кейсе';
     });
   });
@@ -535,6 +621,7 @@
       if (!toast) {
         toast = document.createElement('div');
         toast.className = 'copy-toast';
+        toast.setAttribute('role', 'status');
         document.body.appendChild(toast);
       }
       toast.textContent = text;

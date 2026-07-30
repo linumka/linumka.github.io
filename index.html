@@ -14,7 +14,7 @@
 <link rel="apple-touch-icon" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Mulish:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
@@ -37,6 +37,7 @@
   </defs>
 </svg>
 
+<a class="skip-link" href="#main">К содержимому</a>
 <div class="top-fade"></div>
 <nav class="nav">
   <a class="pill" href="portfolio.html">Портфолио</a>
@@ -45,6 +46,7 @@
   <span class="nav-note">Открыта к проектной и удалённой работе</span>
 </nav>
 
+<main id="main">
 <header class="hero">
   <canvas class="stars-canvas" data-stars></canvas>
   <div class="container grid4 hero-about-grid">
@@ -57,6 +59,9 @@
       <p class="hero-sub reveal">Графический дизайнер – брендинг
         и event-айдентика для мероприятий и digital-медиа</p>
       <p class="hero-city reveal">Санкт-Петербург</p>
+      <p class="hero-cta reveal">
+        <a class="pill pill--cta" href="portfolio.html"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span>Посмотреть работы</a>
+      </p>
     </div>
   </div>
 </header>
@@ -178,9 +183,9 @@
     </div>
     <p class="subhead">Инструменты</p>
     <div class="tool-tags">
-      <span>Adobe Photoshop</span><span>Adobe Illustrator</span><span>Adobe After Effects</span>
-      <span>Figma</span><span>Blender 3D</span>
-      <span>Claude</span><span>ChatGPT</span><span>Runway</span>
+      <span lang="en">Adobe Photoshop</span><span lang="en">Adobe Illustrator</span><span lang="en">Adobe After Effects</span>
+      <span lang="en">Figma</span><span lang="en">Blender 3D</span>
+      <span lang="en">Claude</span><span lang="en">ChatGPT</span><span lang="en">Runway</span>
     </div>
     <p class="subhead">Языки</p>
     <p>Русский – родной<br>Английский – C1 (продвинутый)</p>
@@ -198,16 +203,18 @@
     <h2>Связаться со мной</h2>
     <div class="star-row"><span class="spark spark--dark"><svg><use href="#spark4"/></svg></span>Открыта к сотрудничеству – для классных проектов или фуллтайм!</div>
     <div class="contact-actions">
-      <a class="pill" href="mailto:v.alena1711@gmail.com">v.alena1711@gmail.com</a>
+      <a class="pill pill--cta" href="mailto:v.alena1711@gmail.com">v.alena1711@gmail.com</a>
       <a class="pill" href="https://t.me/linumka" target="_blank" rel="noopener">Написать в Telegram</a>
     </div>
     <p class="subhead">Материалы</p>
-    <div class="contact-actions" style="margin-top:8px">
-      <a class="pill" href="portfolio.html">Посмотреть портфолио</a>
-      <a class="pill" href="CV_Vasileva_GraphicDesigner.pdf" download>Скачать резюме PDF</a>
+    <div class="contact-actions mt-8">
+      <a class="pill pill--cta" href="portfolio.html">Посмотреть портфолио</a>
+      <a class="pill pill--cta" href="CV_Vasileva_GraphicDesigner.pdf" download>Скачать резюме PDF</a>
     </div>
   </div>
 </div>
+
+</main>
 
 <footer>
   <canvas class="stars-canvas" data-stars></canvas>
@@ -215,7 +222,8 @@
     <div><p>Алёна Васильева</p></div>
     <div>
       <p>2026</p>
-      <p class="footer-weather" id="weather" title="потому что где-то всегда холоднее">Якутск −34°C</p>
+      <p class="footer-weather" id="weather">Якутск −34°C</p>
+      <span class="weather-note">потому что где-то всегда холоднее</span>
     </div>
     <div>
       <p class="col-title">Больше обо мне:</p>
