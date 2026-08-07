@@ -13,20 +13,74 @@
     var ctx = canvas.getContext('2d');
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var W = 0, H = 0, stars = [], t = 0, raf = null, running = false;
+    var host = canvas.parentElement;
+
+    /* прямоугольники читаемого текста: туда звёзды не ставим */
+    function textZones() {
+      var zones = [];
+      var box = canvas.getBoundingClientRect();
+      var sel = 'h1, h2, h3, p, li, .pill, .case-tags, .info-card, .hero-photo, .footer-links';
+      (host ? host.querySelectorAll(sel) : []).forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (!r.width || !r.height) return;
+        zones.push({
+          x1: r.left - box.left - 14, y1: r.top - box.top - 10,
+          x2: r.right - box.left + 14, y2: r.bottom - box.top + 10
+        });
+      });
+      return zones;
+    }
+
+    function free(x, y, zones) {
+      for (var i = 0; i < zones.length; i++) {
+        var z = zones[i];
+        if (x > z.x1 && x < z.x2 && y > z.y1 && y < z.y2) return false;
+      }
+      return true;
+    }
 
     function resize() {
       var r = canvas.getBoundingClientRect();
       W = r.width; H = r.height;
       canvas.width = W * dpr; canvas.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      var zones = textZones();
       stars = [];
-      var n = Math.round((W * H) / 22000);
-      for (var i = 0; i < n; i++) {
-        /* каждая четвёртая – четырёхлучевая звезда из фирменного набора */
-        var isSpark = Math.random() < 0.28;
+
+      /* 1. «веточка»: пологая дуга слева направо, слева гуще и крупнее */
+      var amp = H * (0.10 + Math.random() * 0.05);
+      var baseY = H * (0.52 + Math.random() * 0.12);
+      var phase = Math.random() * Math.PI;
+      var beads = Math.max(10, Math.round(W / 46));
+      for (var b = 0; b <= beads; b++) {
+        var u = b / beads;                                  /* 0 слева → 1 справа */
+        if (Math.random() > 1 - u * 0.55) continue;          /* справа реже */
+        var x = u * W;
+        var y = baseY + Math.sin(u * Math.PI * 1.6 + phase) * amp + (Math.random() - 0.5) * 12;
+        if (!free(x, y, zones)) continue;
+        var big = Math.random() < 0.3 - u * 0.15;            /* слева крупнее */
         stars.push({
-          x: Math.random() * W, y: Math.random() * H,
-          s: isSpark ? 4 + Math.random() * 6 : 0.7 + Math.random() * 1.8,
+          x: x, y: y,
+          s: big ? 3.5 + Math.random() * 3.5 : 0.8 + Math.random() * 1.4,
+          p: Math.random() * Math.PI * 2,
+          v: 0.5 + Math.random() * 1.1,
+          rot: Math.random() * Math.PI,
+          spark: big,
+          c: Math.random() < 0.4 ? '#b4cdfe' : '#ffece7'
+        });
+      }
+
+      /* 2. редкая россыпь по остальному полю, тоже мимо текста */
+      var n = Math.round((W * H) / 42000);
+      var guard = 0;
+      while (stars.length < beads * 0.6 + n && guard++ < n * 40) {
+        var px = Math.random() * W, py = Math.random() * H;
+        if (!free(px, py, zones)) continue;
+        var isSpark = Math.random() < 0.14;
+        stars.push({
+          x: px, y: py,
+          s: isSpark ? 3 + Math.random() * 3 : 0.7 + Math.random() * 1.5,
           p: Math.random() * Math.PI * 2,
           v: 0.5 + Math.random() * 1.2,
           rot: Math.random() * Math.PI,
@@ -39,10 +93,10 @@
     /* фирменная 4-лучевая звезда: r(θ) = R·|cos(2θ)|^k */
     function sparkPath(x, y, R, rot) {
       ctx.beginPath();
-      for (var a = 0; a <= 64; a++) {
-        var ang = (a / 64) * Math.PI * 2;
-        var rad = R * Math.pow(Math.abs(Math.cos(2 * ang)), 2.2);
-        rad = Math.max(rad, R * 0.06);
+      for (var a = 0; a <= 96; a++) {
+        var ang = (a / 96) * Math.PI * 2;
+        var rad = R * Math.pow(Math.abs(Math.cos(2 * ang)), 3.4);
+        rad = Math.max(rad, R * 0.02);
         var px = x + Math.cos(ang + rot) * rad;
         var py = y + Math.sin(ang + rot) * rad;
         if (a === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
@@ -56,10 +110,10 @@
       for (var i = 0; i < stars.length; i++) {
         var st = stars[i];
         var tw = 0.35 + 0.65 * Math.abs(Math.sin(t * st.v + st.p));
-        ctx.globalAlpha = Math.min(1, 0.45 + tw * 0.75);
+        ctx.globalAlpha = Math.min(1, 0.4 + tw * 0.7);
         ctx.fillStyle = st.c;
         ctx.shadowColor = st.c;
-        ctx.shadowBlur = (st.spark ? 14 : 9) * tw;
+        ctx.shadowBlur = (st.spark ? 11 : 8) * tw;
         if (st.spark) {
           sparkPath(st.x, st.y, st.s * (0.75 + tw * 0.45), st.rot + t * 0.15);
           ctx.fill();
@@ -76,8 +130,13 @@
     function start() { if (!running) { running = true; raf = requestAnimationFrame(frame); } }
     function stop() { running = false; if (raf) cancelAnimationFrame(raf); }
 
+    /* пересчёт после загрузки шрифтов и при ресайзе: зоны текста меняются */
     resize();
     window.addEventListener('resize', resize);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(resize);
+    setTimeout(resize, 1200);
+
+
     if (reduced) { frame(); cancelAnimationFrame(raf); return; }
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (entries) {
@@ -126,7 +185,7 @@
         '<img src="' + esc(c.image) + '" alt="" loading="lazy" ' +
         'onerror="this.parentElement.classList.add(\'ph\');this.remove()">';
       if (vids.length) {
-        var label = vids.length > 1 ? 'смотреть анимации (' + vids.length + ')' : 'смотреть анимацию';
+        var label = vids.length > 1 ? 'смотреть видео (' + vids.length + ')' : 'смотреть видео';
         mediaInner += '<span class="play-badge"><span class="spark"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg></span>' + label + '</span>';
       }
       var media = '<div class="case-media">' + mediaInner + '</div>';
@@ -401,7 +460,7 @@
       lastFocused = document.activeElement;
       lb.setAttribute('role', 'dialog');
       lb.setAttribute('aria-modal', 'true');
-      lb.setAttribute('aria-label', 'Просмотр анимации');
+      lb.setAttribute('aria-label', 'Просмотр видео');
       document.body.appendChild(lb);
       document.body.style.overflow = 'hidden';
       current = lb;
@@ -450,7 +509,7 @@
       media.setAttribute('role', 'button');
       media.setAttribute('tabindex', '0');
       media.setAttribute('aria-label',
-        'Смотреть анимацию: ' + (title ? title.textContent.trim() : 'кейс'));
+        'Смотреть видео: ' + (title ? title.textContent.trim() : 'кейс'));
 
       function fire() { open(src); }
       media.addEventListener('click', fire);
