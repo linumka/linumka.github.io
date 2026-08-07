@@ -62,11 +62,11 @@ h3.block-label {
   gap: 6px;
   background: var(--brown2);
   color: var(--white1);
-  padding: 4px 12px;
+  padding: 0 10px;
   font-size: 16px;
   font-family: inherit;
   font-weight: 500;
-  line-height: 1.35;
+  line-height: 1.3;
   border: none;
   cursor: pointer;
   transition: background .25s, color .25s;
@@ -76,11 +76,11 @@ h3.block-label {
 .pill::after {
   content: "";
   position: absolute;
-  top: -11px; bottom: -11px;
+  top: -14px; bottom: -14px;
   left: -4px; right: -4px;
 }
 /* конверсионные кнопки заметнее навигационных */
-.pill--cta { padding: 8px 16px; }
+.pill--cta { padding: 2px 14px; }
 .pill:hover { background: #6a4c56; }
 /* видимый фокус на тёмном фоне */
 :where(a, button, [tabindex]):focus-visible {
@@ -253,11 +253,21 @@ section { position: relative; }
   gap: 56px;
   margin-top: 48px;
 }
-.xp-dates { color: var(--white2); margin-bottom: 14px; }
 .xp-grid { row-gap: 12px; }
-.xp-org { grid-column: 1 / 2; color: var(--white1); min-width: 0; }
-.xp-org .muted { display: block; margin-top: 4px; }
-.xp-role { grid-column: 1 / 2; color: var(--white2); min-width: 0; margin-top: 4px; }
+/* иерархия как в резюме: позиция крупно, организация с датами мелко одной строкой */
+.xp-head { grid-column: 1 / 2; min-width: 0; }
+.xp-position {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--white1);
+  margin: 0;
+}
+.xp-meta {
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--white2);
+}
 .xp-desc { grid-column: 2 / 5; color: var(--white2); min-width: 0; }
 .xp-desc li {
   padding-left: 16px;
@@ -704,8 +714,7 @@ footer {
 @media (max-width: 1100px) {
   .hero-photo { grid-column: 1 / 3; max-width: 380px; }
   .hero-text { grid-column: 1 / 5; }
-  .xp-org { grid-column: 1 / 5; }
-  .xp-role { grid-column: 1 / 5; color: var(--white2); margin-top: 0; }
+  .xp-head { grid-column: 1 / 5; }
   .xp-desc { grid-column: 1 / 5; }
   .banner-text { grid-column: 1 / 5; max-width: 640px; }
   .card-skills, .card-useful, .card-contact { grid-column: 1 / 5; max-width: 700px; }
@@ -718,8 +727,8 @@ footer {
   .nav .pill { font-size: 15px; }
   .nav-note { right: 50%; transform: translateX(50%); font-size: 11.5px; }
   /* пальцем должно быть легко попасть: реальные паддинги побольше */
-  .pill { padding: 8px 14px; }
-  .pill--cta { padding: 10px 18px; }
+  .pill { padding: 2px 12px; }
+  .pill--cta { padding: 4px 14px; }
   .contact-actions { gap: 14px; }
   .footer-links { gap: 14px; }
   .hero-about-grid { padding-top: 90px; }

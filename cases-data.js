@@ -209,5 +209,17 @@ window.CASES = [
     "image": "assets/de-mates.jpg",
     "desc": "Набор 3D-эмодзи для Telegram комьюнити DE MATES – серия персонажей-смайлов, которая живёт в чатах и в промо вечеринок.",
     "featured": false
+  },
+  {
+    "title": "«Сияние ИТМО» – видео премии",
+    "year": "2025",
+    "cats": "motion",
+    "tags": [
+      "Video Editing"
+    ],
+    "image": "assets/siyanie.jpg",
+    "video": "assets/siyanie.mp4",
+    "desc": "Премия лучших студентов и клубов Университета ИТМО. Я снимала материал на камеру и полностью смонтировала итоговое видео премии. Пост с видео и подробностями – [в канале «Сияние ИТМО»](https://t.me/siyanie_itmo/6).",
+    "featured": false
   }
 ];

@@ -20,16 +20,34 @@
       canvas.width = W * dpr; canvas.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       stars = [];
-      var n = Math.round((W * H) / 26000);
+      var n = Math.round((W * H) / 22000);
       for (var i = 0; i < n; i++) {
+        /* каждая четвёртая – четырёхлучевая звезда из фирменного набора */
+        var isSpark = Math.random() < 0.28;
         stars.push({
           x: Math.random() * W, y: Math.random() * H,
-          s: 0.6 + Math.random() * 1.6,
+          s: isSpark ? 4 + Math.random() * 6 : 0.7 + Math.random() * 1.8,
           p: Math.random() * Math.PI * 2,
           v: 0.5 + Math.random() * 1.2,
-          c: Math.random() < 0.35 ? '#b4cdfe' : '#ffe6e0'
+          rot: Math.random() * Math.PI,
+          spark: isSpark,
+          c: Math.random() < 0.4 ? '#b4cdfe' : '#ffece7'
         });
       }
+    }
+
+    /* фирменная 4-лучевая звезда: r(θ) = R·|cos(2θ)|^k */
+    function sparkPath(x, y, R, rot) {
+      ctx.beginPath();
+      for (var a = 0; a <= 64; a++) {
+        var ang = (a / 64) * Math.PI * 2;
+        var rad = R * Math.pow(Math.abs(Math.cos(2 * ang)), 2.2);
+        rad = Math.max(rad, R * 0.06);
+        var px = x + Math.cos(ang + rot) * rad;
+        var py = y + Math.sin(ang + rot) * rad;
+        if (a === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
     }
 
     function frame() {
@@ -37,14 +55,19 @@
       ctx.clearRect(0, 0, W, H);
       for (var i = 0; i < stars.length; i++) {
         var st = stars[i];
-        var tw = 0.3 + 0.7 * Math.abs(Math.sin(t * st.v + st.p));
-        ctx.globalAlpha = tw * 0.8;
+        var tw = 0.35 + 0.65 * Math.abs(Math.sin(t * st.v + st.p));
+        ctx.globalAlpha = Math.min(1, 0.45 + tw * 0.75);
         ctx.fillStyle = st.c;
         ctx.shadowColor = st.c;
-        ctx.shadowBlur = 6 * tw;
-        ctx.beginPath();
-        ctx.arc(st.x, st.y, st.s * tw, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.shadowBlur = (st.spark ? 14 : 9) * tw;
+        if (st.spark) {
+          sparkPath(st.x, st.y, st.s * (0.75 + tw * 0.45), st.rot + t * 0.15);
+          ctx.fill();
+        } else {
+          ctx.beginPath();
+          ctx.arc(st.x, st.y, st.s * tw, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
       ctx.globalAlpha = 1; ctx.shadowBlur = 0;
       raf = requestAnimationFrame(frame);
