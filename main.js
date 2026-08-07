@@ -55,11 +55,11 @@
       var beads = Math.max(10, Math.round(W / 46));
       for (var b = 0; b <= beads; b++) {
         var u = b / beads;                                  /* 0 слева → 1 справа */
-        if (Math.random() > 1 - u * 0.55) continue;          /* справа реже */
-        var x = u * W;
+        if (Math.random() < u * 0.78) continue;              /* справа сильно реже */
+        var x = 16 + u * (W - 32);                           /* с отступом от краёв */
         var y = baseY + Math.sin(u * Math.PI * 1.6 + phase) * amp + (Math.random() - 0.5) * 12;
         if (!free(x, y, zones)) continue;
-        var big = Math.random() < 0.3 - u * 0.15;            /* слева крупнее */
+        var big = Math.random() < 0.4 - u * 0.3;             /* слева крупнее */
         stars.push({
           x: x, y: y,
           s: big ? 3.5 + Math.random() * 3.5 : 0.8 + Math.random() * 1.4,
@@ -71,13 +71,15 @@
         });
       }
 
-      /* 2. редкая россыпь по остальному полю, тоже мимо текста */
-      var n = Math.round((W * H) / 42000);
-      var guard = 0;
-      while (stars.length < beads * 0.6 + n && guard++ < n * 40) {
-        var px = Math.random() * W, py = Math.random() * H;
+      /* 2. редкая россыпь: слева гуще, справа почти пусто, всегда мимо текста */
+      var n = Math.round((W * H) / 90000);
+      var added = 0, guard = 0;
+      while (added < n && guard++ < n * 60) {
+        var px = 12 + Math.pow(Math.random(), 1.7) * (W - 24);
+        var py = 10 + Math.random() * (H - 20);
         if (!free(px, py, zones)) continue;
-        var isSpark = Math.random() < 0.14;
+        var isSpark = Math.random() < 0.12;
+        added++;
         stars.push({
           x: px, y: py,
           s: isSpark ? 3 + Math.random() * 3 : 0.7 + Math.random() * 1.5,
