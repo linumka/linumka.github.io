@@ -138,7 +138,6 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(resize);
     setTimeout(resize, 1200);
 
-
     if (reduced) { frame(); cancelAnimationFrame(raf); return; }
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (entries) {
@@ -216,11 +215,6 @@
 
       var tagsAttr = ' data-tags="' + esc((c.tags || []).join('|')) + '"';
 
-      if (!c.featured) {
-        return '<article class="case reveal' + videoClass + '" data-cats="' + esc(c.cats) + '"' + tagsAttr + videoAttr + '>' + media + body + '</article>';
-      }
-
-      var d = c.details || {};
       var gallery = function (list) {
         if (!list || !list.length) return '';
         return '<div class="gallery-strip" tabindex="0" role="group" aria-label="Галерея кейса ' + esc(c.title) + '">' +
@@ -228,6 +222,18 @@
             return '<img src="' + esc(src) + '" alt="" loading="lazy" onerror="this.remove()">';
           }).join('') + '</div>';
       };
+
+      if (!c.featured) {
+        /* необязательное поле gallery: полоса кадров под карточкой */
+        if (c.gallery && c.gallery.length) {
+          return '<article class="case case--wide reveal' + videoClass + '" data-cats="' + esc(c.cats) + '"' + tagsAttr + videoAttr + '>' +
+                   '<div class="case-top">' + media + body + '</div>' + gallery(c.gallery) +
+                 '</article>';
+        }
+        return '<article class="case reveal' + videoClass + '" data-cats="' + esc(c.cats) + '"' + tagsAttr + videoAttr + '>' + media + body + '</article>';
+      }
+
+      var d = c.details || {};
       var solution = (d.solution || []).map(function (item) {
         var parts = String(item).split('|');
         if (parts.length > 1) {
@@ -243,7 +249,11 @@
           ((d.role && d.role.length) ? '<ul>' + d.role.map(function (r) { return '<li>' + esc(r) + '</li>'; }).join('') + '</ul>' : '') +
           gallery(d.gallery1) +
           (d.task ? '<h4>Задача</h4><p>' + esc(d.task) + '</p>' : '') +
-          (solution ? '<h4>Решение</h4>' + (d.solutionIntro ? '<p>' + esc(d.solutionIntro) + '</p>' : '') + '<ul>' + solution + '</ul>' : '') +
+          /* решение бывает списком (solution) или сплошным абзацем (solutionText) */
+          ((solution || d.solutionText) ? '<h4>Решение</h4>' +
+            (d.solutionIntro ? '<p>' + esc(d.solutionIntro) + '</p>' : '') +
+            (d.solutionText ? '<p>' + fmtDesc(d.solutionText) + '</p>' : '') +
+            (solution ? '<ul>' + solution + '</ul>' : '') : '') +
           (d.closing ? '<p class="mt-14">' + esc(d.closing) + '</p>' : '') +
           gallery(d.gallery2) +
         '</div></div>';
@@ -275,6 +285,8 @@
       volOff:'<svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 9v6h4l5 4.5v-15L8 9H4z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="m15.8 9.6 5 5M20.8 9.6l-5 5"/></svg>',
       up:    '<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="m5.5 14.5 6.5-6.5 6.5 6.5"/></svg>',
       down:  '<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="m5.5 9.5 6.5 6.5 6.5-6.5"/></svg>',
+      left:  '<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="m14.5 5.5-6.5 6.5 6.5 6.5"/></svg>',
+      right: '<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="m9.5 5.5 6.5 6.5-6.5 6.5"/></svg>',
       close: '<svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="m5.5 5.5 13 13M18.5 5.5l-13 13"/></svg>',
       spark: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg>'
     };
@@ -431,8 +443,84 @@
       wireCommon(lb, function () { return activeVideo; }, pauseBtn, muteBtn);
     }
 
+    /* ---------- тонкая полоса перемотки, как в рилсах ---------- */
+    function wireSeek(lb, getVideo) {
+      var seek = document.createElement('div');
+      seek.className = 'lb-seek' + (lb.classList.contains('lightbox--reels') ? ' lb-seek--fixed' : '');
+      seek.setAttribute('role', 'slider');
+      seek.setAttribute('tabindex', '0');
+      seek.setAttribute('aria-label', 'Перемотка видео');
+      seek.setAttribute('aria-valuemin', '0');
+      seek.setAttribute('aria-valuemax', '100');
+      seek.setAttribute('aria-valuenow', '0');
+      seek.innerHTML = '<span class="lb-seek-track"></span><span class="lb-seek-fill"></span><span class="lb-seek-knob"></span>';
+      (lb.querySelector('.lightbox-frame') || lb).appendChild(seek);
+
+      var fill = seek.querySelector('.lb-seek-fill');
+      var knob = seek.querySelector('.lb-seek-knob');
+      var dragging = false;
+
+      function paint(p) {
+        fill.style.width = (p * 100) + '%';
+        knob.style.left = (p * 100) + '%';
+        seek.setAttribute('aria-valuenow', Math.round(p * 100));
+      }
+      function seekTo(e) {
+        var v = getVideo();
+        if (!v || !isFinite(v.duration) || !v.duration) return;
+        var r = seek.getBoundingClientRect();
+        var p = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+        v.currentTime = p * v.duration;
+        paint(p);
+      }
+      seek.addEventListener('pointerdown', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dragging = true;
+        seek.classList.add('on');
+        try { seek.setPointerCapture(e.pointerId); } catch (err) {}
+        seekTo(e);
+      });
+      seek.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        e.preventDefault();
+        seekTo(e);
+      });
+      function endDrag(e) {
+        if (!dragging) return;
+        dragging = false;
+        seek.classList.remove('on');
+        try { seek.releasePointerCapture(e.pointerId); } catch (err) {}
+      }
+      seek.addEventListener('pointerup', endDrag);
+      seek.addEventListener('pointercancel', endDrag);
+      seek.addEventListener('click', function (e) { e.stopPropagation(); });
+      /* с клавиатуры – шаг в секунду, стрелки не должны листать ролики */
+      seek.addEventListener('keydown', function (e) {
+        var v = getVideo();
+        if (!v || !isFinite(v.duration) || !v.duration) return;
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault(); e.stopPropagation();
+          v.currentTime = Math.max(0, v.currentTime - 1);
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault(); e.stopPropagation();
+          v.currentTime = Math.min(v.duration, v.currentTime + 1);
+        }
+      });
+
+      (function tick() {
+        if (!dragging) {
+          var v = getVideo();
+          if (v && isFinite(v.duration) && v.duration) paint(v.currentTime / v.duration);
+        }
+        lb._seekRaf = requestAnimationFrame(tick);
+      })();
+    }
+
     /* ---------- общее: пауза, звук, закрытие ---------- */
     function wireCommon(lb, getVideo, pauseBtn, muteBtn) {
+      wireSeek(lb, getVideo);
+
       function togglePause(e) {
         if (e) e.stopPropagation();
         var v = getVideo();
@@ -458,11 +546,11 @@
 
     var lastFocused = null;
 
-    function mount(lb) {
+    function mount(lb, label) {
       lastFocused = document.activeElement;
       lb.setAttribute('role', 'dialog');
       lb.setAttribute('aria-modal', 'true');
-      lb.setAttribute('aria-label', 'Просмотр видео');
+      lb.setAttribute('aria-label', label || 'Просмотр видео');
       document.body.appendChild(lb);
       document.body.style.overflow = 'hidden';
       current = lb;
@@ -474,7 +562,7 @@
       /* фокус не должен уходить за пределы диалога */
       lb._trap = function (e) {
         if (e.key !== 'Tab' || !current) return;
-        var items = current.querySelectorAll('button, [href], video[controls]');
+        var items = current.querySelectorAll('button, [href], video[controls], [role="slider"]');
         if (!items.length) return;
         var first = items[0], last = items[items.length - 1];
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
@@ -487,6 +575,7 @@
       if (!current) return;
       var lb = current; current = null;
       lb.querySelectorAll('video').forEach(function (v) { v.pause(); });
+      if (lb._seekRaf) cancelAnimationFrame(lb._seekRaf);
       if (lb._keys) document.removeEventListener('keydown', lb._keys);
       if (lb._trap) document.removeEventListener('keydown', lb._trap);
       lb.classList.remove('on');
@@ -499,6 +588,80 @@
 
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') close();
+    });
+
+    /* ---------- просмотр картинок ---------- */
+    function openImages(list, start) {
+      close();
+      var idx = start || 0, multi = list.length > 1;
+      var lb = document.createElement('div');
+      lb.className = 'lightbox lightbox--img';
+      lb.innerHTML =
+        '<div class="lightbox-frame lightbox-frame--img">' +
+          '<span class="frame-spark frame-spark--tl">' + I.spark + '</span>' +
+          '<span class="frame-spark frame-spark--br">' + I.spark + '</span>' +
+          '<img src="" alt="">' +
+          (multi ? '<div class="lb-badge" data-counter></div>' : '') +
+        '</div>' +
+        btn('lb-close', I.close, 'Закрыть') +
+        (multi ? '<div class="lb-nav">' + btn('lb-prev', I.left, 'Предыдущая') + btn('lb-next', I.right, 'Следующая') + '</div>' : '');
+      mount(lb, 'Просмотр изображения');
+
+      var img = lb.querySelector('img');
+      var counter = lb.querySelector('[data-counter]');
+
+      function show(i) {
+        idx = (i + list.length) % list.length;
+        img.src = list[idx];
+        if (counter) counter.textContent = (idx + 1) + ' / ' + list.length;
+      }
+      show(idx);
+
+      if (multi) {
+        lb.querySelector('.lb-next').addEventListener('click', function (e) { e.stopPropagation(); show(idx + 1); });
+        lb.querySelector('.lb-prev').addEventListener('click', function (e) { e.stopPropagation(); show(idx - 1); });
+        lb._keys = function (e) {
+          if (e.key === 'ArrowRight' || e.key === 'ArrowDown') show(idx + 1);
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') show(idx - 1);
+        };
+        document.addEventListener('keydown', lb._keys);
+      }
+
+      lb.addEventListener('click', function (e) {
+        if (!e.target.closest('.lb-btn') && !e.target.closest('.lb-badge') && !e.target.closest('img')) close();
+      });
+      lb.querySelector('.lb-close').addEventListener('click', function (e) {
+        e.stopPropagation(); close();
+      });
+    }
+
+    /* картинки открываются в просмотре: галереи кейсов и обложки без видео */
+    function wireImage(el, list, i, label) {
+      el.setAttribute('role', 'button');
+      el.setAttribute('tabindex', '0');
+      el.setAttribute('aria-label', label);
+      el.addEventListener('click', function () { openImages(list, i); });
+      el.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+          e.preventDefault();
+          openImages(list, i);
+        }
+      });
+    }
+
+    document.querySelectorAll('.gallery-strip').forEach(function (strip) {
+      var imgs = [].slice.call(strip.querySelectorAll('img'));
+      var list = imgs.map(function (im) { return im.getAttribute('src'); });
+      imgs.forEach(function (im, i) {
+        wireImage(im, list, i, 'Открыть изображение ' + (i + 1) + ' из ' + list.length);
+      });
+    });
+
+    document.querySelectorAll('.case:not(.case--video) .case-media img').forEach(function (im) {
+      var card = im.closest('.case');
+      var title = card && card.querySelector('.case-title');
+      wireImage(im, [im.getAttribute('src')], 0,
+        'Открыть обложку: ' + (title ? title.textContent.trim() : 'кейс'));
     });
 
     document.querySelectorAll('.case--video').forEach(function (card) {
