@@ -268,6 +268,12 @@ section { position: relative; }
   line-height: 1.45;
   color: var(--white2);
 }
+.xp-dates {
+  margin-top: 4px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--white2);
+}
 .xp-desc { grid-column: 2 / 5; color: var(--white2); min-width: 0; }
 .xp-desc li {
   padding-left: 16px;
@@ -423,8 +429,10 @@ h3.case-title, .case-title { color: var(--white1); font-size: 16px; font-weight:
 .case-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
 
 /* featured expandable */
-.case--featured { grid-template-columns: 1fr; }
-.case--featured .case-top {
+.case--featured,
+.case--wide { grid-template-columns: 1fr; }
+.case--featured .case-top,
+.case--wide .case-top {
   display: grid;
   grid-template-columns: minmax(0, 467px) 1fr;
   gap: 36px;
@@ -646,6 +654,60 @@ footer {
 }
 .lightbox--reels .lb-close { top: calc(16px + env(safe-area-inset-top, 0px)); }
 
+/* тонкая полоса перемотки, как в рилсах */
+.lb-seek {
+  position: absolute;
+  left: 5px; right: 5px; bottom: 5px;
+  height: 20px;
+  z-index: 7;
+  cursor: pointer;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.lb-seek-track,
+.lb-seek-fill {
+  position: absolute;
+  left: 0; bottom: 0;
+  height: 3px;
+  transition: height .15s ease;
+}
+.lb-seek-track { right: 0; background: rgba(255, 236, 231, .3); }
+.lb-seek-fill { width: 0; background: var(--white1); }
+.lb-seek-knob {
+  position: absolute;
+  left: 0; bottom: -2px;
+  width: 8px; height: 8px;
+  margin-left: -4px;
+  background: var(--white1);
+  opacity: 0;
+  transition: opacity .15s ease;
+}
+.lb-seek:hover .lb-seek-track, .lb-seek.on .lb-seek-track, .lb-seek:focus-visible .lb-seek-track,
+.lb-seek:hover .lb-seek-fill,  .lb-seek.on .lb-seek-fill,  .lb-seek:focus-visible .lb-seek-fill { height: 5px; }
+.lb-seek:hover .lb-seek-knob, .lb-seek.on .lb-seek-knob, .lb-seek:focus-visible .lb-seek-knob { opacity: 1; }
+.lb-seek:focus { outline: none; }
+.lb-seek:focus-visible { outline: 2px solid var(--blue2); outline-offset: 2px; }
+.lb-seek--fixed {
+  position: fixed;
+  left: 12px; right: 12px;
+  bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+}
+/* на мобайле кнопки поднимаем, чтобы не спорили с полосой */
+.lightbox--reels .lb-controls,
+.lb-controls--fixed { bottom: calc(34px + env(safe-area-inset-bottom, 0px)); }
+
+/* просмотр картинок */
+.lightbox-frame--img img {
+  display: block;
+  max-height: calc(100vh - 106px);
+  max-width: calc(100vw - 58px);
+  background: #2a1a20;
+}
+.gallery-strip img { cursor: zoom-in; }
+.case:not(.case--video) .case-media img { cursor: zoom-in; }
+.gallery-strip img:focus-visible,
+.case-media img:focus-visible { outline: 2px solid var(--blue2); outline-offset: 2px; }
+
 /* ---------- тост «адрес скопирован» ---------- */
 .copy-toast {
   position: fixed;
@@ -718,7 +780,7 @@ footer {
   .xp-desc { grid-column: 1 / 5; }
   .banner-text { grid-column: 1 / 5; max-width: 640px; }
   .card-skills, .card-useful, .card-contact { grid-column: 1 / 5; max-width: 700px; }
-  .case, .case--featured .case-top { grid-template-columns: 1fr; }
+  .case, .case--featured .case-top, .case--wide .case-top { grid-template-columns: 1fr; }
   .case-media { max-width: 560px; }
 }
 
