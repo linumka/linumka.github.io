@@ -165,11 +165,10 @@
 
   /* хронология: свежие проекты выше; «н.в.» (идущие сейчас) – в самом верху */
   function caseSortKey(c) {
-    var y = String(c.year || '');
-    var years = y.match(/\d{4}/g);
-    var key = years ? Math.max.apply(null, years.map(Number)) : 0;
-    if (/н\.?\s?в|now|наст/i.test(y)) key += 100;
-    return key;
+    // год НАЧАЛА проекта: сортировка идёт от старых кейсов к новым,
+    // внутри одного года порядок берётся из cases-data.js
+    var years = String(c.year || '').match(/\d{4}/g);
+    return years ? Math.min.apply(null, years.map(Number)) : 9999;
   }
 
   function renderCases() {
@@ -177,7 +176,7 @@
     if (!wrap || !window.CASES) return;
 
     var sorted = window.CASES.slice().sort(function (a, b) {
-      return caseSortKey(b) - caseSortKey(a);
+      return caseSortKey(a) - caseSortKey(b);
     });
 
     var html = sorted.map(function (c) {

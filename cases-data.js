@@ -13,7 +13,7 @@ window.CASES = [
       "3D Static Visual"
     ],
     "image": "assets/biocon.jpg",
-    "desc": "Международная конференция по биотехнологиям для 350+ участников из 24 стран. Заказчики – ПАО «Татнефть» и Университет ИТМО. Они хотели уйти от сухого академического образа, поэтому я построила бренд с нуля и вела его два сезона – логотип, брендбук, соцсети, экраны на площадке, полиграфия, мерч, пресс-кит. Подробный разбор лежит [на Behance](https://www.behance.net/gallery/216718569/Event-brand-identity-BIOCON-2024).",
+    "desc": "Международная конференция по биотехнологиям для 350+ участников из 24 стран. Заказчики – ПАО «Татнефть» и Университет ИТМО. Цель – уйти от сухого академического образа, поэтому я построила бренд с нуля и вела его два сезона. Логотип, брендбук, соцсети, экраны на площадке, полиграфия, мерч, пресс-кит. Подробный разбор лежит [на Behance](https://www.behance.net/gallery/216718569/Event-brand-identity-BIOCON-2024).",
     "featured": true,
     "details": {
       "roleIntro": "",
@@ -106,6 +106,48 @@ window.CASES = [
     }
   },
   {
+    "title": "3D-motion промо ролики для ивентов",
+    "year": "2025 – 2026",
+    "cats": "graphic motion",
+    "tags": [
+      "3D Motion",
+      "Social Media",
+      "Event Branding"
+    ],
+    "image": "assets/mates-racing.jpg",
+    "desc": "Визуал для вечеринок MATES и стриминга MEGAHOUSE. Вертикальные 3D-анонсы и анимированная графика для видео. Внутри – MATES: RACING CLUB 2025, MEGAHOUSE × EightBall 2025 с [выпуском целиком на YouTube](https://youtu.be/ML17n29b84w) и MATES: LOVE PARTY 2026.",
+    "featured": false,
+    "video": [
+      "assets/mates-racing.mp4",
+      "assets/megahouse.mp4",
+      "assets/love-party.mp4"
+    ]
+  },
+  {
+    "title": "Agnetics emoji pack",
+    "year": "2025",
+    "cats": "graphic",
+    "tags": [
+      "Social Media",
+      "2D Illustration"
+    ],
+    "image": "assets/agnetics-emoji.jpg",
+    "desc": "Эмодзи-пак в Telegram для AI tech-компании Agnetics.",
+    "featured": false
+  },
+  {
+    "title": "«Сияние ИТМО» – промо-ролик премии",
+    "year": "2025",
+    "cats": "motion",
+    "tags": [
+      "Video Editing"
+    ],
+    "image": "assets/siyanie.jpg",
+    "video": "assets/siyanie.mp4",
+    "desc": "Дизайн-лид премии. Вела SMM-контент и оформление [сайта](https://isawards.itmo.ru/ru), а промо-ролик сняла на камеру и смонтировала сама. Заказчик – Университет ИТМО.",
+    "featured": false
+  },
+  {
     "title": "СЕАНС × Discovery = Юнион",
     "year": "2025",
     "cats": "graphic motion",
@@ -181,7 +223,7 @@ window.CASES = [
       "3D Motion"
     ],
     "image": "assets/fashion-show.jpg",
-    "desc": "Модный показ на 700+ гостей. SMM-контент и серия вертикальных 3D-роликов для анонсов – 13 600+ просмотров в Telegram. На этом проекте я также была техническим директором.",
+    "desc": "Модный показ на 700+ гостей. SMM-контент и серия вертикальных 3D-роликов для анонсов – 13 600+ просмотров в Telegram. Пс, я была техническим директором.",
     "featured": false,
     "video": [
       "assets/fashion-1.mp4",
@@ -206,24 +248,6 @@ window.CASES = [
     ]
   },
   {
-    "title": "3D-motion промо ролики для ивентов 2025–2026",
-    "year": "2025 – 2026",
-    "cats": "graphic motion",
-    "tags": [
-      "3D Motion",
-      "Social Media",
-      "Event Branding"
-    ],
-    "image": "assets/mates-racing.jpg",
-    "desc": "Визуал для вечеринок MATES и стриминга MEGAHOUSE. Вертикальные 3D-анонсы и анимированная графика для видео. Внутри – MATES: RACING CLUB 2025, MEGAHOUSE × EightBall 2025 с [выпуском целиком на YouTube](https://youtu.be/ML17n29b84w) и MATES: LOVE PARTY 2026.",
-    "featured": false,
-    "video": [
-      "assets/mates-racing.mp4",
-      "assets/megahouse.mp4",
-      "assets/love-party.mp4"
-    ]
-  },
-  {
     "title": "DE MATES emoji pack",
     "year": "2025",
     "cats": "graphic",
@@ -236,18 +260,6 @@ window.CASES = [
     "featured": false
   },
   {
-    "title": "«Сияние ИТМО» – промо-ролик премии",
-    "year": "2025",
-    "cats": "motion",
-    "tags": [
-      "Video Editing"
-    ],
-    "image": "assets/siyanie.jpg",
-    "video": "assets/siyanie.mp4",
-    "desc": "Дизайн-лид премии. Вела SMM-контент и оформление [сайта](https://isawards.itmo.ru/ru), а промо-ролик сняла на камеру и смонтировала сама. Заказчик – Университет ИТМО.",
-    "featured": false
-  },
-  {
     "title": "95 лет ФНЦ пищевых систем им. В.М. Горбатова РАН",
     "year": "2025",
     "cats": "graphic",
@@ -257,18 +269,6 @@ window.CASES = [
     ],
     "image": "assets/vniimp-95.jpg",
     "desc": "Юбилей 95 лет «ФНЦ пищевых систем им. В.М. Горбатова РАН». Логотип юбилея, айдентика, пакет мерча и сопроводительные презентации. Проект остановлен на стороне заказчика.",
-    "featured": false
-  },
-  {
-    "title": "Agnetics emoji pack",
-    "year": "2025",
-    "cats": "graphic",
-    "tags": [
-      "Social Media",
-      "2D Illustration"
-    ],
-    "image": "assets/agnetics-emoji.jpg",
-    "desc": "Эмодзи-пак в Telegram для AI tech-компании Agnetics.",
     "featured": false
   }
 ];
