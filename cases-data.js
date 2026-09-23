@@ -13,7 +13,7 @@ window.CASES = [
       "3D Static Visual"
     ],
     "image": "assets/biocon.jpg",
-    "desc": "BIOCON – международная конференция по биотехнологиям, которую Университет ИТМО проводит вместе с ПАО «Татнефть» для 350+ участников из 24 стран. Организаторы хотели уйти от сухого академического образа, поэтому я построила бренд конференции с нуля и вела его два сезона – от логотипа и соцсетей до экранов на площадке, полиграфии и мерча. Подробный разбор лежит [на Behance](https://www.behance.net/gallery/216718569/Event-brand-identity-BIOCON-2024).",
+    "desc": "Международная конференция по биотехнологиям для 350+ участников из 24 стран. Заказчики – ПАО «Татнефть» и Университет ИТМО. Они хотели уйти от сухого академического образа, поэтому я построила бренд с нуля и вела его два сезона – логотип, брендбук, соцсети, экраны на площадке, полиграфия, мерч, пресс-кит. Подробный разбор лежит [на Behance](https://www.behance.net/gallery/216718569/Event-brand-identity-BIOCON-2024).",
     "featured": true,
     "details": {
       "roleIntro": "",
@@ -158,14 +158,14 @@ window.CASES = [
     "featured": false
   },
   {
-    "title": "Вселенная ИТМО (featuring Toxi$)",
+    "title": "3D-motion на главной сцене A2 Club",
     "year": "2025",
     "cats": "motion",
     "tags": [
       "3D Motion"
     ],
     "image": "assets/itmo-universe.jpg",
-    "desc": "Посвящение первокурсников ИТМО в клубе A2, где перед 3500+ зрителями выступал хедлайнер Toxi$. Я сделала 10 авторских роликов для LED-экрана главной сцены – сцены собирала в Blender, дорабатывала и монтировала в After Effects.",
+    "desc": "Концерт в A2 Club на 3500+ зрителей, хедлайнер Toxi$. Я отвечала за контент главной сцены – 10 авторских 3D-роликов для LED. Сцены собирала в Blender, дорабатывала и монтировала в After Effects.",
     "featured": false,
     "gallery": [
       "assets/universe-1.jpg",
@@ -181,7 +181,7 @@ window.CASES = [
       "3D Motion"
     ],
     "image": "assets/fashion-show.jpg",
-    "desc": "ITMO FASHION SHOW – проект о моде, самовыражении и творчестве, где студенты ИТМО превращают идеи в образы. Показ собрал 700+ очных гостей. Я делала SMM-контент и серию вертикальных 3D-роликов для анонсов в соцсетях, которые набрали 13 600+ просмотров только в Telegram.",
+    "desc": "Модный показ на 700+ гостей. SMM-контент и серия вертикальных 3D-роликов для анонсов – 13 600+ просмотров в Telegram. На этом проекте я также была техническим директором.",
     "featured": false,
     "video": [
       "assets/fashion-1.mp4",
@@ -198,7 +198,7 @@ window.CASES = [
       "2D Motion"
     ],
     "image": "assets/shl.jpg",
-    "desc": "Видеоподкаст Студенческой хоккейной лиги Санкт-Петербурга. Сделала 3D-интро и 2D-перебивки, которые открывают каждый выпуск серии.",
+    "desc": "3D-интро и 2D-перебивки для видеоподкаста. Клиент – Студенческая хоккейная лига Санкт-Петербурга.",
     "featured": false,
     "video": [
       "assets/shl-1.mp4",
@@ -206,42 +206,22 @@ window.CASES = [
     ]
   },
   {
-    "title": "MEGAHOUSE × EightBall",
-    "year": "2025",
+    "title": "3D-motion промо ролики для ивентов 2025–2026",
+    "year": "2025 – 2026",
     "cats": "graphic motion",
     "tags": [
       "3D Motion",
       "Social Media",
       "Event Branding"
     ],
-    "image": "assets/megahouse.jpg",
-    "desc": "MEGAHOUSE – стриминговые онлайн-вечеринки комьюнити СЕАНС. Для выпуска с EightBall я сделала вертикальный [промо-ролик](https://t.me/seancefest/1405), анимированную графику для видео и оформление кампании в соцсетях, а сам [выпуск целиком лежит на YouTube](https://youtu.be/ML17n29b84w).",
-    "featured": false,
-    "video": "assets/megahouse.mp4"
-  },
-  {
-    "title": "MATES: RACING CLUB",
-    "year": "2025",
-    "cats": "graphic motion",
-    "tags": [
-      "3D Motion"
-    ],
     "image": "assets/mates-racing.jpg",
-    "desc": "Осенняя вечеринка MATES с хип-хопом, рэпом и попом. Сделала вертикальный 3D-анонс в гоночной эстетике и графику для промо в соцсетях.",
+    "desc": "Визуал для вечеринок MATES и стриминга MEGAHOUSE. Вертикальные 3D-анонсы и анимированная графика для видео. Внутри – MATES: RACING CLUB 2025, MEGAHOUSE × EightBall 2025 с [выпуском целиком на YouTube](https://youtu.be/ML17n29b84w) и MATES: LOVE PARTY 2026.",
     "featured": false,
-    "video": "assets/mates-racing.mp4"
-  },
-  {
-    "title": "MATES: LOVE PARTY",
-    "year": "2026",
-    "cats": "graphic motion",
-    "tags": [
-      "3D Motion"
-    ],
-    "image": "assets/love-party.jpg",
-    "desc": "Вечеринка MATES ко Дню всех влюблённых. Вертикальный 3D-ролик для анонса и посты для соцсетей.",
-    "featured": false,
-    "video": "assets/love-party.mp4"
+    "video": [
+      "assets/mates-racing.mp4",
+      "assets/megahouse.mp4",
+      "assets/love-party.mp4"
+    ]
   },
   {
     "title": "DE MATES emoji pack",
@@ -264,7 +244,31 @@ window.CASES = [
     ],
     "image": "assets/siyanie.jpg",
     "video": "assets/siyanie.mp4",
-    "desc": "Премия лучших студентов и клубов Университета ИТМО. Я была дизайн-лидом премии – вела SMM-контент и оформление [сайта](https://isawards.itmo.ru/ru), а для промо-ролика сама снимала материал на камеру и полностью его смонтировала.",
+    "desc": "Дизайн-лид премии. Вела SMM-контент и оформление [сайта](https://isawards.itmo.ru/ru), а промо-ролик сняла на камеру и смонтировала сама. Заказчик – Университет ИТМО.",
+    "featured": false
+  },
+  {
+    "title": "95 лет ФНЦ пищевых систем им. В.М. Горбатова РАН",
+    "year": "2025",
+    "cats": "graphic",
+    "tags": [
+      "Event Branding",
+      "Social Media"
+    ],
+    "image": "assets/vniimp-95.jpg",
+    "desc": "Юбилей 95 лет «ФНЦ пищевых систем им. В.М. Горбатова РАН». Логотип юбилея, айдентика, пакет мерча и сопроводительные презентации. Проект остановлен на стороне заказчика.",
+    "featured": false
+  },
+  {
+    "title": "Agnetics emoji pack",
+    "year": "2025",
+    "cats": "graphic",
+    "tags": [
+      "Social Media",
+      "2D Illustration"
+    ],
+    "image": "assets/agnetics-emoji.jpg",
+    "desc": "Эмодзи-пак в Telegram для AI tech-компании [Agnetics](https://agnetics.ru/).",
     "featured": false
   }
 ];
