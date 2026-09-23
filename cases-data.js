@@ -268,7 +268,7 @@ window.CASES = [
       "2D Illustration"
     ],
     "image": "assets/agnetics-emoji.jpg",
-    "desc": "Эмодзи-пак в Telegram для AI tech-компании [Agnetics](https://agnetics.ru/).",
+    "desc": "Эмодзи-пак в Telegram для AI tech-компании Agnetics.",
     "featured": false
   }
 ];
