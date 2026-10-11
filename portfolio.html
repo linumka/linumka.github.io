@@ -3,8 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Портфолио – linumka | Graphic Design, Motion & Video</title>
-<meta name="description" content="Кейсы Алёны Васильевой: айдентика событий, 3D motion для LED-экранов, social media-контент и видео.">
+<title>Портфолио – linumka | 3D Motion &amp; Graphic Design</title>
+<meta name="description" content="Кейсы Алёны Васильевой, 3D motion-дизайнера: промо-ролики для соцсетей, 3D-контент для LED-экранов, видео и айдентика событий.">
+<meta property="og:title" content="Портфолио – linumka">
+<meta property="og:description" content="3D motion-дизайнер">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://linumka.github.io/portfolio.html">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/favicon.png">
@@ -38,7 +42,7 @@
 <nav class="nav">
   <a class="pill light" href="portfolio.html">Портфолио</a>
   <a class="pill" href="index.html">Обо мне</a>
-  <a class="pill pill--write" href="mailto:v.alena1711@gmail.com"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span>Написать</a>
+  <a class="pill pill--write" href="https://t.me/linumka" target="_blank" rel="noopener"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span>Написать</a>
   <span class="nav-note">Открыта к проектной и удалённой работе</span>
 </nav>
 
@@ -50,91 +54,47 @@
       <p class="hero-name reveal">Алёна Васильева</p>
       <h1 class="wordmark" data-split>linumka</h1>
     </div>
-    <p class="hero-sub reveal">Графический дизайнер – брендинг
-      и event-айдентика для мероприятий и digital-медиа</p>
+    <p class="hero-sub reveal">3D motion-дизайнер – ролики для соцсетей,
+      LED-экранов и ивентов</p>
   </div>
 </header>
 
 <section class="container" aria-labelledby="filters-h">
   <h2 class="visually-hidden" id="filters-h">Фильтр работ</h2>
-  <div class="filter-all-wrap reveal">
-    <button class="pill light" data-filter="all" aria-pressed="true">Все работы</button>
-  </div>
   <div class="filters reveal">
-    <div class="filter-group">
-      <button class="pill" data-filter="graphic" aria-pressed="false"><span lang="en">Graphic Design</span></button>
-      <button class="sub" data-subfilter="Event Branding" aria-pressed="false"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span><span lang="en">Event Branding</span></button>
-      <button class="sub" data-subfilter="Social Media" aria-pressed="false"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span><span lang="en">Social Media</span></button>
-      <button class="sub" data-subfilter="2D Illustration" aria-pressed="false"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span><span lang="en">2D Illustration</span></button>
-      <button class="sub" data-subfilter="3D Static Visual" aria-pressed="false"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span><span lang="en">3D Static Visual</span></button>
-    </div>
-    <div class="filter-group">
+    <button class="pill light" data-filter="all" aria-pressed="true">Все работы</button>
+    <div class="filter-group" role="group" aria-label="Motion &amp; Video">
       <button class="pill" data-filter="motion" aria-pressed="false"><span lang="en">Motion &amp; Video</span></button>
-      <button class="sub" data-subfilter="3D Motion" aria-pressed="false"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span><span lang="en">3D Motion</span></button>
-      <button class="sub" data-subfilter="2D Motion" aria-pressed="false"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span><span lang="en">2D Motion</span></button>
-      <button class="sub" data-subfilter="Video Editing" aria-pressed="false"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span><span lang="en">Video Editing</span></button>
+      <div class="filter-subs">
+        <button class="sub" data-subfilter="3D Motion" aria-pressed="false"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span><span lang="en">3D Motion</span></button>
+        <button class="sub" data-subfilter="2D Motion" aria-pressed="false"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span><span lang="en">2D Motion</span></button>
+        <button class="sub" data-subfilter="Video Editing" aria-pressed="false"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span><span lang="en">Video Editing</span></button>
+      </div>
+    </div>
+    <div class="filter-group" role="group" aria-label="Graphic Design">
+      <button class="pill" data-filter="graphic" aria-pressed="false"><span lang="en">Graphic Design</span></button>
+      <div class="filter-subs">
+        <button class="sub" data-subfilter="Event Branding" aria-pressed="false"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span><span lang="en">Event Branding</span></button>
+        <button class="sub" data-subfilter="Social Media" aria-pressed="false"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span><span lang="en">Social Media</span></button>
+        <button class="sub" data-subfilter="2D Illustration" aria-pressed="false"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span><span lang="en">2D Illustration</span></button>
+        <button class="sub" data-subfilter="3D Static Visual" aria-pressed="false"><span class="spark spark--blue"><svg><use href="#spark4"/></svg></span><span lang="en">3D Static Visual</span></button>
+      </div>
     </div>
   </div>
 </section>
 
-<h2 class="visually-hidden">Кейсы</h2>
-<section class="container cases" id="cases" data-dynamic>
+<section class="container cases" id="cases" data-dynamic aria-label="Кейсы">
   <!-- кейсы рендерятся из cases-data.js -->
   <noscript>
-  <article class="case">
-    <div class="case-media"><img src="assets/biocon.jpg" alt="" loading="lazy"></div>
-    <div class="case-body">
-      <h3 class="case-title">BIOCON<span class="year">2023 – 2024</span></h3>
-      <div class="case-tags"><span lang="en">Event Branding</span><span lang="en">Social Media</span><span lang="en">2D Illustration</span><span lang="en">3D Motion</span><span lang="en">3D Static Visual</span></div>
-      <p class="case-desc">Международная конференция по биотехнологиям для 350+ участников из 24 стран. Заказчики – ПАО «Татнефть» и Университет ИТМО. Цель – уйти от сухого академического образа, поэтому я построила бренд с нуля и вела его два сезона. Логотип, брендбук, соцсети, экраны на площадке, полиграфия, мерч, пресс-кит. Подробный разбор лежит <a href="https://www.behance.net/gallery/216718569/Event-brand-identity-BIOCON-2024" target="_blank" rel="noopener">на Behance</a>.</p>
-    </div>
-  </article>
-  <article class="case">
-    <div class="case-media"><img src="assets/se-cover.jpg" alt="" loading="lazy"></div>
-    <div class="case-body">
-      <h3 class="case-title">СЕАНС – визуальный бренд<span class="year">2023 – н.в.</span></h3>
-      <div class="case-tags"><span lang="en">Brand Identity</span><span lang="en">Event Branding</span><span lang="en">Social Media</span><span lang="en">3D Static Visual</span><span lang="en">2D Motion</span></div>
-      <p class="case-desc">СЕАНС – молодое музыкальное творческое объединение из Санкт-Петербурга, где играют сеты, пишут треки, обучают, проводят вечеринки и делают стриминговый проект MEGAHOUSE. Я главный дизайнер бренда с 2023 года, и за два года он прошёл путь от логотипа и одного цвета до цельной системы, которая распространяется на релизы, вечеринки, мерч и коллаборации. Полный кейс лежит <a href="https://www.behance.net/gallery/252269959/Brand-identity-Music-community" target="_blank" rel="noopener">на Behance</a>.</p>
-    </div>
-  </article>
+  <div class="case-group">
+  <h2 class="case-group-title"><span lang="en">Motion &amp; Video</span><span class="case-group-count">8</span></h2>
+  <div class="case-list">
   <article class="case">
     <div class="case-media"><img src="assets/mates-racing.jpg" alt="" loading="lazy"></div>
     <div class="case-body">
-      <h3 class="case-title">3D-motion промо ролики для ивентов<span class="year">2025 – 2026</span></h3>
+      <h3 class="case-title">3D-motion промо-ролики для ивентов<span class="year">2025 – 2026</span></h3>
       <div class="case-tags"><span lang="en">3D Motion</span><span lang="en">Social Media</span><span lang="en">Event Branding</span></div>
-      <p class="case-desc">Визуал для вечеринок MATES и стриминга MEGAHOUSE. Вертикальные 3D-анонсы и анимированная графика для видео. Внутри – MATES: RACING CLUB 2025, MEGAHOUSE × EightBall 2025 с <a href="https://youtu.be/ML17n29b84w" target="_blank" rel="noopener">выпуском целиком на YouTube</a> и MATES: LOVE PARTY 2026.</p>
-    </div>
-  </article>
-  <article class="case">
-    <div class="case-media"><img src="assets/agnetics-emoji.jpg" alt="" loading="lazy"></div>
-    <div class="case-body">
-      <h3 class="case-title">Agnetics emoji pack<span class="year">2025</span></h3>
-      <div class="case-tags"><span lang="en">Social Media</span><span lang="en">2D Illustration</span></div>
-      <p class="case-desc">Эмодзи-пак в Telegram для AI tech-компании Agnetics.</p>
-    </div>
-  </article>
-  <article class="case">
-    <div class="case-media"><img src="assets/siyanie.jpg" alt="" loading="lazy"></div>
-    <div class="case-body">
-      <h3 class="case-title">«Сияние ИТМО» – промо-ролик премии<span class="year">2025</span></h3>
-      <div class="case-tags"><span lang="en">Video Editing</span></div>
-      <p class="case-desc">Дизайн-лид премии. Вела SMM-контент и оформление <a href="https://isawards.itmo.ru/ru" target="_blank" rel="noopener">сайта</a>, а промо-ролик сняла на камеру и смонтировала сама. Заказчик – Университет ИТМО.</p>
-    </div>
-  </article>
-  <article class="case">
-    <div class="case-media"><img src="assets/union.jpg" alt="" loading="lazy"></div>
-    <div class="case-body">
-      <h3 class="case-title">СЕАНС × Discovery = Юнион<span class="year">2025</span></h3>
-      <div class="case-tags"><span lang="en">Event Branding</span><span lang="en">Social Media</span><span lang="en">2D Illustration</span><span lang="en">2D Motion</span></div>
-      <p class="case-desc">Опен-эйр СЕАНС × Discovery в баре «Юнион» – две сцены, привозы из Москвы (ioneweb) и Минска (shkeeper), 400+ гостей. Концепт вырос из раннего интернета и нулевых, поэтому вся графика живёт на интерфейсе Windows 98, а название работает как формула СЕАНС + Discovery = Ю, где Ю указывает на «Юнион». Я сделала ключевой визуал и айдентику вечеринки и вела её контент.</p>
-    </div>
-  </article>
-  <article class="case">
-    <div class="case-media"><img src="assets/movie-poster.jpg" alt="" loading="lazy"></div>
-    <div class="case-body">
-      <h3 class="case-title">«Вкусовщина» – постер фильма<span class="year">2025</span></h3>
-      <div class="case-tags"><span lang="en">2D Illustration</span><span lang="en">3D Static Visual</span></div>
-      <p class="case-desc">Постер к короткометражке студии ITMO.KINO. На съёмках я работала гаффером, и постер вырос из реального кадра – стаканы, свет и мизансцену я увидела на площадке, пока ставила свет. Сцену собрала в Blender, чтобы зафиксировать перспективу и камеру, а отрисовывала в Photoshop. Разбор процесса лежит <a href="https://www.behance.net/gallery/252892109/Movie-poster-illustration" target="_blank" rel="noopener">на Behance</a>.</p>
+      <p class="case-desc">Вертикальные 3D-анонсы для соцсетей вечеринок MATES и стриминга MEGAHOUSE: MATES: RACING CLUB 2025, MEGAHOUSE × EightBall 2025 (<a href="https://youtu.be/ML17n29b84w" target="_blank" rel="noopener">выпуск целиком на YouTube</a>) и MATES: LOVE PARTY 2026. Каждый ролик – от пустой сцены в Blender до готового Reels.</p>
     </div>
   </article>
   <article class="case">
@@ -149,8 +109,8 @@
     <div class="case-media"><img src="assets/fashion-show.jpg" alt="" loading="lazy"></div>
     <div class="case-body">
       <h3 class="case-title">ITMO FASHION SHOW<span class="year">2025</span></h3>
-      <div class="case-tags"><span lang="en">3D Motion</span></div>
-      <p class="case-desc">Модный показ на 700+ гостей. SMM-контент и серия вертикальных 3D-роликов для анонсов – 13 600+ просмотров в Telegram. Пс, я была техническим директором.</p>
+      <div class="case-tags"><span lang="en">3D Motion</span><span lang="en">Social Media</span></div>
+      <p class="case-desc">Модный показ на 700+ гостей. Анонсы должны были показать, что это большое городское событие о моде, а не очередной студенческий проект. Я сделала SMM-контент и серию вертикальных 3D-роликов – 13 600+ просмотров в Telegram. Пс, а ещё я была техническим директором шоу.</p>
     </div>
   </article>
   <article class="case">
@@ -162,11 +122,64 @@
     </div>
   </article>
   <article class="case">
+    <div class="case-media"><img src="assets/biocon.jpg" alt="" loading="lazy"></div>
+    <div class="case-body">
+      <h3 class="case-title">BIOCON<span class="year">2023 – 2024</span></h3>
+      <div class="case-tags"><span lang="en">Event Branding</span><span lang="en">Social Media</span><span lang="en">2D Illustration</span><span lang="en">3D Motion</span><span lang="en">3D Static Visual</span></div>
+      <p class="case-desc">Международная конференция по биотехнологиям для 350+ участников из 24 стран. Заказчики – ПАО «Татнефть» и Университет ИТМО. Построила бренд с нуля и вела его два сезона: логотип, брендбук, 3D-графика и анимация, соцсети, экраны на площадке, полиграфия, мерч, пресс-кит. Подробный разбор лежит <a href="https://www.behance.net/gallery/216718569/Event-brand-identity-BIOCON-2024" target="_blank" rel="noopener">на Behance</a>.</p>
+    </div>
+  </article>
+  <article class="case">
+    <div class="case-media"><img src="assets/se-cover.jpg" alt="" loading="lazy"></div>
+    <div class="case-body">
+      <h3 class="case-title">СЕАНС – визуальный бренд<span class="year">2023 – н.в.</span></h3>
+      <div class="case-tags"><span lang="en">Brand Identity</span><span lang="en">Event Branding</span><span lang="en">Social Media</span><span lang="en">3D Static Visual</span><span lang="en">2D Motion</span></div>
+      <p class="case-desc">СЕАНС – молодое музыкальное творческое объединение из Санкт-Петербурга, где играют сеты, пишут треки, обучают, проводят вечеринки и делают стриминговый проект MEGAHOUSE. Я главный дизайнер бренда с 2023 года, и за два года он прошёл путь от логотипа и одного цвета до цельной системы, которая распространяется на релизы, вечеринки, мерч и коллаборации. Полный кейс лежит <a href="https://www.behance.net/gallery/252269959/Brand-identity-Music-community" target="_blank" rel="noopener">на Behance</a>.</p>
+    </div>
+  </article>
+  <article class="case">
+    <div class="case-media"><img src="assets/union.jpg" alt="" loading="lazy"></div>
+    <div class="case-body">
+      <h3 class="case-title">СЕАНС × Discovery = Юнион<span class="year">2025</span></h3>
+      <div class="case-tags"><span lang="en">Event Branding</span><span lang="en">Social Media</span><span lang="en">2D Illustration</span><span lang="en">2D Motion</span></div>
+      <p class="case-desc">Опен-эйр СЕАНС × Discovery в баре «Юнион» – две сцены, привозы из Москвы (ioneweb) и Минска (shkeeper), 400+ гостей. Концепт вырос из раннего интернета и нулевых, поэтому вся графика живёт на интерфейсе Windows 98, а название работает как формула СЕАНС + Discovery = Ю, где Ю указывает на «Юнион». Я сделала ключевой визуал и айдентику вечеринки и вела её контент.</p>
+    </div>
+  </article>
+  <article class="case">
+    <div class="case-media"><img src="assets/siyanie.jpg" alt="" loading="lazy"></div>
+    <div class="case-body">
+      <h3 class="case-title">«Сияние ИТМО» – промо-ролик премии<span class="year">2025</span></h3>
+      <div class="case-tags"><span lang="en">Video Editing</span></div>
+      <p class="case-desc">Дизайн-лид премии. Вела SMM-контент и оформление <a href="https://isawards.itmo.ru/ru" target="_blank" rel="noopener">сайта</a>, а промо-ролик сняла на камеру и смонтировала сама. Заказчик – Университет ИТМО.</p>
+    </div>
+  </article>
+  </div>
+  </div>
+  <div class="case-group">
+  <h2 class="case-group-title"><span lang="en">Graphic Design</span><span class="case-group-count">4</span></h2>
+  <div class="case-list">
+  <article class="case">
+    <div class="case-media"><img src="assets/movie-poster.jpg" alt="" loading="lazy"></div>
+    <div class="case-body">
+      <h3 class="case-title">«Вкусовщина» – постер фильма<span class="year">2025</span></h3>
+      <div class="case-tags"><span lang="en">2D Illustration</span><span lang="en">3D Static Visual</span></div>
+      <p class="case-desc">Постер к короткометражке студии ITMO.KINO. На съёмках я работала гаффером, и постер вырос из реального кадра – стаканы, свет и мизансцену я увидела на площадке, пока ставила свет. Сцену собрала в Blender, чтобы зафиксировать перспективу и камеру, а отрисовывала в Photoshop. Разбор процесса лежит <a href="https://www.behance.net/gallery/252892109/Movie-poster-illustration" target="_blank" rel="noopener">на Behance</a>.</p>
+    </div>
+  </article>
+  <article class="case">
     <div class="case-media"><img src="assets/de-mates.jpg" alt="" loading="lazy"></div>
     <div class="case-body">
       <h3 class="case-title">DE MATES emoji pack<span class="year">2025</span></h3>
       <div class="case-tags"><span lang="en">3D Static Visual</span><span lang="en">Social Media</span></div>
       <p class="case-desc">Набор 3D-эмодзи для Telegram комьюнити DE MATES – серия персонажей-смайлов, которая живёт в чатах и в промо вечеринок.</p>
+    </div>
+  </article>
+  <article class="case">
+    <div class="case-media"><img src="assets/agnetics-emoji.jpg" alt="" loading="lazy"></div>
+    <div class="case-body">
+      <h3 class="case-title">Agnetics emoji pack<span class="year">2025</span></h3>
+      <div class="case-tags"><span lang="en">Social Media</span><span lang="en">2D Illustration</span></div>
+      <p class="case-desc">Эмодзи-пак в Telegram для AI tech-компании Agnetics.</p>
     </div>
   </article>
   <article class="case">
@@ -177,6 +190,8 @@
       <p class="case-desc">Юбилей 95 лет «ФНЦ пищевых систем им. В.М. Горбатова РАН». Логотип юбилея, айдентика, пакет мерча и сопроводительные презентации. Проект остановлен на стороне заказчика.</p>
     </div>
   </article>
+  </div>
+  </div>
   </noscript>
 </section>
 
@@ -201,8 +216,8 @@
     <div>
       <p class="col-title">Связь:</p>
       <div class="footer-links">
-        <a class="pill" href="mailto:v.alena1711@gmail.com">Почта</a>
         <a class="pill" href="https://t.me/linumka" target="_blank" rel="noopener">Написать в Telegram</a>
+        <a class="pill" href="mailto:v.alena1711@gmail.com">Почта</a>
       </div>
     </div>
   </div>
