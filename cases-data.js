@@ -6,7 +6,8 @@
      h – заголовок пункта, p – абзац или массив абзацев,
      list – пункты; «Начало | текст» выделяет начало пункта,
      media – полоса картинок и видео после пункта (.mp4 играют без звука по кругу),
-     tall: true – высокая полоса для вертикальных кадров 9:16. */
+     tall: true – высокая полоса для вертикальных кадров 9:16.
+   loop – короткое видео без звука вместо статичной обложки (image остаётся постером). */
 window.CASES = [
   {
     "title": "3D-motion промо-ролики для ивентов",
@@ -19,6 +20,7 @@ window.CASES = [
       "Event Branding"
     ],
     "image": "assets/mates-racing.jpg",
+    "loop": "assets/mates-loop.mp4",
     "desc": "Вертикальные 3D-анонсы для соцсетей вечеринок MATES и стриминга MEGAHOUSE: MATES: RACING CLUB 2025, MEGAHOUSE × EightBall 2025 ([выпуск целиком на YouTube](https://youtu.be/ML17n29b84w)) и MATES: LOVE PARTY 2026. Каждый ролик – от пустой сцены в Blender до готового Reels.",
     "featured": true,
     "video": [
@@ -127,6 +129,7 @@ window.CASES = [
       "Social Media"
     ],
     "image": "assets/fashion-show.jpg",
+    "loop": "assets/fashion-loop.mp4",
     "desc": "Модный показ на 700+ гостей. Анонсы должны были показать, что это большое городское событие о моде, а не очередной студенческий проект. Я сделала SMM-контент и серию вертикальных 3D-роликов – 13 600+ просмотров в Telegram. Пс, а ещё я была техническим директором шоу.",
     "featured": false,
     "video": [
@@ -417,7 +420,8 @@ window.CASES = [
     "tags": [
       "Video Editing"
     ],
-    "image": "assets/siyanie.jpg",
+    "image": "assets/siyanie-cover.jpg",
+    "loop": "assets/siyanie-loop.mp4",
     "video": "assets/siyanie.mp4",
     "desc": "Дизайн-лид премии. Вела SMM-контент и оформление [сайта](https://isawards.itmo.ru/ru), а промо-ролик сняла на камеру и смонтировала сама. Заказчик – Университет ИТМО.",
     "featured": false
@@ -436,29 +440,17 @@ window.CASES = [
     "featured": false
   },
   {
-    "title": "DE MATES emoji pack",
+    "title": "Эмодзи-паки для Telegram",
     "year": "2025",
     "group": "graphic",
     "cats": "graphic",
     "tags": [
       "3D Static Visual",
+      "2D Illustration",
       "Social Media"
     ],
-    "image": "assets/de-mates.jpg",
-    "desc": "Набор 3D-эмодзи для Telegram комьюнити DE MATES – серия персонажей-смайлов, которая живёт в чатах и в промо вечеринок.",
-    "featured": false
-  },
-  {
-    "title": "Agnetics emoji pack",
-    "year": "2025",
-    "group": "graphic",
-    "cats": "graphic",
-    "tags": [
-      "Social Media",
-      "2D Illustration"
-    ],
-    "image": "assets/agnetics-emoji.jpg",
-    "desc": "Эмодзи-пак в Telegram для AI tech-компании Agnetics.",
+    "image": "assets/emoji-packs.jpg",
+    "desc": "Два набора эмодзи для Telegram. Для комьюнити DE MATES – 3D-эмодзи в хроме и красном, которые живут в чатах и в промо вечеринок. Для AI tech-компании Agnetics – 2D-пак иконок в фирменных градиентах.",
     "featured": false
   },
   {
@@ -471,7 +463,7 @@ window.CASES = [
       "Social Media"
     ],
     "image": "assets/vniimp-95.jpg",
-    "desc": "Юбилей 95 лет «ФНЦ пищевых систем им. В.М. Горбатова РАН». Логотип юбилея, айдентика, пакет мерча и сопроводительные презентации. Проект остановлен на стороне заказчика.",
+    "desc": "Юбилей 95 лет «ФНЦ пищевых систем им. В.М. Горбатова РАН». Логотип юбилея, айдентика, пакет мерча и сопроводительные презентации.",
     "featured": false
   }
 ];

@@ -406,7 +406,10 @@ section { position: relative; }
   object-fit: cover;
   transition: transform .6s cubic-bezier(.2,.7,.2,1);
 }
-.case:hover .case-media img { transform: scale(1.04); }
+.case:hover .case-media img,
+.case:hover .case-media .case-loop { transform: scale(1.04); }
+/* луп лежит поверх статичной обложки: если видео не загрузится, видна картинка */
+.case-media .case-loop { position: absolute; inset: 0; }
 h3.case-title, .case-title { color: var(--white1); font-size: 16px; font-weight: 500; margin: 0; }
 .case-title .year { color: var(--white2); margin-left: 8px; }
 .case-tags {

@@ -191,6 +191,11 @@
       var mediaInner =
         '<img src="' + esc(c.image) + '" alt="" loading="lazy" ' +
         'onerror="this.parentElement.classList.add(\'ph\');this.remove()">';
+      /* loop: короткое видео поверх обложки, играет без звука, пока карточка на экране */
+      if (c.loop) {
+        mediaInner += '<video class="case-loop" src="' + esc(c.loop) + '" poster="' + esc(c.image) + '" ' +
+                      'muted loop playsinline preload="metadata" aria-hidden="true" data-autoplay></video>';
+      }
       if (vids.length) {
         var label = vids.length > 1 ? 'смотреть видео (' + vids.length + ')' : 'смотреть видео';
         mediaInner += '<span class="play-badge"><span class="spark"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg></span>' + label + '</span>';
@@ -225,7 +230,7 @@
         return '<div class="gallery-strip' + (tall ? ' gallery-strip--tall' : '') + '" tabindex="0" role="group" aria-label="Галерея кейса ' + esc(c.title) + '">' +
           list.map(function (src) {
             if (isVideo(src)) {
-              return '<video src="' + esc(src) + '" muted loop playsinline preload="metadata" data-inline-video></video>';
+              return '<video src="' + esc(src) + '" muted loop playsinline preload="metadata" data-inline-video data-autoplay></video>';
             }
             return '<img src="' + esc(src) + '" alt="" loading="lazy" onerror="this.remove()">';
           }).join('') + '</div>';
@@ -676,14 +681,18 @@
         'Открыть обложку: ' + (title ? title.textContent.trim() : 'кейс'));
     });
 
-    /* видео в разборе кейса: без звука и по кругу, пока на экране; по клику – в плеер со звуком */
-    var inlineIO = (!reduced && 'IntersectionObserver' in window) ? new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting && e.intersectionRatio >= 0.4) e.target.play().catch(function () {});
-        else e.target.pause();
-      });
-    }, { threshold: [0, 0.4] }) : null;
+    /* лупы на обложках и видео в разборе кейса: без звука и по кругу, пока на экране */
+    if (!reduced && 'IntersectionObserver' in window) {
+      var autoplayIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting && e.intersectionRatio >= 0.4) e.target.play().catch(function () {});
+          else e.target.pause();
+        });
+      }, { threshold: [0, 0.4] });
+      document.querySelectorAll('[data-autoplay]').forEach(function (v) { autoplayIO.observe(v); });
+    }
 
+    /* видео в разборе кейса по клику открываются в плеере со звуком */
     document.querySelectorAll('[data-inline-video]').forEach(function (v) {
       var src = v.getAttribute('src');
       v.setAttribute('role', 'button');
@@ -696,7 +705,6 @@
           open(src);
         }
       });
-      if (inlineIO) inlineIO.observe(v);
     });
 
     document.querySelectorAll('.case--video').forEach(function (card) {
