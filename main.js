@@ -224,20 +224,24 @@
 
       var tagsAttr = ' data-tags="' + esc((c.tags || []).join('|')) + '"';
 
-      /* полоса кадров: картинки и видео (видео играют без звука, по клику – в плеер) */
+      /* работы рядами: строка – отдельный ряд, массив – несколько работ в ряд.
+         Без прокрутки: работы в ряду делят ширину по своим пропорциям (см. fitMediaRows).
+         Видео играют без звука, по клику открываются в плеере */
       var gallery = function (list, tall) {
         if (!list || !list.length) return '';
-        return '<div class="gallery-strip' + (tall ? ' gallery-strip--tall' : '') + '" tabindex="0" role="group" aria-label="Галерея кейса ' + esc(c.title) + '">' +
-          list.map(function (src) {
-            if (isVideo(src)) {
-              return '<video src="' + esc(src) + '" muted loop playsinline preload="metadata" data-inline-video data-autoplay></video>';
-            }
-            return '<img src="' + esc(src) + '" alt="" loading="lazy" onerror="this.remove()">';
+        return '<div class="media-rows' + (tall ? ' media-rows--tall' : '') + '" role="group" aria-label="Работы: ' + esc(c.title) + '">' +
+          list.map(function (row) {
+            return '<div class="media-row">' + [].concat(row).map(function (src) {
+              if (isVideo(src)) {
+                return '<video src="' + esc(src) + '" muted loop playsinline preload="metadata" data-inline-video data-autoplay></video>';
+              }
+              return '<img src="' + esc(src) + '" alt="" loading="lazy" onerror="this.remove()">';
+            }).join('') + '</div>';
           }).join('') + '</div>';
       };
 
       if (!c.featured) {
-        /* необязательное поле gallery: полоса кадров под карточкой */
+        /* необязательное поле gallery: работы под карточкой */
         if (c.gallery && c.gallery.length) {
           return '<article class="case case--wide reveal' + videoClass + '" data-cats="' + esc(c.cats) + '"' + tagsAttr + videoAttr + '>' +
                    '<div class="case-top">' + media + body + '</div>' + gallery(c.gallery) +
@@ -246,7 +250,7 @@
         return '<article class="case reveal' + videoClass + '" data-cats="' + esc(c.cats) + '"' + tagsAttr + videoAttr + '>' + media + body + '</article>';
       }
 
-      /* разбор кейса: пункт слева, текст справа, полоса работ под пунктом */
+      /* разбор кейса: название пункта, текст, работы справа */
       var sections = ((c.details || {}).sections || []).map(function (s) {
         var paras = s.p ? (Array.isArray(s.p) ? s.p : [s.p]) : [];
         return '<div class="case-section">' +
@@ -274,8 +278,7 @@
       var list = window.CASES.filter(function (c) { return (c.group || 'graphic') === g.id; });
       if (!list.length) return '';
       return '<div class="case-group" data-group="' + g.id + '">' +
-               '<h2 class="case-group-title reveal"><span lang="en">' + g.title + '</span>' +
-                 '<span class="case-group-count">' + list.length + '</span></h2>' +
+               '<h2 class="case-group-title reveal"><span lang="en">' + g.title + '</span></h2>' +
                '<div class="case-list">' + list.map(cardHtml).join('') + '</div>' +
              '</div>';
     }).join('');
@@ -284,6 +287,25 @@
   }
 
   renderCases();
+
+  /* ряд работ одной высоты на всю ширину: каждая работа растёт пропорционально
+     своей ширине к высоте. Одиночную работу не растягиваем (её ограничивает CSS) */
+  function fitMediaRows() {
+    function fit(el, w, h) {
+      if (!w || !h) return;
+      el.style.aspectRatio = w + ' / ' + h;
+      if (el.parentNode && el.parentNode.children.length > 1) el.style.flexGrow = (w / h).toFixed(3);
+    }
+    document.querySelectorAll('.media-row > img').forEach(function (im) {
+      if (im.complete && im.naturalWidth) fit(im, im.naturalWidth, im.naturalHeight);
+      else im.addEventListener('load', function () { fit(im, im.naturalWidth, im.naturalHeight); });
+    });
+    document.querySelectorAll('.media-row > video').forEach(function (v) {
+      if (v.readyState >= 1) fit(v, v.videoWidth, v.videoHeight);
+      else v.addEventListener('loadedmetadata', function () { fit(v, v.videoWidth, v.videoHeight); });
+    });
+  }
+  fitMediaRows();
 
   /* ---------------------------------------------------
    * 2.6 Видео-лайтбокс
@@ -666,7 +688,7 @@
       });
     }
 
-    document.querySelectorAll('.gallery-strip').forEach(function (strip) {
+    document.querySelectorAll('.media-rows').forEach(function (strip) {
       var imgs = [].slice.call(strip.querySelectorAll('img'));
       var list = imgs.map(function (im) { return im.getAttribute('src'); });
       imgs.forEach(function (im, i) {
