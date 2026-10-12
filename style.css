@@ -46,12 +46,6 @@ h2 {
   font-weight: 500;
   color: var(--white1);
 }
-h3.block-label {
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--white2);
-  margin-top: 72px;
-}
 
 .muted { color: var(--white2); }
 
@@ -267,7 +261,7 @@ section { position: relative; }
 .cv-when { color: var(--white2); font-variant-numeric: tabular-nums; }
 .cv-what { color: var(--white1); font-size: 18px; line-height: 1.4; }
 .cv-where { grid-column: 3 / 5; color: var(--white2); }
-.block-label + .cv-list { margin-top: 20px; }
+.cv-heading { margin-top: 96px; }
 
 /* ---------- info cards ---------- */
 .cards-flow {
@@ -374,7 +368,6 @@ section { position: relative; }
   gap: 12px;
   margin-bottom: 40px;
 }
-.case-group-count { font-size: 16px; color: var(--white2); }
 /* при фильтре заголовки блоков прячем: остаётся одна лента результатов */
 .cases.is-filtered { gap: 64px; }
 .cases.is-filtered .case-group-title { display: none; }
@@ -473,32 +466,28 @@ h3.case-title, .case-title { color: var(--white1); font-size: 16px; font-weight:
 .case-details a { text-decoration: underline; text-underline-offset: 3px; }
 /* «Начало | текст»: начало отдельной светлой строкой */
 .case-details .lead { display: block; color: var(--white1); }
-.case-section .gallery-strip { grid-column: 3; margin: 4px 0 0; }
-.case-section .gallery-strip img,
-.case-section .gallery-strip video { height: 180px; }
-.case-section .gallery-strip--tall img,
-.case-section .gallery-strip--tall video { height: 264px; }
 .case-details-end { margin-top: 48px; }
-.gallery-strip {
-  display: flex;
-  gap: 6px;
-  margin: 24px 0 8px;
-  overflow-x: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--brown2) transparent;
+
+/* ---------- работы рядами, без прокрутки ---------- */
+/* в ряду работы одной высоты делят ширину по пропорциям (fitMediaRows в main.js) */
+.media-rows { display: flex; flex-direction: column; gap: 6px; }
+.case-section .media-rows { grid-column: 3; margin-top: 4px; }
+.case--wide > .media-rows { margin-top: 24px; }
+.media-row { display: flex; gap: 6px; align-items: flex-start; }
+.media-row > img,
+.media-row > video {
+  display: block;
+  flex: 1 1 0;
+  min-width: 0;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
 }
-.gallery-strip img,
-.gallery-strip video {
-  height: 200px;
-  width: auto;
-  flex: 0 0 auto;
-}
-/* пропорции задаём сразу, чтобы полоса не прыгала, пока видео грузится */
-.gallery-strip video { aspect-ratio: auto 16 / 9; object-fit: cover; background: #000; cursor: pointer; }
-/* вертикальные кадры 9:16 – полоса выше */
-.gallery-strip--tall img,
-.gallery-strip--tall video { height: 360px; }
-.gallery-strip--tall video { aspect-ratio: auto 9 / 16; }
+/* пока видео не загрузилось, держим типичные пропорции, чтобы ряд не прыгал */
+.media-row > video { aspect-ratio: 16 / 9; background: #000; cursor: pointer; }
+.media-rows--tall .media-row > video { aspect-ratio: 9 / 16; }
+/* одиночная работа не растягивается во всю ширину, а вписывается в рамки */
+.media-row > :only-child { flex: 0 1 auto; width: auto; max-width: 100%; max-height: 320px; }
 
 /* ---------- footer ---------- */
 footer {
@@ -722,10 +711,10 @@ footer {
   max-width: calc(100vw - 58px);
   background: #2a1a20;
 }
-.gallery-strip img { cursor: zoom-in; }
+.media-row > img { cursor: zoom-in; }
 .case:not(.case--video) .case-media img { cursor: zoom-in; }
-.gallery-strip img:focus-visible,
-.gallery-strip video:focus-visible,
+.media-row > img:focus-visible,
+.media-row > video:focus-visible,
 .case-media img:focus-visible { outline: 2px solid var(--blue2); outline-offset: 2px; }
 
 /* ---------- тост «адрес скопирован» ---------- */
@@ -799,8 +788,8 @@ footer {
   .cv-row { grid-template-columns: 140px minmax(0, 1fr); }
   .cv-where { grid-column: 2; }
   .case-section { grid-template-columns: minmax(0, 1fr); row-gap: 10px; }
-  .case-section h4, .case-section-body, .case-section .gallery-strip { grid-column: 1; }
-  .case-section .gallery-strip { margin-top: 8px; }
+  .case-section h4, .case-section-body, .case-section .media-rows { grid-column: 1; }
+  .case-section .media-rows { margin-top: 8px; max-width: 560px; }
   .banner-text { grid-column: 1 / 5; max-width: 640px; }
   .card-skills, .card-useful, .card-contact { grid-column: 1 / 5; max-width: 700px; }
   .case, .case--featured .case-top, .case--wide .case-top { grid-template-columns: 1fr; }
@@ -829,10 +818,7 @@ footer {
   .filter-group { grid-column: 1; grid-template-columns: minmax(0, 1fr); row-gap: 14px; }
   .filter-subs { gap: 8px 22px; }
   .cases { gap: 88px; }
-  .gallery-strip img, .gallery-strip video { height: 140px; }
-  .gallery-strip--tall img, .gallery-strip--tall video,
-  .case-section .gallery-strip--tall img, .case-section .gallery-strip--tall video { height: 260px; }
-  .case-section .gallery-strip img, .case-section .gallery-strip video { height: 140px; }
+  .media-row > :only-child { max-height: 260px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
