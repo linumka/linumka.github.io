@@ -500,11 +500,11 @@ h3.case-title, .case-title { color: var(--white1); font-size: 16px; font-weight:
   flex: 0 0 auto;
 }
 /* пропорции задаём сразу, чтобы полоса не прыгала, пока видео грузится */
-.gallery-strip video { aspect-ratio: 16 / 9; object-fit: cover; background: #000; cursor: pointer; }
+.gallery-strip video { aspect-ratio: auto 16 / 9; object-fit: cover; background: #000; cursor: pointer; }
 /* вертикальные кадры 9:16 – полоса выше */
 .gallery-strip--tall img,
 .gallery-strip--tall video { height: 360px; }
-.gallery-strip--tall video { aspect-ratio: 9 / 16; }
+.gallery-strip--tall video { aspect-ratio: auto 9 / 16; }
 
 /* ---------- footer ---------- */
 footer {

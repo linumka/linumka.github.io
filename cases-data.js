@@ -69,7 +69,12 @@ window.CASES = [
         },
         {
           "h": "Моя роль",
-          "p": "Подключилась на раннем этапе, когда были только вайб и текст анонса, и вместе с продюсерами проекта довела идею до финального ролика. Отвечала за видеопродукт целиком: концепт сцены, моделинг и анимация в Blender, свет и рендер, типографика и сборка в After Effects, подбор трека и экспорт под соцсети."
+          "p": "Подключилась на раннем этапе, когда были только вайб и текст анонса, и вместе с продюсерами проекта довела идею до финального ролика. Отвечала за видеопродукт целиком: концепт сцены, моделинг и анимация в Blender, свет и рендер, типографика и сборка в After Effects, подбор трека и экспорт под соцсети. Ниже – сцена RACING CLUB во вьюпорте Blender и работа над LOVE PARTY.",
+          "media": [
+            "assets/mates-viewport.jpg",
+            "assets/love-party-process.mp4"
+          ],
+          "tall": true
         },
         {
           "h": "Гипотеза",
@@ -110,12 +115,17 @@ window.CASES = [
     "tags": [
       "3D Motion"
     ],
-    "image": "assets/itmo-universe.jpg",
-    "desc": "Концерт в A2 Club на 3500+ зрителей, хедлайнер Toxi$. Я отвечала за контент главной сцены – 10 авторских 3D-роликов для LED. Сцены собирала в Blender, дорабатывала и монтировала в After Effects.",
+    "image": "assets/a2-stage.jpg",
+    "video": "assets/itmotion-led.mp4",
+    "desc": "Концерт в A2 Club на 3500+ зрителей, хедлайнер Toxi$. Я отвечала за контент главной сцены – 10 авторских 3D-роликов для LED: 3D-буквы из лавы, воды, лиан и дыма. Сцены собирала в Blender, дорабатывала и монтировала в After Effects. На обложке – мой ролик на экране во время шоу, ниже – один из клипов и рабочие сцены.",
     "featured": false,
     "gallery": [
+      "assets/itmotion-led.mp4",
+      "assets/itmo-universe.jpg",
+      "assets/a2-build.jpg",
       "assets/universe-1.jpg",
       "assets/universe-2.jpg",
+      "assets/a2-blender-m.jpg",
       "assets/universe-3.jpg"
     ]
   },
@@ -136,6 +146,9 @@ window.CASES = [
       "assets/fashion-1.mp4",
       "assets/fashion-2.mp4",
       "assets/fashion-3.mp4"
+    ],
+    "gallery": [
+      "assets/fashion-camera.jpg"
     ]
   },
   {
