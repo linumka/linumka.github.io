@@ -85,9 +85,6 @@ h3.block-label {
   left: -4px; right: -4px;
 }
 .pill:hover { background: #6a4c56; }
-/* главное действие – синяя плашка */
-.pill--cta { background: var(--blue1); }
-.pill--cta:hover { background: #1a36c4; }
 /* видимый фокус на тёмном фоне */
 :where(a, button, [tabindex]):focus-visible {
   outline: 2px solid var(--blue2);
@@ -182,17 +179,23 @@ h3.block-label {
   grid-column: 2 / 5;
   position: relative;
   min-width: 0;
+  --wm: clamp(84px, 13vw, 188px);
 }
 .hero-mark { display: inline-block; text-align: left; }
+/* имя опущено в слово: стоит между «li» и «k», над строчными «inum».
+   Размер и отступы считаются от размера слова --wm, поэтому сцепка
+   держится на любой ширине экрана */
 .hero-name {
-  font-size: clamp(26px, 3.4vw, 40px);
+  position: relative;
+  z-index: 1;
+  font-size: calc(var(--wm) * .2);
+  line-height: 1;
   color: var(--white1);
-  margin-bottom: 0;
-  /* имя сидит над словом, сдвинуто вправо от его начала — как в макете */
-  margin-left: clamp(30px, 5.5vw, 80px);
+  margin-left: calc(var(--wm) * .43);
 }
+.hero-name + .wordmark { margin-top: -.215em; }
 .wordmark {
-  font-size: clamp(84px, 13vw, 188px);
+  font-size: var(--wm);
   font-weight: 500;
   line-height: .9;
   letter-spacing: -.06em;
@@ -207,7 +210,6 @@ h3.block-label {
   line-height: 1.4;
   color: var(--white1);
 }
-.hero-cta { margin-top: 26px; }
 .hero-city { margin-top: 12px; color: var(--white2); }
 .hero-status {
   display: flex;
@@ -225,11 +227,7 @@ h3.block-label {
   padding-bottom: 64px;
   position: relative;
 }
-.hero-folio .hero-name {
-  font-size: clamp(30px, 4.5vw, 55px);
-  margin-left: clamp(40px, 7.4vw, 110px);
-}
-.hero-folio .wordmark { font-size: clamp(96px, 17.5vw, 260px); }
+.hero-folio .hero-mark { --wm: clamp(96px, 17.5vw, 260px); }
 .hero-folio .hero-sub {
   margin: 32px auto 0;
   max-width: 460px;
@@ -257,16 +255,15 @@ section { position: relative; }
 
 /* ---------- опыт и образование: компактный список-таблица ---------- */
 /* год | роль | где – в тех же колонках, что и вся страница */
-.cv-list { margin-top: 40px; border-top: 1px solid var(--line); }
+.cv-list { margin-top: 40px; }
 .cv-row {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   column-gap: 24px;
   row-gap: 4px;
   align-items: baseline;
-  padding: 18px 0 20px;
-  border-bottom: 1px solid var(--line);
 }
+.cv-row + .cv-row { margin-top: 20px; }
 .cv-when { color: var(--white2); font-variant-numeric: tabular-nums; }
 .cv-what { color: var(--white1); font-size: 18px; line-height: 1.4; }
 .cv-where { grid-column: 3 / 5; color: var(--white2); }
@@ -318,8 +315,6 @@ section { position: relative; }
 }
 .contact-actions .pill { background: var(--brown2); color: var(--white1); }
 .contact-actions .pill:hover { background: var(--brown1); }
-.contact-actions .pill--cta { background: var(--blue1); }
-.contact-actions .pill--cta:hover { background: #1a36c4; }
 
 /* ---------- filters (portfolio) ---------- */
 /* одна сетка: «Все работы» | раздел | его пункты в строку с равным шагом */
@@ -378,8 +373,6 @@ section { position: relative; }
   align-items: baseline;
   gap: 12px;
   margin-bottom: 40px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--line);
 }
 .case-group-count { font-size: 16px; color: var(--white2); }
 /* при фильтре заголовки блоков прячем: остаётся одна лента результатов */
@@ -457,16 +450,16 @@ h3.case-title, .case-title { color: var(--white1); font-size: 16px; font-weight:
   transition: grid-template-rows .55s cubic-bezier(.2,.7,.2,1), opacity .45s ease, visibility 0s;
 }
 .case-details-inner::before { content: ""; display: block; height: 40px; }
-/* пункт разбора: название слева под обложкой, текст – в колонке описания карточки */
+/* пункт разбора в три колонки: название, текст, работы справа */
 .case-section {
   display: grid;
-  grid-template-columns: minmax(0, 467px) minmax(0, 1fr);
-  column-gap: 36px;
-  padding: 24px 0 28px;
-  border-top: 1px solid var(--line);
+  grid-template-columns: 160px minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: 32px;
+  align-items: start;
 }
-.case-section h4 { color: var(--white1); font-weight: 500; font-size: 16px; margin: 0; }
-.case-section-body { max-width: 620px; }
+.case-section + .case-section { margin-top: 44px; }
+.case-section h4 { grid-column: 1; color: var(--white1); font-weight: 500; font-size: 16px; line-height: 1.5; margin: 0; }
+.case-section-body { grid-column: 2; }
 .case-section-body > * + * { margin-top: 10px; }
 .case-details p, .case-details li { color: var(--white2); }
 .case-details li { padding-left: 16px; position: relative; margin-bottom: 8px; }
@@ -480,11 +473,12 @@ h3.case-title, .case-title { color: var(--white1); font-size: 16px; font-weight:
 .case-details a { text-decoration: underline; text-underline-offset: 3px; }
 /* «Начало | текст»: начало отдельной светлой строкой */
 .case-details .lead { display: block; color: var(--white1); }
-.case-section .gallery-strip { grid-column: 1 / -1; margin: 24px 0 0; }
-.case-details-end {
-  padding-top: 28px;
-  border-top: 1px solid var(--line);
-}
+.case-section .gallery-strip { grid-column: 3; margin: 4px 0 0; }
+.case-section .gallery-strip img,
+.case-section .gallery-strip video { height: 180px; }
+.case-section .gallery-strip--tall img,
+.case-section .gallery-strip--tall video { height: 264px; }
+.case-details-end { margin-top: 48px; }
 .gallery-strip {
   display: flex;
   gap: 6px;
@@ -528,6 +522,7 @@ footer {
 .footer-links { display: flex; flex-direction: column; gap: 22px; align-items: flex-start; }
 .footer-weather {
   margin-top: 8px;
+  white-space: pre-line;
   color: rgba(255,236,231,.65);
   font-size: 15px;
   cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="%23FFECE7" stroke="%231F1317" stroke-width="1" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg>') 11 11, auto;
@@ -803,7 +798,9 @@ footer {
   .hero-text { grid-column: 1 / 5; }
   .cv-row { grid-template-columns: 140px minmax(0, 1fr); }
   .cv-where { grid-column: 2; }
-  .case-section { grid-template-columns: 1fr; row-gap: 10px; }
+  .case-section { grid-template-columns: minmax(0, 1fr); row-gap: 10px; }
+  .case-section h4, .case-section-body, .case-section .gallery-strip { grid-column: 1; }
+  .case-section .gallery-strip { margin-top: 8px; }
   .banner-text { grid-column: 1 / 5; max-width: 640px; }
   .card-skills, .card-useful, .card-contact { grid-column: 1 / 5; max-width: 700px; }
   .case, .case--featured .case-top, .case--wide .case-top { grid-template-columns: 1fr; }
@@ -819,9 +816,11 @@ footer {
   .hero-about-grid { padding-top: 90px; }
   .hero-folio { padding-top: 100px; }
   .hero-photo { grid-column: 1 / 5; width: 112%; max-width: 380px; margin-left: -6%; margin-block: -14% -6%; }
+  .hero-text, .hero-folio .hero-mark { --wm: clamp(84px, 25vw, 110px); }
   .wordmark { white-space: normal; word-break: keep-all; }
   .banner-grid { padding-top: 72px; padding-bottom: 72px; }
-  .cv-row { grid-template-columns: 1fr; padding: 14px 0 16px; }
+  .cv-row { grid-template-columns: 1fr; }
+  .cv-row + .cv-row { margin-top: 18px; }
   .cv-when { font-size: 14px; }
   .cv-what, .cv-where { grid-column: 1; }
   .info-card { padding: 24px 20px 28px; }
@@ -831,7 +830,9 @@ footer {
   .filter-subs { gap: 8px 22px; }
   .cases { gap: 88px; }
   .gallery-strip img, .gallery-strip video { height: 140px; }
-  .gallery-strip--tall img, .gallery-strip--tall video { height: 280px; }
+  .gallery-strip--tall img, .gallery-strip--tall video,
+  .case-section .gallery-strip--tall img, .case-section .gallery-strip--tall video { height: 260px; }
+  .case-section .gallery-strip img, .case-section .gallery-strip video { height: 140px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -863,4 +864,3 @@ footer {
 }
 .skip-link:focus { top: 12px; }
 .mt-8 { margin-top: 8px; }
-.weather-note { display: block; font-size: 13px; color: rgba(255,236,231,.6); margin-top: 2px; }
