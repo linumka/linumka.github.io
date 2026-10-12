@@ -163,27 +163,39 @@
       '<a href="$2" target="_blank" rel="noopener">$1</a>');
   }
 
-  /* хронология: свежие проекты выше; «н.в.» (идущие сейчас) – в самом верху */
-  function caseSortKey(c) {
-    // год НАЧАЛА проекта: сортировка идёт от старых кейсов к новым,
-    // внутри одного года порядок берётся из cases-data.js
-    var years = String(c.year || '').match(/\d{4}/g);
-    return years ? Math.min.apply(null, years.map(Number)) : 9999;
+  /* блоки портфолио: сначала моушн, потом графика; порядок внутри – как в cases-data.js */
+  var GROUPS = [
+    { id: 'motion', title: 'Motion &amp; Video' },
+    { id: 'graphic', title: 'Graphic Design' }
+  ];
+
+  function isVideo(src) { return /\.(mp4|webm)$/i.test(src); }
+
+  /* пункт списка: «Начало | текст» – начало отдельной строкой, пояснение под ним */
+  function listItem(item) {
+    var parts = String(item).split('|');
+    if (parts.length > 1) {
+      return '<li><span class="lead">' + esc(parts[0].trim()) + '</span> ' +
+             fmtDesc(parts.slice(1).join('|').trim()) + '</li>';
+    }
+    return '<li>' + fmtDesc(item) + '</li>';
   }
 
   function renderCases() {
     var wrap = document.querySelector('#cases[data-dynamic]');
     if (!wrap || !window.CASES) return;
 
-    var sorted = window.CASES.slice().sort(function (a, b) {
-      return caseSortKey(a) - caseSortKey(b);
-    });
-
-    var html = sorted.map(function (c) {
+    var cardHtml = function (c) {
+      /* video может быть строкой или массивом */
       var vids = c.video ? (Array.isArray(c.video) ? c.video : [c.video]) : [];
       var mediaInner =
         '<img src="' + esc(c.image) + '" alt="" loading="lazy" ' +
         'onerror="this.parentElement.classList.add(\'ph\');this.remove()">';
+      /* loop: короткое видео поверх обложки, играет без звука, пока карточка на экране */
+      if (c.loop) {
+        mediaInner += '<video class="case-loop" src="' + esc(c.loop) + '" poster="' + esc(c.image) + '" ' +
+                      'muted loop playsinline preload="metadata" aria-hidden="true" data-autoplay></video>';
+      }
       if (vids.length) {
         var label = vids.length > 1 ? 'смотреть видео (' + vids.length + ')' : 'смотреть видео';
         mediaInner += '<span class="play-badge"><span class="spark"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg></span>' + label + '</span>';
@@ -205,19 +217,21 @@
           (actions ? '<div class="case-actions">' + actions + '</div>' : '') +
         '</div>';
 
-      /* video может быть строкой или массивом */
-      var videoList = c.video ? (Array.isArray(c.video) ? c.video : [c.video]) : [];
-      var videoAttr = videoList.length ? ' data-video="' + esc(videoList.join('|')) + '"' : '';
-      var videoClass = videoList.length ? ' case--video' : '';
+      var videoAttr = vids.length ? ' data-video="' + esc(vids.join('|')) + '"' : '';
+      var videoClass = vids.length ? ' case--video' : '';
       /* необязательное поле ratio: "9/16" даёт вертикальную карточку */
       if (String(c.ratio || '').replace(/\s/g, '') === '9/16') videoClass += ' case--vertical';
 
       var tagsAttr = ' data-tags="' + esc((c.tags || []).join('|')) + '"';
 
-      var gallery = function (list) {
+      /* полоса кадров: картинки и видео (видео играют без звука, по клику – в плеер) */
+      var gallery = function (list, tall) {
         if (!list || !list.length) return '';
-        return '<div class="gallery-strip" tabindex="0" role="group" aria-label="Галерея кейса ' + esc(c.title) + '">' +
+        return '<div class="gallery-strip' + (tall ? ' gallery-strip--tall' : '') + '" tabindex="0" role="group" aria-label="Галерея кейса ' + esc(c.title) + '">' +
           list.map(function (src) {
+            if (isVideo(src)) {
+              return '<video src="' + esc(src) + '" muted loop playsinline preload="metadata" data-inline-video data-autoplay></video>';
+            }
             return '<img src="' + esc(src) + '" alt="" loading="lazy" onerror="this.remove()">';
           }).join('') + '</div>';
       };
@@ -232,34 +246,38 @@
         return '<article class="case reveal' + videoClass + '" data-cats="' + esc(c.cats) + '"' + tagsAttr + videoAttr + '>' + media + body + '</article>';
       }
 
-      var d = c.details || {};
-      var solution = (d.solution || []).map(function (item) {
-        var parts = String(item).split('|');
-        if (parts.length > 1) {
-          return '<li><span class="lead">' + esc(parts[0].trim()) + '.</span> ' + esc(parts.slice(1).join('|').trim()) + '</li>';
-        }
-        return '<li>' + esc(item) + '</li>';
+      /* разбор кейса: пункт слева, текст справа, полоса работ под пунктом */
+      var sections = ((c.details || {}).sections || []).map(function (s) {
+        var paras = s.p ? (Array.isArray(s.p) ? s.p : [s.p]) : [];
+        return '<div class="case-section">' +
+                 '<h4>' + esc(s.h) + '</h4>' +
+                 '<div class="case-section-body">' +
+                   paras.map(function (p) { return '<p>' + fmtDesc(p) + '</p>'; }).join('') +
+                   ((s.list && s.list.length) ? '<ul>' + s.list.map(listItem).join('') + '</ul>' : '') +
+                 '</div>' +
+                 gallery(s.media, s.tall) +
+               '</div>';
       }).join('');
 
       var details =
         '<div class="case-details"><div class="case-details-inner">' +
-          '<h4>Моя роль</h4>' +
-          (d.roleIntro ? '<p>' + esc(d.roleIntro) + '</p>' : '') +
-          ((d.role && d.role.length) ? '<ul>' + d.role.map(function (r) { return '<li>' + esc(r) + '</li>'; }).join('') + '</ul>' : '') +
-          gallery(d.gallery1) +
-          (d.task ? '<h4>Задача</h4><p>' + esc(d.task) + '</p>' : '') +
-          /* решение бывает списком (solution) или сплошным абзацем (solutionText) */
-          ((solution || d.solutionText) ? '<h4>Решение</h4>' +
-            (d.solutionIntro ? '<p>' + esc(d.solutionIntro) + '</p>' : '') +
-            (d.solutionText ? '<p>' + fmtDesc(d.solutionText) + '</p>' : '') +
-            (solution ? '<ul>' + solution + '</ul>' : '') : '') +
-          (d.closing ? '<p class="mt-14">' + esc(d.closing) + '</p>' : '') +
-          gallery(d.gallery2) +
+          sections +
+          '<div class="case-details-end"><button class="pill" data-collapse>Свернуть кейс</button></div>' +
         '</div></div>';
 
       return '<article class="case case--featured reveal' + videoClass + '" data-cats="' + esc(c.cats) + '"' + tagsAttr + videoAttr + '>' +
                '<div class="case-top">' + media + body + '</div>' + details +
              '</article>';
+    };
+
+    var html = GROUPS.map(function (g) {
+      var list = window.CASES.filter(function (c) { return (c.group || 'graphic') === g.id; });
+      if (!list.length) return '';
+      return '<div class="case-group" data-group="' + g.id + '">' +
+               '<h2 class="case-group-title reveal"><span lang="en">' + g.title + '</span>' +
+                 '<span class="case-group-count">' + list.length + '</span></h2>' +
+               '<div class="case-list">' + list.map(cardHtml).join('') + '</div>' +
+             '</div>';
     }).join('');
 
     wrap.insertAdjacentHTML('beforeend', html);
@@ -663,6 +681,32 @@
         'Открыть обложку: ' + (title ? title.textContent.trim() : 'кейс'));
     });
 
+    /* лупы на обложках и видео в разборе кейса: без звука и по кругу, пока на экране */
+    if (!reduced && 'IntersectionObserver' in window) {
+      var autoplayIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting && e.intersectionRatio >= 0.4) e.target.play().catch(function () {});
+          else e.target.pause();
+        });
+      }, { threshold: [0, 0.4] });
+      document.querySelectorAll('[data-autoplay]').forEach(function (v) { autoplayIO.observe(v); });
+    }
+
+    /* видео в разборе кейса по клику открываются в плеере со звуком */
+    document.querySelectorAll('[data-inline-video]').forEach(function (v) {
+      var src = v.getAttribute('src');
+      v.setAttribute('role', 'button');
+      v.setAttribute('tabindex', '0');
+      v.setAttribute('aria-label', 'Смотреть видео со звуком');
+      v.addEventListener('click', function () { open(src); });
+      v.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+          e.preventDefault();
+          open(src);
+        }
+      });
+    });
+
     document.querySelectorAll('.case--video').forEach(function (card) {
       var src = card.getAttribute('data-video');
       var media = card.querySelector('.case-media');
@@ -731,6 +775,19 @@
   var subBtns = document.querySelectorAll('[data-subfilter]');
   if (filterBtns.length) {
     var cases = document.querySelectorAll('.case');
+    var casesWrap = document.getElementById('cases');
+    var groups = document.querySelectorAll('.case-group');
+
+    /* «Все работы» – два блока с заголовками; при фильтре – одна общая лента без пустых блоков */
+    function refreshGroups(filtered) {
+      if (casesWrap) casesWrap.classList.toggle('is-filtered', filtered);
+      groups.forEach(function (g) {
+        var any = [].some.call(g.querySelectorAll('.case'), function (card) {
+          return card.style.display !== 'none';
+        });
+        g.hidden = !any;
+      });
+    }
 
     function show(card, visible) {
       if (visible) {
@@ -768,6 +825,7 @@
       cases.forEach(function (card) {
         show(card, cat === 'all' || (card.getAttribute('data-cats') || '').split(' ').indexOf(cat) !== -1);
       });
+      refreshGroups(cat !== 'all');
     }
 
     /* под-фильтр по тегу: точное совпадение со строкой из tags */
@@ -789,6 +847,7 @@
         var tags = (card.getAttribute('data-tags') || '').split('|');
         show(card, tags.indexOf(tag) !== -1);
       });
+      refreshGroups(true);
     }
 
     filterBtns.forEach(function (b) {
@@ -810,11 +869,22 @@
    * 5. Featured case accordions
    * --------------------------------------------------- */
   document.querySelectorAll('[data-toggle]').forEach(function (btn) {
-    var details = btn.closest('.case').querySelector('.case-details');
-    btn.addEventListener('click', function () {
-      var open = details.classList.toggle('open');
+    var card = btn.closest('.case');
+    var details = card.querySelector('.case-details');
+    function setOpen(open) {
+      details.classList.toggle('open', open);
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
       btn.textContent = open ? 'Свернуть' : 'Подробнее о кейсе';
+    }
+    btn.addEventListener('click', function () {
+      setOpen(!details.classList.contains('open'));
+    });
+    /* кнопка в конце длинного разбора: свернуть и вернуться к началу карточки */
+    var collapse = details.querySelector('[data-collapse]');
+    if (collapse) collapse.addEventListener('click', function () {
+      setOpen(false);
+      card.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+      btn.focus({ preventScroll: true });
     });
   });
 
