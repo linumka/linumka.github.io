@@ -987,8 +987,9 @@
           return (t > 0 ? '+' : t < 0 ? '−' : '') + Math.abs(t) + '°C';
         }
         if (list.length >= 2) {
+          /* два города в две строки */
           weatherEl.textContent = 'СПб ' + fmt(list[0].current.temperature_2m) +
-            ' · Якутск ' + fmt(list[1].current.temperature_2m);
+            '\nЯкутск ' + fmt(list[1].current.temperature_2m);
         }
       })
       .catch(function () { /* остаётся легендарное «Якутск −34°C» */ });
