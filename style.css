@@ -41,6 +41,8 @@ ul { list-style: none; }
   column-gap: 24px;
 }
 
+/* заголовки без воздуха между строками: межстрочное 100% */
+h1, h2, h3, h4 { line-height: 1; }
 h2 {
   font-size: clamp(28px, 4vw, 40px);
   font-weight: 500;
@@ -451,7 +453,7 @@ h3.case-title, .case-title { color: var(--white1); font-size: 16px; font-weight:
   align-items: start;
 }
 .case-section + .case-section { margin-top: 44px; }
-.case-section h4 { grid-column: 1; color: var(--white1); font-weight: 500; font-size: 16px; line-height: 1.5; margin: 0; }
+.case-section h4 { grid-column: 1; color: var(--white1); font-weight: 500; font-size: 16px; margin: 0; }
 .case-section-body { grid-column: 2; }
 .case-section-body > * + * { margin-top: 10px; }
 .case-details p, .case-details li { color: var(--white2); }
