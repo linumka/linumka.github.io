@@ -20,7 +20,8 @@ body {
   font-family: 'Mulish', sans-serif;
   font-weight: 500;
   font-size: 16px;
-  line-height: 1.5;
+  /* межстрочное 100% для всего текста; у плашек и логотипа свои значения */
+  line-height: 1;
   overflow-x: hidden;
 }
 
@@ -203,7 +204,6 @@ h2 {
   margin-top: 28px;
   max-width: 520px;
   font-size: clamp(19px, 2vw, 22px);
-  line-height: 1.4;
   color: var(--white1);
 }
 .hero-city { margin-top: 12px; color: var(--white2); }
@@ -261,7 +261,7 @@ section { position: relative; }
 }
 .cv-row + .cv-row { margin-top: 20px; }
 .cv-when { color: var(--white2); font-variant-numeric: tabular-nums; }
-.cv-what { color: var(--white1); font-size: 18px; line-height: 1.4; }
+.cv-what { color: var(--white1); font-size: 18px; }
 .cv-where { grid-column: 3 / 5; color: var(--white2); }
 .cv-heading { margin-top: 96px; }
 
@@ -287,7 +287,7 @@ section { position: relative; }
   color: #241419;
   margin-top: 4px;
 }
-.info-card .star-row .spark { margin-top: 3px; }
+.info-card .star-row .spark { margin-top: -1px; }
 .info-card .subhead {
   color: var(--brown1);
   margin-top: 20px;
@@ -457,11 +457,11 @@ h3.case-title, .case-title { color: var(--white1); font-size: 16px; font-weight:
 .case-section-body { grid-column: 2; }
 .case-section-body > * + * { margin-top: 10px; }
 .case-details p, .case-details li { color: var(--white2); }
-.case-details li { padding-left: 16px; position: relative; margin-bottom: 8px; }
+.case-details li { padding-left: 16px; position: relative; margin-bottom: 10px; }
 .case-details li:last-child { margin-bottom: 0; }
 .case-details li::before {
   content: "";
-  position: absolute; left: 0; top: .55em;
+  position: absolute; left: 0; top: calc(.62em - 3px);
   width: 6px; height: 6px; border-radius: 50%;
   background: var(--brown2);
 }
