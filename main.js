@@ -288,6 +288,24 @@
 
   renderCases();
 
+  /* типографика: короткие слова (предлоги, союзы, «я») не висят в конце строки –
+     склеиваем их со следующим словом неразрывным пробелом */
+  (function bindShortWords() {
+    var re = /(^|[\s(«„"])([а-яёА-ЯЁ]{1,2})[ \t\n]+(?=[^\s])/g;
+    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        return /^(SCRIPT|STYLE|NOSCRIPT)$/.test(n.parentNode.nodeName) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(function (n) {
+      /* дважды: «и в работе» – после первого прохода «в» уже не стоит после пробела */
+      var t = n.nodeValue.replace(re, '$1$2\u00A0').replace(re, '$1$2\u00A0');
+      if (t !== n.nodeValue) n.nodeValue = t;
+    });
+  })();
+
   /* ряд работ одной высоты на всю ширину: каждая работа растёт пропорционально
      своей ширине к высоте. Одиночную работу не растягиваем (её ограничивает CSS) */
   function fitMediaRows() {
