@@ -13,7 +13,7 @@
 window.CASES = [
   {
     "title": "3D-motion промо-ролики для ивентов",
-    "year": "2025 – 2026",
+    "year": "2025–2026",
     "group": "motion",
     "cats": "motion graphic",
     "tags": [
@@ -185,7 +185,7 @@ window.CASES = [
   },
   {
     "title": "BIOCON",
-    "year": "2023 – 2024",
+    "year": "2023–2024",
     "group": "motion",
     "cats": "graphic motion",
     "tags": [
@@ -308,7 +308,7 @@ window.CASES = [
   },
   {
     "title": "СЕАНС – визуальный бренд",
-    "year": "2023 – н.в.",
+    "year": "2023–н.в.",
     "group": "motion",
     "cats": "graphic motion",
     "tags": [
@@ -539,3 +539,79 @@ window.CASES = [
     "featured": false
   }
 ];
+
+/* Альтернативный текст для картинок и видео: одно короткое предложение о кадре и проекте.
+   Ключ – путь к файлу, как в CASES. */
+window.ALT = {
+  "assets/photo.png": "Портрет Алёны Васильевой в кепке на фоне кирпичной стены.",
+  "assets/mates-racing.jpg": "Обложка кейса, три кадра 3D анонсов MATES с гоночным болидом и лайнапом вечеринки.",
+  "assets/mates-racing-car.jpg": "Кадр 3D анонса MATES RACING CLUB, красный гоночный болид под логотипом MATES.",
+  "assets/megahouse-dj.jpg": "Кадр 3D ролика MEGAHOUSE × EightBall, диджейский пульт в темноте.",
+  "assets/love-party-car.jpg": "Кадр 3D ролика MATES LOVE PARTY, накрытый стол на капоте красной «Волги» у реки.",
+  "assets/mates-racing-lineup.jpg": "Финальный кадр анонса MATES RACING CLUB с датой 4/10 и лайнапом диджеев.",
+  "assets/megahouse-lineup.jpg": "Финальный кадр ролика MEGAHOUSE × EightBall, лайнап на бильярдном столе.",
+  "assets/love-party-lineup.jpg": "Финальный кадр ролика MATES LOVE PARTY, лайнап на открытке приглашении.",
+  "assets/mates-viewport.jpg": "Сцена с гоночным болидом во вьюпорте Blender для анонса MATES RACING CLUB.",
+  "assets/a2-stage.jpg": "Концерт в A2 Club, 3D ролик со зданием в лианах на LED экране главной сцены.",
+  "assets/a2-build.jpg": "Кадр 3D ролика для сцены A2 Club, здание оплетают лианы с цветами.",
+  "assets/itmo-universe.jpg": "Кадр 3D ролика, буква из лавы для LED экрана сцены A2 Club.",
+  "assets/universe-1.jpg": "Буква из лавы во вьюпорте Blender, рабочая сцена ролика для A2 Club.",
+  "assets/a2-blender-m.jpg": "Стеклянная синяя буква и ноды композитинга в Blender, ролик для A2 Club.",
+  "assets/universe-2.jpg": "Буква из воды во вьюпорте Blender, рабочая сцена ролика для A2 Club.",
+  "assets/universe-3.jpg": "Буква из лиан с цветами во вьюпорте Blender, рабочая сцена ролика для A2 Club.",
+  "assets/fashion-show.jpg": "Обложка кейса ITMO FASHION SHOW, три кадра 3D анонсов с камерой, микрофоном и логотипом шоу.",
+  "assets/fashion-camera.jpg": "Рендер камеры с зелёным экраном на фоне дворца для анонса ITMO FASHION SHOW.",
+  "assets/shl.jpg": "Кадр 3D интро подкаста «Под трибуной СХЛ», коньки на льду.",
+  "assets/biocon.jpg": "3D логотип BIOCON в прозрачной чашке Петри на зелёном фоне.",
+  "assets/b-157.jpg": "Сцена конференции BIOCON с логотипом на экране и рядами кресел в зале.",
+  "assets/b-178.jpg": "Панельная дискуссия BIOCON, зал смотрит на экран с фирменной графикой.",
+  "assets/b-180.jpg": "Участник BIOCON даёт интервью у стеклянной стены.",
+  "assets/b-201.jpg": "Восемь постеров BIOCON 2024 на стене в разных вариантах стиля.",
+  "assets/b-2003.jpg": "Пост BIOCON с приглашением к участию для учёных, R&D центров и экспертов.",
+  "assets/b-2005.jpg": "Обложка BIOCON CORE 2024 с зелёным свечением вокруг круга.",
+  "assets/b-2004.jpg": "Сторис BIOCON о конференции в Альметьевске с фирменными плашками.",
+  "assets/b-2006.jpg": "Сторис BIOCON на английском с татарским орнаментом и QR кодом регистрации.",
+  "assets/b-2008.jpg": "Программа первого дня BIOCON 2024 в тёмной фирменной вёрстке.",
+  "assets/b-2007.jpg": "Обложка Free time BIOCON с 3D пузырями из розового стекла.",
+  "assets/b-ad.jpg": "Рекламный макет BIOCON с датами 11–13 ноября и городом Альметьевск.",
+  "assets/b-group.jpg": "3D иконки BIOCON, чашка, самолёт и группа людей из цветного стекла.",
+  "assets/b-210.jpg": "Футболка BIOCON с надписью на татарском языке.",
+  "assets/b-211.jpg": "Лупа над подсвеченным образцом, фото для BIOCON.",
+  "assets/se-cover.jpg": "Пластинка с синим логотипом СЕАНС на полке у стены.",
+  "assets/se-inst-live.jpg": "Диджеи играют на вечеринке «СЕАНС × Институт», на пульте синий флаг с логотипом.",
+  "assets/se-inst-poster.jpg": "Афиша «СЕАНС × Институт» с фотографиями диджеев.",
+  "assets/se-coffee.jpg": "Афиша Evening Coffee Club by СЕАНС с монохромным портретом и рисунками.",
+  "assets/se-inst-timetable.jpg": "Расписание сетов вечеринки «СЕАНС × Институт» с рисунками ручкой.",
+  "assets/se-flat-poster.jpg": "Афиша «СЕАНС у Флэт» с пластинкой и логотипом.",
+  "assets/se-flat-timetable.jpg": "Расписание сетов «СЕАНС у Флэт» на синем фоне.",
+  "assets/se-mashup.jpg": "Обложка релиза MASHUP COLLECTION с хромированным логотипом СЕАНС на синем.",
+  "assets/se-mix.jpg": "Обложка микса spring mix 25 с синим цветком на тёмном фоне.",
+  "assets/se-cover-fall.jpg": "3D рендер пластинки СЕАНС с осенним листом на обложке.",
+  "assets/se-cover-ifs.jpg": "3D рендер пластинки СЕАНС с красной наклейкой на обложке.",
+  "assets/se-cd.jpg": "Коллаж с портретом и россыпью фотографий для релиза СЕАНС.",
+  "assets/se-stickers.jpg": "Набор стикеров СЕАНС с логотипом, клетчатым флагом и надписью «Старт».",
+  "assets/se-merch.jpg": "Брелоки и стикеры СЕАНС на столе, снимок широкоугольным объективом.",
+  "assets/union.jpg": "Расписание вечеринки «СЕАНС × Discovery = Юнион» в окне Windows 98 на мониторе.",
+  "assets/union-afisha.jpg": "Афиша «СЕАНС × Discovery = Юнион» в стиле Windows 98 с пластинкой и иконками.",
+  "assets/union-timetable.jpg": "Расписание двух сцен, двор и зал, в окнах Windows 98.",
+  "assets/union-map.jpg": "Карта вечеринки в баре «Юнион» в стиле интерфейса Windows 98.",
+  "assets/union-social.jpg": "Посты с блиц интервью диджеев, iPod поверх фотографий.",
+  "assets/union-lightbox.jpg": "Афиша вечеринки «Юнион» в лайтбоксе метро.",
+  "assets/union-wall.jpg": "Афиши вечеринки «Юнион» с QR кодом на стене с граффити.",
+  "assets/union-photos.jpg": "Фото с вечеринки «Юнион», диджей, танцпол и гости.",
+  "assets/union-team.jpg": "Команда вечеринки «Юнион» во дворе бара.",
+  "assets/siyanie-cover.jpg": "Кадр промо ролика «Сияние ИТМО», руки на диджейском пульте.",
+  "assets/movie-poster.jpg": "Постер фильма «Вкусовщина», герой за столом среди башен из зелёных стаканов.",
+  "assets/emoji-packs.jpg": "Эмодзи для Telegram, иконки Agnetics сверху и 3D эмодзи DE MATES снизу.",
+  "assets/vniimp-95.jpg": "Логотип юбилея 95 лет ВНИИМП на тёмном фоне с медной волной.",
+  "assets/love-party-process.mp4": "Видео работы над роликом MATES LOVE PARTY за мониторами со сценой Blender.",
+  "assets/biocon-3d.mp4": "3D анимация надписи BIOTECH ORGANIC из розового стекла для BIOCON.",
+  "assets/itmotion-led.mp4": "3D ролик для LED экрана A2 Club с буквами из лавы, воды, лиан и дыма.",
+  "assets/mates-racing.mp4": "3D анонс MATES RACING CLUB с гоночным болидом.",
+  "assets/megahouse.mp4": "3D ролик MEGAHOUSE × EightBall с диджейским пультом и бильярдным столом.",
+  "assets/love-party.mp4": "3D ролик MATES LOVE PARTY с застольем на капоте «Волги»."
+};
+
+/* Уменьшенные копии картинок для рядов работ (assets/thumbs/, до 800 px): ширина и высота.
+   В полном размере картинка открывается по клику. */
+window.THUMB = {"assets/mates-racing-car.jpg": [451, 800], "assets/megahouse-dj.jpg": [450, 800], "assets/love-party-car.jpg": [451, 800], "assets/mates-racing-lineup.jpg": [451, 800], "assets/megahouse-lineup.jpg": [450, 800], "assets/love-party-lineup.jpg": [451, 800], "assets/mates-viewport.jpg": [476, 800], "assets/a2-build.jpg": [800, 270], "assets/itmo-universe.jpg": [538, 439], "assets/universe-1.jpg": [800, 439], "assets/a2-blender-m.jpg": [800, 450], "assets/universe-2.jpg": [800, 449], "assets/universe-3.jpg": [800, 413], "assets/fashion-camera.jpg": [640, 800], "assets/b-157.jpg": [800, 532], "assets/b-178.jpg": [800, 532], "assets/b-180.jpg": [800, 532], "assets/b-201.jpg": [800, 532], "assets/b-2003.jpg": [800, 800], "assets/b-2005.jpg": [800, 800], "assets/b-2004.jpg": [450, 800], "assets/b-2006.jpg": [570, 800], "assets/b-2008.jpg": [566, 800], "assets/b-2007.jpg": [800, 450], "assets/b-ad.jpg": [800, 450], "assets/b-group.jpg": [433, 395], "assets/b-210.jpg": [800, 533], "assets/b-211.jpg": [800, 532], "assets/se-inst-live.jpg": [800, 533], "assets/se-inst-poster.jpg": [640, 800], "assets/se-coffee.jpg": [640, 800], "assets/se-inst-timetable.jpg": [450, 800], "assets/se-flat-poster.jpg": [450, 800], "assets/se-flat-timetable.jpg": [450, 800], "assets/se-mashup.jpg": [800, 800], "assets/se-mix.jpg": [800, 800], "assets/se-cover.jpg": [800, 800], "assets/se-cover-fall.jpg": [800, 800], "assets/se-cover-ifs.jpg": [800, 800], "assets/se-cd.jpg": [800, 800], "assets/se-stickers.jpg": [566, 800], "assets/se-merch.jpg": [600, 800], "assets/union-afisha.jpg": [640, 800], "assets/union-timetable.jpg": [640, 800], "assets/union-map.jpg": [640, 800], "assets/union-social.jpg": [800, 341], "assets/union-lightbox.jpg": [667, 800], "assets/union-wall.jpg": [767, 800], "assets/union-photos.jpg": [800, 652], "assets/union-team.jpg": [800, 600]};
