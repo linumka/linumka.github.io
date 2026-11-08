@@ -20,8 +20,10 @@ body {
   font-family: 'Mulish', sans-serif;
   font-weight: 500;
   font-size: 16px;
-  /* межстрочное 100% для всего текста; у плашек и логотипа свои значения */
-  line-height: 1;
+  /* наборный текст: просвет между строками (от базовой линии до верха
+     заглавных следующей строки) около 90% размера шрифта; у заголовков 100%,
+     у плашек и логотипа свои значения */
+  line-height: 1.6;
   overflow-x: hidden;
 }
 
@@ -73,7 +75,7 @@ h2 {
   white-space: nowrap;
 }
 /* звёздочка не раздувает плашку по высоте */
-.pill .spark { width: .85em; height: .85em; margin-block: -.1em; }
+.pill .spark { width: auto; height: 1em; margin-block: -.2em; }
 /* невидимая зона клика ~42px по вертикали; по горизонтали узко, чтобы соседние кнопки не перекрывались */
 .pill::after {
   content: "";
@@ -94,10 +96,10 @@ h2 {
 }
 .pill.light:hover { background: #fff4ef; }
 /* «Написать»: как остальные кнопки, но со звёздочкой-приманкой */
-.pill--write .spark svg { animation: writeTwinkle 2.6s ease-in-out infinite; }
+.pill--write .spark { animation: writeTwinkle 2.6s ease-in-out infinite; }
 @keyframes writeTwinkle {
   0%, 100% { transform: scale(1); opacity: .85; }
-  50%      { transform: scale(1.35) rotate(20deg); opacity: 1; }
+  50%      { transform: scale(1.3); opacity: 1; }
 }
 /* подпись-статус под навигацией, у кнопки «Написать» */
 .nav-note {
@@ -112,12 +114,17 @@ h2 {
 }
 
 /* ---------- sparkle icon ---------- */
+/* рисованная звезда (assets/stars/main.png) как маска: форма из картинки,
+   цвет из color, поэтому на голубой карточке она тёмная, на тёмном фоне голубая */
 .spark {
-  width: 18px; height: 18px;
+  height: 18px; width: auto; aspect-ratio: 8 / 5;
   flex: 0 0 auto;
   display: inline-block;
+  background-color: currentColor;
+  -webkit-mask: url(assets/stars/main.png) center / contain no-repeat;
+  mask: url(assets/stars/main.png) center / contain no-repeat;
 }
-.spark svg { width: 100%; height: 100%; display: block; }
+.spark svg { display: none; }
 .spark--blue { color: var(--blue2); }
 .spark--warm { color: var(--white1); }
 .spark--dark { color: var(--brown2); }
@@ -295,7 +302,7 @@ section { position: relative; }
   color: #241419;
   margin-top: 4px;
 }
-.info-card .star-row .spark { margin-top: -1px; }
+.info-card .star-row .spark { margin-top: 4px; }
 .info-card .subhead {
   color: var(--brown1);
   margin-top: 20px;
@@ -469,7 +476,7 @@ h3.case-title, .case-title { color: var(--white1); font-size: 16px; font-weight:
 .case-details li:last-child { margin-bottom: 0; }
 .case-details li::before {
   content: "";
-  position: absolute; left: 0; top: calc(.62em - 3px);
+  position: absolute; left: 0; top: calc(.92em - 3px);
   width: 6px; height: 6px; border-radius: 50%;
   background: var(--brown2);
 }
@@ -529,7 +536,7 @@ footer {
   white-space: pre-line;
   color: rgba(255,236,231,.65);
   font-size: 15px;
-  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="%23FFECE7" stroke="%231F1317" stroke-width="1" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg>') 11 11, auto;
+  cursor: url('assets/stars/cursor.png') 14 9, auto;
 }
 
 /* ---------- видео-лайтбокс ---------- */
@@ -547,7 +554,7 @@ footer {
   font-size: 14px;
   pointer-events: none;
 }
-.play-badge .spark { width: 14px; height: 14px; color: var(--blue2); }
+.play-badge .spark { width: auto; height: 12px; color: var(--blue2); }
 
 .lightbox {
   position: fixed;
@@ -580,15 +587,19 @@ footer {
   max-width: calc(100vw - 58px);
   background: #000;
 }
+/* звезда рамки видео (assets/stars/frame.png), тоже маской */
 .lightbox-frame .frame-spark {
   position: absolute;
-  width: 26px; height: 26px;
+  width: 30px; height: 30px;
   color: var(--white1);
+  background-color: currentColor;
+  -webkit-mask: url(assets/stars/frame.png) center / contain no-repeat;
+  mask: url(assets/stars/frame.png) center / contain no-repeat;
   filter: drop-shadow(0 0 6px rgba(255,236,231,.8));
 }
-.lightbox-frame .frame-spark svg { width: 100%; height: 100%; }
-.lightbox-frame .frame-spark--tl { top: -14px; left: -14px; }
-.lightbox-frame .frame-spark--br { bottom: -14px; right: -14px; color: var(--blue2); }
+.lightbox-frame .frame-spark svg { display: none; }
+.lightbox-frame .frame-spark--tl { top: -16px; left: -16px; }
+.lightbox-frame .frame-spark--br { bottom: -16px; right: -16px; color: var(--blue2); }
 /* квадратные кнопки в духе Instagram */
 .lb-btn {
   width: 44px; height: 44px;
@@ -758,15 +769,18 @@ footer {
   position: fixed;
   left: 0; top: 0;
   z-index: 90;
-  width: 20px; height: 20px;
+  width: 26px; height: 17px;
   pointer-events: none;
   color: var(--white1);
+  background-color: currentColor;
+  -webkit-mask: url(assets/stars/main.png) center / contain no-repeat;
+  mask: url(assets/stars/main.png) center / contain no-repeat;
   filter: drop-shadow(0 0 6px rgba(255, 236, 231, .7));
   opacity: 0;
   transition: opacity .3s;
   display: none;
 }
-.cursor-star svg { width: 100%; height: 100%; display: block; }
+.cursor-star svg { display: none; }
 @media (hover: hover) and (pointer: fine) {
   .cursor-star { display: block; }
 }
@@ -839,7 +853,7 @@ footer {
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .pill--write .spark svg { animation: none; }
+  .pill--write .spark { animation: none; }
   .reveal { opacity: 1 !important; transform: none !important; }
   .cursor-star { display: none !important; }
 }

@@ -39,9 +39,10 @@
     var c = document.createElement('canvas'); c.width = c.height = 48;
     var g = c.getContext('2d'), gr = g.createRadialGradient(24, 24, 0, 24, 24, 24);
     var rgb = color === '#b4cdfe' ? '180, 205, 254' : '255, 236, 231';
+    /* ядро точки – 40% спрайта, свечение узкое и слабое */
     gr.addColorStop(0, 'rgba(' + rgb + ', 1)');
-    gr.addColorStop(0.2, 'rgba(' + rgb + ', 1)');
-    gr.addColorStop(0.32, 'rgba(' + rgb + ', .45)');
+    gr.addColorStop(0.4, 'rgba(' + rgb + ', 1)');
+    gr.addColorStop(0.55, 'rgba(' + rgb + ', .22)');
     gr.addColorStop(1, 'rgba(' + rgb + ', 0)');
     g.fillStyle = gr; g.fillRect(0, 0, 48, 48);
     return (dotSprites[color] = c);
@@ -61,18 +62,23 @@
       (host ? host.querySelectorAll(sel) : []).forEach(function (el) {
         var r = el.getBoundingClientRect();
         if (!r.width || !r.height) return;
+        /* блок ещё не проявился (.reveal) и сдвинут вниз – считаем его итоговое место */
+        var dy = 0, rv = el.closest('.reveal:not(.shown)');
+        if (rv) { var m = getComputedStyle(rv).transform; if (m && m !== 'none') dy = parseFloat(m.split(',')[5]) || 0; }
         zones.push({
-          x1: r.left - box.left - 14, y1: r.top - box.top - 10,
-          x2: r.right - box.left + 14, y2: r.bottom - box.top + 10
+          x1: r.left - box.left - 14, y1: r.top - box.top - dy - 10,
+          x2: r.right - box.left + 14, y2: r.bottom - box.top - dy + 10
         });
       });
       return zones;
     }
 
-    function free(x, y, zones) {
+    /* r – полуразмер звезды: крупная рисованная звезда не должна задевать текст краями */
+    function free(x, y, zones, r) {
+      r = r || 0;
       for (var i = 0; i < zones.length; i++) {
         var z = zones[i];
-        if (x > z.x1 && x < z.x2 && y > z.y1 && y < z.y2) return false;
+        if (x + r > z.x1 && x - r < z.x2 && y + r > z.y1 && y - r < z.y2) return false;
       }
       return true;
     }
@@ -100,12 +106,12 @@
         var y = baseY + Math.sin(u * Math.PI * 1.6 + phase) * amp + (Math.random() - 0.5) * 12;
         if (!free(x, y, zones)) continue;
         var big = Math.random() < 0.4 - u * 0.3;             /* слева крупнее */
+        if (big && !free(x, y, zones, 18)) big = false;      /* у текста – только точка */
         stars.push({
           x: x, y: y,
           s: big ? 3.5 + Math.random() * 3.5 : 0.8 + Math.random() * 1.4,
           p: Math.random() * Math.PI * 2,
           v: 0.5 + Math.random() * 1.1,
-          rot: (Math.random() - 0.5) * 0.5,
           spark: big,
           kind: big ? nextStarKind() : 0,
           c: Math.random() < 0.4 ? '#b4cdfe' : '#ffece7'
@@ -119,14 +125,13 @@
         var px = 12 + Math.pow(Math.random(), 1.7) * (W - 24);
         var py = 10 + Math.random() * (H - 20);
         if (!free(px, py, zones)) continue;
-        var isSpark = Math.random() < 0.12;
+        var isSpark = Math.random() < 0.12 && free(px, py, zones, 18);
         added++;
         stars.push({
           x: px, y: py,
           s: isSpark ? 3 + Math.random() * 3 : 0.7 + Math.random() * 1.5,
           p: Math.random() * Math.PI * 2,
           v: 0.5 + Math.random() * 1.2,
-          rot: (Math.random() - 0.5) * 0.5,
           spark: isSpark,
           kind: isSpark ? nextStarKind() : 0,
           c: Math.random() < 0.4 ? '#b4cdfe' : '#ffece7'
@@ -134,17 +139,13 @@
       }
     }
 
-    /* рисованная звезда: высота от размера звезды, лёгкое покачивание вместо вращения */
+    /* рисованная звезда: высота от размера звезды, всегда стоит прямо */
     function drawStar(st, tw) {
       var sp = starSprite(st.kind);
       if (!sp) return;
       var h = st.s * 3.8 * (0.85 + tw * 0.25) * sp.ratio;
       var w = h * sp.width / sp.height;
-      ctx.save();
-      ctx.translate(st.x, st.y);
-      ctx.rotate(st.rot + Math.sin(t * 0.4 + st.p) * 0.12);
-      ctx.drawImage(sp, -w / 2, -h / 2, w, h);
-      ctx.restore();
+      ctx.drawImage(sp, st.x - w / 2, st.y - h / 2, w, h);
     }
 
     function drawAll() {
@@ -156,7 +157,7 @@
         if (st.spark) {
           drawStar(st, tw);
         } else {
-          var d = st.s * tw * 10;            /* ядро точки – пятая часть спрайта */
+          var d = st.s * tw * 5;             /* ядро точки – 40% спрайта */
           ctx.drawImage(dotSprite(st.c), st.x - d / 2, st.y - d / 2, d, d);
         }
       }
@@ -1026,7 +1027,7 @@
     star.innerHTML = '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg>';
     document.body.appendChild(star);
 
-    var mx = -100, my = -100, sx = -100, sy = -100, visible = false, rot = 0;
+    var mx = -100, my = -100, sx = -100, sy = -100, visible = false;
 
     document.addEventListener('mousemove', function (e) {
       mx = e.clientX; my = e.clientY;
@@ -1045,9 +1046,9 @@
     (function follow() {
       sx += (mx - sx) * 0.16;
       sy += (my - sy) * 0.16;
-      rot += 0.6 + Math.min(6, Math.abs(mx - sx) + Math.abs(my - sy)) * 0.15;
       var scale = star.dataset.big ? 1.5 : 1;
-      star.style.transform = 'translate(' + (sx + 14) + 'px,' + (sy + 16) + 'px) rotate(' + rot + 'deg) scale(' + scale + ')';
+      /* звезда всегда стоит прямо, без поворота */
+      star.style.transform = 'translate(' + (sx + 14) + 'px,' + (sy + 16) + 'px) scale(' + scale + ')';
       requestAnimationFrame(follow);
     })();
   }
