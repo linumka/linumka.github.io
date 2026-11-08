@@ -96,11 +96,7 @@ h2 {
 }
 .pill.light:hover { background: #fff4ef; }
 /* «Написать»: как остальные кнопки, но со звёздочкой-приманкой */
-.pill--write .spark { animation: writeTwinkle 2.6s ease-in-out infinite; }
-@keyframes writeTwinkle {
-  0%, 100% { transform: scale(1); opacity: .85; }
-  50%      { transform: scale(1.3); opacity: 1; }
-}
+
 /* подпись-статус под навигацией, у кнопки «Написать» */
 .nav-note {
   position: absolute;
@@ -127,7 +123,41 @@ h2 {
 .spark svg { display: none; }
 .spark--blue { color: var(--blue2); }
 .spark--warm { color: var(--white1); }
-.spark--dark { color: var(--brown2); }
+.spark--dark { color: #fff; }
+
+/* разные рисованные звёзды (фильтры портфолио): форма из своей картинки */
+.spark.k1 { -webkit-mask-image: url(assets/stars/star-1.png); mask-image: url(assets/stars/star-1.png); }
+.spark.k2 { -webkit-mask-image: url(assets/stars/star-2.png); mask-image: url(assets/stars/star-2.png); }
+.spark.k3 { -webkit-mask-image: url(assets/stars/star-3.png); mask-image: url(assets/stars/star-3.png); }
+.spark.k4 { -webkit-mask-image: url(assets/stars/main.png); mask-image: url(assets/stars/main.png); }
+
+/* ---------- живая звезда: центр на месте, лучи тянутся и сжимаются,
+   точки на концах едут вместе с лучами. Слои – assets/stars/anim/ ---------- */
+.astar {
+  position: relative; display: inline-block; flex: 0 0 auto;
+  height: 1em; aspect-ratio: 282 / 178;
+}
+.astar i {
+  position: absolute; inset: 0;
+  background-color: currentColor;
+  -webkit-mask: center / 100% 100% no-repeat; mask: center / 100% 100% no-repeat;
+  animation: 2.4s ease-in-out infinite;
+}
+.astar .a-core { -webkit-mask-image: url(assets/stars/anim/core.png); mask-image: url(assets/stars/anim/core.png); animation: none; }
+.astar .a-l  { -webkit-mask-image: url(assets/stars/anim/rayL.png); mask-image: url(assets/stars/anim/rayL.png); transform-origin: 39.01% 53.37%; animation-name: astar-h; }
+.astar .a-r  { -webkit-mask-image: url(assets/stars/anim/rayR.png); mask-image: url(assets/stars/anim/rayR.png); transform-origin: 63.83% 53.37%; animation-name: astar-h; }
+.astar .a-t  { -webkit-mask-image: url(assets/stars/anim/rayT.png); mask-image: url(assets/stars/anim/rayT.png); transform-origin: 51.77% 33.71%; animation-name: astar-v; }
+.astar .a-b  { -webkit-mask-image: url(assets/stars/anim/rayB.png); mask-image: url(assets/stars/anim/rayB.png); transform-origin: 51.77% 73.03%; animation-name: astar-v; }
+.astar .a-dl { -webkit-mask-image: url(assets/stars/anim/dotL.png); mask-image: url(assets/stars/anim/dotL.png); animation-name: astar-dl; }
+.astar .a-dr { -webkit-mask-image: url(assets/stars/anim/dotR.png); mask-image: url(assets/stars/anim/dotR.png); animation-name: astar-dr; }
+/* горизонтальные лучи короче, когда вертикальные длиннее, и наоборот */
+@keyframes astar-h  { 0%, 100% { transform: scaleX(1); }  50% { transform: scaleX(.55); } }
+@keyframes astar-v  { 0%, 100% { transform: scaleY(.6); } 50% { transform: scaleY(1.08); } }
+/* точка смещается ровно на столько, на сколько укоротился её луч */
+@keyframes astar-dl { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(11.81%); } }
+@keyframes astar-dr { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-10.21%); } }
+.pill--write { color: var(--white1); }
+.pill--write .astar { color: var(--blue2); height: 1.05em; margin-block: -.2em; }
 
 /* ---------- компактная плавающая навигация ---------- */
 /* подложка меню: тёмная и размытая до нижней точки меню (строка «Открыта
@@ -365,6 +395,7 @@ section { position: relative; }
   text-align: left;
   transition: color .2s;
 }
+.filter-subs .spark { width: 24px; height: 18px; aspect-ratio: auto; }
 .filter-subs .sub:hover,
 .filter-subs .sub.active { color: var(--white1); }
 .filter-subs .sub.active .spark { color: var(--white1); }
@@ -769,18 +800,15 @@ footer {
   position: fixed;
   left: 0; top: 0;
   z-index: 90;
-  width: 26px; height: 17px;
+  width: 30px; height: 19px;
   pointer-events: none;
   color: var(--white1);
-  background-color: currentColor;
-  -webkit-mask: url(assets/stars/main.png) center / contain no-repeat;
-  mask: url(assets/stars/main.png) center / contain no-repeat;
-  filter: drop-shadow(0 0 6px rgba(255, 236, 231, .7));
+  filter: drop-shadow(0 0 5px rgba(255, 236, 231, .6));
   opacity: 0;
   transition: opacity .3s;
   display: none;
 }
-.cursor-star svg { display: none; }
+.cursor-star .astar { display: block; height: 100%; }
 @media (hover: hover) and (pointer: fine) {
   .cursor-star { display: block; }
 }
@@ -853,7 +881,7 @@ footer {
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .pill--write .spark { animation: none; }
+  .astar i { animation: none !important; }
   .reveal { opacity: 1 !important; transform: none !important; }
   .cursor-star { display: none !important; }
 }

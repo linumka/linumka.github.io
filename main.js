@@ -137,6 +137,24 @@
           c: Math.random() < 0.4 ? '#b4cdfe' : '#ffece7'
         });
       }
+
+      /* 3. в каждом блоке хотя бы несколько рисованных звёзд – там, где свободно от текста */
+      var want = Math.max(3, Math.round((W * H) / 260000));
+      var have = stars.filter(function (st) { return st.spark; }).length;
+      for (var tries = 0; have < want && tries < 600; tries++) {
+        var sx = 16 + Math.random() * (W - 32), sy = 14 + Math.random() * (H - 28);
+        if (!free(sx, sy, zones, 20)) continue;
+        have++;
+        stars.push({
+          x: sx, y: sy,
+          s: 3.5 + Math.random() * 3,
+          p: Math.random() * Math.PI * 2,
+          v: 0.5 + Math.random() * 1.1,
+          spark: true,
+          kind: nextStarKind(),
+          c: '#b4cdfe'
+        });
+      }
     }
 
     /* рисованная звезда: высота от размера звезды, всегда стоит прямо */
@@ -897,6 +915,19 @@
   /* ---------------------------------------------------
    * 4. Case filtering
    * --------------------------------------------------- */
+  /* звёзды в фильтрах: четыре вида вперемешку, каждый вид встречается хотя бы раз */
+  (function mixFilterStars() {
+    var stars = document.querySelectorAll('.filter-subs .spark');
+    if (!stars.length) return;
+    var kinds = [];
+    while (kinds.length < stars.length) kinds = kinds.concat(['k1', 'k2', 'k3', 'k4']);
+    kinds = kinds.slice(0, stars.length);
+    for (var i = kinds.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), tmp = kinds[i]; kinds[i] = kinds[j]; kinds[j] = tmp;
+    }
+    stars.forEach(function (el, i) { el.classList.add(kinds[i]); });
+  })();
+
   var filterBtns = document.querySelectorAll('[data-filter]');
   var subBtns = document.querySelectorAll('[data-subfilter]');
   if (filterBtns.length) {
@@ -1024,10 +1055,11 @@
     var star = document.createElement('div');
     star.className = 'cursor-star';
     star.setAttribute('aria-hidden', 'true');
-    star.innerHTML = '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z"/></svg>';
+    /* живая звезда: лучи тянутся, точки едут вместе с ними (слои в CSS .astar) */
+    star.innerHTML = '<span class="astar" aria-hidden="true"><i class="a-core"></i><i class="a-l"></i><i class="a-r"></i><i class="a-t"></i><i class="a-b"></i><i class="a-dl"></i><i class="a-dr"></i></span>';
     document.body.appendChild(star);
 
-    var mx = -100, my = -100, sx = -100, sy = -100, visible = false;
+    var mx = -100, my = -100, sx = -100, sy = -100, visible = false, rot = 0;
 
     document.addEventListener('mousemove', function (e) {
       mx = e.clientX; my = e.clientY;
@@ -1046,9 +1078,10 @@
     (function follow() {
       sx += (mx - sx) * 0.16;
       sy += (my - sy) * 0.16;
+      /* поворачивается, только пока курсор движется: чем быстрее, тем сильнее */
+      rot += Math.min(6, Math.abs(mx - sx) + Math.abs(my - sy)) * 0.15;
       var scale = star.dataset.big ? 1.5 : 1;
-      /* звезда всегда стоит прямо, без поворота */
-      star.style.transform = 'translate(' + (sx + 14) + 'px,' + (sy + 16) + 'px) scale(' + scale + ')';
+      star.style.transform = 'translate(' + (sx + 14) + 'px,' + (sy + 16) + 'px) rotate(' + rot + 'deg) scale(' + scale + ')';
       requestAnimationFrame(follow);
     })();
   }
