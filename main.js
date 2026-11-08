@@ -9,6 +9,44 @@
   /* ---------------------------------------------------
    * 1. Sparse twinkling stars (hero, banner, footer)
    * --------------------------------------------------- */
+  /* рисованные звёзды: пять вариантов по очереди, поэтому каждый встречается одинаково часто */
+  var STAR_SRC = ['assets/stars/star-1.png', 'assets/stars/star-2.png', 'assets/stars/star-3.png',
+                  'assets/stars/star-4.png', 'assets/stars/star-5.png'];
+  var starImgs = STAR_SRC.map(function (src) { var im = new Image(); im.src = src; return im; });
+  var starTurn = Math.floor(Math.random() * STAR_SRC.length);
+  function nextStarKind() { starTurn = (starTurn + 1) % STAR_SRC.length; return starTurn; }
+
+  /* свечение рисуем один раз в спрайт: shadowBlur в каждом кадре дорого стоит на телефонах */
+  var GLOW = 'rgba(180, 205, 254, .9)';
+  var starSprites = [];
+  function starSprite(kind) {
+    if (starSprites[kind]) return starSprites[kind];
+    var im = starImgs[kind];
+    if (!im.complete || !im.naturalWidth) return null;
+    var pad = 18, c = document.createElement('canvas');
+    c.width = im.naturalWidth + pad * 2; c.height = im.naturalHeight + pad * 2;
+    var g = c.getContext('2d');
+    g.shadowColor = GLOW; g.shadowBlur = 12;
+    g.drawImage(im, pad, pad);
+    g.shadowBlur = 0;
+    g.drawImage(im, pad, pad);
+    c.ratio = c.height / im.naturalHeight;   /* во сколько спрайт выше самой звезды */
+    return (starSprites[kind] = c);
+  }
+  var dotSprites = {};
+  function dotSprite(color) {
+    if (dotSprites[color]) return dotSprites[color];
+    var c = document.createElement('canvas'); c.width = c.height = 48;
+    var g = c.getContext('2d'), gr = g.createRadialGradient(24, 24, 0, 24, 24, 24);
+    var rgb = color === '#b4cdfe' ? '180, 205, 254' : '255, 236, 231';
+    gr.addColorStop(0, 'rgba(' + rgb + ', 1)');
+    gr.addColorStop(0.2, 'rgba(' + rgb + ', 1)');
+    gr.addColorStop(0.32, 'rgba(' + rgb + ', .45)');
+    gr.addColorStop(1, 'rgba(' + rgb + ', 0)');
+    g.fillStyle = gr; g.fillRect(0, 0, 48, 48);
+    return (dotSprites[color] = c);
+  }
+
   function StarField(canvas) {
     var ctx = canvas.getContext('2d');
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -41,6 +79,8 @@
 
     function resize() {
       var r = canvas.getBoundingClientRect();
+      /* на телефоне высота окна меняется при прокрутке (панель браузера) – звёзды не пересчитываем */
+      if (W && r.width === W && Math.abs(r.height - H) < 140) return;
       W = r.width; H = r.height;
       canvas.width = W * dpr; canvas.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -65,8 +105,9 @@
           s: big ? 3.5 + Math.random() * 3.5 : 0.8 + Math.random() * 1.4,
           p: Math.random() * Math.PI * 2,
           v: 0.5 + Math.random() * 1.1,
-          rot: Math.random() * Math.PI,
+          rot: (Math.random() - 0.5) * 0.5,
           spark: big,
+          kind: big ? nextStarKind() : 0,
           c: Math.random() < 0.4 ? '#b4cdfe' : '#ffece7'
         });
       }
@@ -85,47 +126,46 @@
           s: isSpark ? 3 + Math.random() * 3 : 0.7 + Math.random() * 1.5,
           p: Math.random() * Math.PI * 2,
           v: 0.5 + Math.random() * 1.2,
-          rot: Math.random() * Math.PI,
+          rot: (Math.random() - 0.5) * 0.5,
           spark: isSpark,
+          kind: isSpark ? nextStarKind() : 0,
           c: Math.random() < 0.4 ? '#b4cdfe' : '#ffece7'
         });
       }
     }
 
-    /* фирменная 4-лучевая звезда: r(θ) = R·|cos(2θ)|^k */
-    function sparkPath(x, y, R, rot) {
-      ctx.beginPath();
-      for (var a = 0; a <= 96; a++) {
-        var ang = (a / 96) * Math.PI * 2;
-        var rad = R * Math.pow(Math.abs(Math.cos(2 * ang)), 3.4);
-        rad = Math.max(rad, R * 0.02);
-        var px = x + Math.cos(ang + rot) * rad;
-        var py = y + Math.sin(ang + rot) * rad;
-        if (a === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
-      }
-      ctx.closePath();
+    /* рисованная звезда: высота от размера звезды, лёгкое покачивание вместо вращения */
+    function drawStar(st, tw) {
+      var sp = starSprite(st.kind);
+      if (!sp) return;
+      var h = st.s * 3.8 * (0.85 + tw * 0.25) * sp.ratio;
+      var w = h * sp.width / sp.height;
+      ctx.save();
+      ctx.translate(st.x, st.y);
+      ctx.rotate(st.rot + Math.sin(t * 0.4 + st.p) * 0.12);
+      ctx.drawImage(sp, -w / 2, -h / 2, w, h);
+      ctx.restore();
     }
 
-    function frame() {
-      t += 0.016;
+    function drawAll() {
       ctx.clearRect(0, 0, W, H);
       for (var i = 0; i < stars.length; i++) {
         var st = stars[i];
         var tw = 0.35 + 0.65 * Math.abs(Math.sin(t * st.v + st.p));
         ctx.globalAlpha = Math.min(1, 0.4 + tw * 0.7);
-        ctx.fillStyle = st.c;
-        ctx.shadowColor = st.c;
-        ctx.shadowBlur = (st.spark ? 11 : 8) * tw;
         if (st.spark) {
-          sparkPath(st.x, st.y, st.s * (0.75 + tw * 0.45), st.rot + t * 0.15);
-          ctx.fill();
+          drawStar(st, tw);
         } else {
-          ctx.beginPath();
-          ctx.arc(st.x, st.y, st.s * tw, 0, Math.PI * 2);
-          ctx.fill();
+          var d = st.s * tw * 10;            /* ядро точки – пятая часть спрайта */
+          ctx.drawImage(dotSprite(st.c), st.x - d / 2, st.y - d / 2, d, d);
         }
       }
-      ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+      ctx.globalAlpha = 1;
+    }
+
+    function frame() {
+      t += 0.016;
+      drawAll();
       raf = requestAnimationFrame(frame);
     }
 
@@ -133,17 +173,33 @@
     function stop() { running = false; if (raf) cancelAnimationFrame(raf); }
 
     /* пересчёт после загрузки шрифтов и при ресайзе: зоны текста меняются */
+    function relayout() { W = 0; resize(); drawAll(); }
     resize();
-    window.addEventListener('resize', resize);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(resize);
-    setTimeout(resize, 1200);
+    var resizeTimer = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () { resize(); drawAll(); }, 150);
+    });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
 
-    if (reduced) { frame(); cancelAnimationFrame(raf); return; }
+    /* сразу – неподвижный кадр; когда догрузятся картинки звёзд – ещё раз */
+    drawAll();
+    starImgs.forEach(function (im) { if (!im.complete) im.addEventListener('load', drawAll); });
+    if (reduced) return;
+
+    /* мерцание запускаем, когда страница уже загрузилась и браузер свободен */
+    var visible = false, ready = false;
+    function sync() { if (ready && visible) start(); else stop(); }
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) { e.isIntersecting ? start() : stop(); });
+        entries.forEach(function (e) { visible = e.isIntersecting; sync(); });
       }).observe(canvas);
-    } else { start(); }
+    } else { visible = true; }
+    function goLive() {
+      var idle = window.requestIdleCallback || function (fn) { setTimeout(fn, 600); };
+      idle(function () { ready = true; sync(); }, { timeout: 2000 });
+    }
+    if (document.readyState === 'complete') goLive(); else window.addEventListener('load', goLive);
   }
 
   document.querySelectorAll('[data-stars]').forEach(function (c) { StarField(c); });
@@ -171,6 +227,18 @@
 
   function isVideo(src) { return /\.(mp4|webm)$/i.test(src); }
 
+  /* альтернативный текст из cases-data.js (window.ALT) */
+  function altOf(src) { return (window.ALT && window.ALT[src]) || ''; }
+
+  /* уменьшенная копия для ряда работ и её размеры (window.THUMB); полный файл – для просмотра */
+  function thumbOf(src) {
+    return (window.THUMB && window.THUMB[src]) ? 'assets/thumbs/' + src.split('/').pop().replace(/\.\w+$/, '.jpg') : src;
+  }
+  function sizeAttrs(src) {
+    var d = window.THUMB && window.THUMB[src];
+    return d ? ' width="' + d[0] + '" height="' + d[1] + '"' : '';
+  }
+
   /* пункт списка: «Начало | текст» – начало отдельной строкой, пояснение под ним */
   function listItem(item) {
     var parts = String(item).split('|');
@@ -189,12 +257,12 @@
       /* video может быть строкой или массивом */
       var vids = c.video ? (Array.isArray(c.video) ? c.video : [c.video]) : [];
       var mediaInner =
-        '<img src="' + esc(c.image) + '" alt="" loading="lazy" ' +
+        '<img src="' + esc(c.image) + '" alt="' + esc(altOf(c.image)) + '" loading="lazy" ' +
         'onerror="this.parentElement.classList.add(\'ph\');this.remove()">';
       /* loop: короткое видео поверх обложки, играет без звука, пока карточка на экране */
       if (c.loop) {
-        mediaInner += '<video class="case-loop" src="' + esc(c.loop) + '" poster="' + esc(c.image) + '" ' +
-                      'muted loop playsinline preload="metadata" aria-hidden="true" data-autoplay></video>';
+        mediaInner += '<video class="case-loop" data-src="' + esc(c.loop) + '" poster="' + esc(c.image) + '" ' +
+                      'muted loop playsinline preload="none" aria-hidden="true" data-autoplay></video>';
       }
       if (vids.length) {
         var label = vids.length > 1 ? 'смотреть видео (' + vids.length + ')' : 'смотреть видео';
@@ -227,15 +295,23 @@
       /* работы рядами: строка – отдельный ряд, массив – несколько работ в ряд.
          Без прокрутки: работы в ряду делят ширину по своим пропорциям (см. fitMediaRows).
          Видео играют без звука, по клику открываются в плеере */
-      var gallery = function (list, tall) {
+      /* deferred: картинки в свёрнутом разборе получают адрес только при раскрытии */
+      var gallery = function (list, tall, deferred) {
         if (!list || !list.length) return '';
-        return '<div class="media-rows' + (tall ? ' media-rows--tall' : '') + '" role="group" aria-label="Работы: ' + esc(c.title) + '">' +
+        return '<div class="media-rows' + (tall ? ' media-rows--tall' : '') + '" role="group" aria-label="Работы кейса ' + esc(c.title) + '">' +
           list.map(function (row) {
             return '<div class="media-row">' + [].concat(row).map(function (src) {
               if (isVideo(src)) {
-                return '<video src="' + esc(src) + '" muted loop playsinline preload="metadata" data-inline-video data-autoplay></video>';
+                /* видео внутри кнопки: по клику – плеер со звуком. Файл грузится,
+                   только когда подходит к экрану; до этого виден постер */
+                return '<button class="media-play" type="button" data-play="' + esc(src) + '" ' +
+                         'aria-label="' + esc('Смотреть со звуком. ' + altOf(src)) + '">' +
+                         '<video data-src="' + esc(src) + '" poster="' + esc(src.replace(/\.mp4$/i, '-poster.jpg')) + '" ' +
+                         'muted loop playsinline preload="none" aria-hidden="true" data-autoplay></video>' +
+                       '</button>';
               }
-              return '<img src="' + esc(src) + '" alt="" loading="lazy" onerror="this.remove()">';
+              return '<img ' + (deferred ? 'data-src' : 'src') + '="' + esc(thumbOf(src)) + '" data-full="' + esc(src) + '"' +
+                     sizeAttrs(src) + ' alt="' + esc(altOf(src)) + '" loading="lazy" onerror="this.remove()">';
             }).join('') + '</div>';
           }).join('') + '</div>';
       };
@@ -259,7 +335,7 @@
                    paras.map(function (p) { return '<p>' + fmtDesc(p) + '</p>'; }).join('') +
                    ((s.list && s.list.length) ? '<ul>' + s.list.map(listItem).join('') + '</ul>' : '') +
                  '</div>' +
-                 gallery(s.media, s.tall) +
+                 gallery(s.media, s.tall, true) +
                '</div>';
       }).join('');
 
@@ -314,13 +390,17 @@
       el.style.aspectRatio = w + ' / ' + h;
       if (el.parentNode && el.parentNode.children.length > 1) el.style.flexGrow = (w / h).toFixed(3);
     }
+    /* размеры известны заранее из атрибутов width и height – ряд не прыгает при загрузке */
     document.querySelectorAll('.media-row > img').forEach(function (im) {
-      if (im.complete && im.naturalWidth) fit(im, im.naturalWidth, im.naturalHeight);
+      var w = +im.getAttribute('width'), h = +im.getAttribute('height');
+      if (w && h) fit(im, w, h);
       else im.addEventListener('load', function () { fit(im, im.naturalWidth, im.naturalHeight); });
     });
-    document.querySelectorAll('.media-row > video').forEach(function (v) {
-      if (v.readyState >= 1) fit(v, v.videoWidth, v.videoHeight);
-      else v.addEventListener('loadedmetadata', function () { fit(v, v.videoWidth, v.videoHeight); });
+    /* у видео пропорции берём из постера: сам файл до прокрутки не грузится */
+    document.querySelectorAll('.media-row > .media-play').forEach(function (b) {
+      var poster = new Image();
+      poster.onload = function () { fit(b, poster.naturalWidth, poster.naturalHeight); };
+      poster.src = b.querySelector('video').getAttribute('poster');
     });
   }
   fitMediaRows();
@@ -450,7 +530,7 @@
       lb.innerHTML =
         '<div class="reels-scroll">' +
           playlist.map(function (src, i) {
-            return '<div class="reel"><video src="' + src + '" loop playsinline preload="metadata" data-i="' + i + '"></video></div>';
+            return '<div class="reel"><video src="' + src + '" loop playsinline preload="none" data-i="' + i + '"></video></div>';
           }).join('') +
         '</div>' +
         (playlist.length > 1 ? '<div class="lb-badge lb-badge--fixed" data-counter>1 / ' + playlist.length + '</div>' : '') +
@@ -670,6 +750,7 @@
       function show(i) {
         idx = (i + list.length) % list.length;
         img.src = list[idx];
+        img.alt = altOf(list[idx]);
         if (counter) counter.textContent = (idx + 1) + ' / ' + list.length;
       }
       show(idx);
@@ -708,9 +789,9 @@
 
     document.querySelectorAll('.media-rows').forEach(function (strip) {
       var imgs = [].slice.call(strip.querySelectorAll('img'));
-      var list = imgs.map(function (im) { return im.getAttribute('src'); });
+      var list = imgs.map(function (im) { return im.getAttribute('data-full') || im.getAttribute('src'); });
       imgs.forEach(function (im, i) {
-        wireImage(im, list, i, 'Открыть изображение ' + (i + 1) + ' из ' + list.length);
+        wireImage(im, list, i, 'Увеличить кадр ' + (i + 1) + ' из ' + list.length + '. ' + im.alt);
       });
     });
 
@@ -718,33 +799,37 @@
       var card = im.closest('.case');
       var title = card && card.querySelector('.case-title');
       wireImage(im, [im.getAttribute('src')], 0,
-        'Открыть обложку: ' + (title ? title.textContent.trim() : 'кейс'));
+        'Увеличить обложку кейса ' + (title ? title.textContent.trim() : '') + '. ' + im.alt);
     });
 
-    /* лупы на обложках и видео в разборе кейса: без звука и по кругу, пока на экране */
+    /* лупы на обложках и видео в разборе кейса: без звука и по кругу, пока на экране.
+       Файл подгружается, когда видео подходит к экрану. При prefers-reduced-motion
+       видео стоят на постере и запускаются только по клику, в плеере */
     if (!reduced && 'IntersectionObserver' in window) {
+      var load = function (v) {
+        if (v.dataset.src) { v.src = v.dataset.src; v.removeAttribute('data-src'); }
+      };
+      var lazyIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { load(e.target); lazyIO.unobserve(e.target); }
+        });
+      }, { rootMargin: '300px 0px' });
       var autoplayIO = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
-          if (e.isIntersecting && e.intersectionRatio >= 0.4) e.target.play().catch(function () {});
-          else e.target.pause();
+          var v = e.target;
+          if (e.isIntersecting && e.intersectionRatio >= 0.4) { load(v); v.play().catch(function () {}); }
+          else v.pause();
         });
       }, { threshold: [0, 0.4] });
-      document.querySelectorAll('[data-autoplay]').forEach(function (v) { autoplayIO.observe(v); });
+      document.querySelectorAll('[data-autoplay]').forEach(function (v) {
+        lazyIO.observe(v);
+        autoplayIO.observe(v);
+      });
     }
 
     /* видео в разборе кейса по клику открываются в плеере со звуком */
-    document.querySelectorAll('[data-inline-video]').forEach(function (v) {
-      var src = v.getAttribute('src');
-      v.setAttribute('role', 'button');
-      v.setAttribute('tabindex', '0');
-      v.setAttribute('aria-label', 'Смотреть видео со звуком');
-      v.addEventListener('click', function () { open(src); });
-      v.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-          e.preventDefault();
-          open(src);
-        }
-      });
+    document.querySelectorAll('[data-play]').forEach(function (b) {
+      b.addEventListener('click', function () { open(b.getAttribute('data-play')); });
     });
 
     document.querySelectorAll('.case--video').forEach(function (card) {
@@ -757,7 +842,7 @@
       media.setAttribute('role', 'button');
       media.setAttribute('tabindex', '0');
       media.setAttribute('aria-label',
-        'Смотреть видео: ' + (title ? title.textContent.trim() : 'кейс'));
+        'Смотреть видео ' + (title ? title.textContent.trim() : ''));
 
       function fire() { open(src); }
       media.addEventListener('click', fire);
@@ -912,6 +997,9 @@
     var card = btn.closest('.case');
     var details = card.querySelector('.case-details');
     function setOpen(open) {
+      if (open) details.querySelectorAll('img[data-src]').forEach(function (im) {
+        im.src = im.getAttribute('data-src'); im.removeAttribute('data-src');
+      });
       details.classList.toggle('open', open);
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
       btn.textContent = open ? 'Свернуть' : 'Подробнее о кейсе';

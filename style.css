@@ -123,13 +123,21 @@ h2 {
 .spark--dark { color: var(--brown2); }
 
 /* ---------- компактная плавающая навигация ---------- */
+/* подложка меню: тёмная и размытая до нижней точки меню (строка «Открыта
+   к удалённой работе»), к ней затемнение и размытие начинают ослабевать
+   и сходят на нет ниже. --menu-bottom – нижний край этой строки */
 .top-fade {
+  --menu-bottom: 54px;
   position: fixed;
   top: 0; left: 0; right: 0;
-  height: 96px;
+  height: calc(var(--menu-bottom) + 44px);
   z-index: 40;
   pointer-events: none;
-  background: linear-gradient(to bottom, rgba(31,19,23,.92) 0%, rgba(31,19,23,.55) 45%, rgba(31,19,23,0) 100%);
+  background: rgba(31, 19, 23, .96);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(var(--menu-bottom) - 12px), rgba(0, 0, 0, .94) var(--menu-bottom), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0, #000 calc(var(--menu-bottom) - 12px), rgba(0, 0, 0, .94) var(--menu-bottom), transparent 100%);
 }
 .nav {
   position: fixed;
@@ -477,7 +485,7 @@ h3.case-title, .case-title { color: var(--white1); font-size: 16px; font-weight:
 .case--wide > .media-rows { margin-top: 24px; }
 .media-row { display: flex; gap: 6px; align-items: flex-start; }
 .media-row > img,
-.media-row > video {
+.media-row > .media-play {
   display: block;
   flex: 1 1 0;
   min-width: 0;
@@ -485,11 +493,16 @@ h3.case-title, .case-title { color: var(--white1); font-size: 16px; font-weight:
   height: auto;
   object-fit: cover;
 }
-/* пока видео не загрузилось, держим типичные пропорции, чтобы ряд не прыгал */
-.media-row > video { aspect-ratio: 16 / 9; background: #000; cursor: pointer; }
-.media-rows--tall .media-row > video { aspect-ratio: 9 / 16; }
-/* одиночная работа не растягивается во всю ширину, а вписывается в рамки */
-.media-row > :only-child { flex: 0 1 auto; width: auto; max-width: 100%; max-height: 320px; }
+/* видео лежит в кнопке; пока постер не загрузился, держим типичные пропорции */
+.media-play {
+  position: relative; padding: 0; border: 0; margin: 0;
+  background: #000; cursor: pointer; aspect-ratio: 16 / 9;
+}
+.media-rows--tall .media-play { aspect-ratio: 9 / 16; }
+.media-play video { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* одиночная картинка не растягивается во всю ширину, а вписывается в рамки */
+.media-row > img:only-child { flex: 0 1 auto; width: auto; max-width: 100%; max-height: 320px; }
+.media-row > .media-play:only-child { flex: 1 1 auto; max-height: 360px; }
 
 /* ---------- footer ---------- */
 footer {
@@ -716,7 +729,7 @@ footer {
 .media-row > img { cursor: zoom-in; }
 .case:not(.case--video) .case-media img { cursor: zoom-in; }
 .media-row > img:focus-visible,
-.media-row > video:focus-visible,
+.media-play:focus-visible,
 .case-media img:focus-visible { outline: 2px solid var(--blue2); outline-offset: 2px; }
 
 /* ---------- тост «адрес скопирован» ---------- */
@@ -800,6 +813,7 @@ footer {
 
 @media (max-width: 760px) {
   .nav { top: 10px; max-width: calc(100vw - 20px); }
+  .top-fade { --menu-bottom: 44px; }
   .nav .pill { font-size: 15px; }
   .nav-note { right: 50%; transform: translateX(50%); font-size: 11.5px; }
   /* пальцем должно быть легко попасть: зона клика выше самой плашки */
@@ -820,7 +834,7 @@ footer {
   .filter-group { grid-column: 1; grid-template-columns: minmax(0, 1fr); row-gap: 14px; }
   .filter-subs { gap: 8px 22px; }
   .cases { gap: 88px; }
-  .media-row > :only-child { max-height: 260px; }
+  .media-row > img:only-child { max-height: 260px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
